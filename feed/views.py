@@ -38,11 +38,10 @@ def feeds(request):
         if f_form.is_valid():
             f_form.save()
             request.user.profile.feeds.add(f_form.instance)
-            ser.feed_update(f_form.instance)
+            tasks.feed_update(f_form.instance)
             messages.success(request, "Feed created")
-            # return render(request, "feed/feeds.html", context)
         else:
-            messages.error(request, "error")
+            messages.error(request, "Invalid Form")
 
     context["user_feeds"] = sel.user_feeds(request.user)
 
@@ -94,7 +93,6 @@ def post_children(request, pk):
     for reply in replies:
         count = sel.descendants_count(reply)
         favicon = sel.favicon(reply)
-        print(favicon)
         context["replies"].append((reply, count, favicon))
     return render(request, "feed/children.html", context)
 

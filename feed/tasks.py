@@ -22,3 +22,7 @@ def schedule_update_feeds():
         minutes=1,
         repeats=-1,
     )
+
+
+def feed_update(feed):
+    async_task("feed.services.feed_update", feed)
