@@ -28,6 +28,9 @@ poetry run manage.py tailwind start
 Run django:
 poetry run manage.py runserver
 
+Run Dockerfile:
+docker build -t testing-bhread .
+docker run -p 127.0.0.1:8000:8000 testing-bhread
 
 ## Contribute
 
