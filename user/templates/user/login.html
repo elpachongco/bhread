@@ -1,0 +1,15 @@
+{% extends "feed/base.html" %} {% block content %}
+<form method="POST">
+  {% csrf_token %}
+  <fieldset>
+    <legend>Login</legend>
+    {{ form.as_p }}
+  </fieldset>
+  <div>
+    <button type="submit">Login</button>
+  </div>
+</form>
+<div>
+  <small> Need an account? <a href="{% url 'login' %}">Sign up now</a> </small>
+</div>
+{% endblock content %}

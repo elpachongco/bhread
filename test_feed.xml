@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed
+	xmlns="http://www.w3.org/2005/Atom" >
+	<generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator>
+	<link href="http://localhost:4000/feed/shorts.xml" rel="self" type="application/atom+xml" />
+	<link href="http://localhost:4000/" rel="alternate" type="text/html" />
+	<updated>2023-08-31T10:43:26+08:00</updated>
+	<id>http://localhost:4000/feed/shorts.xml</id>
+	<title type="html">elpachongco’s blog | Shorts</title>
+	<subtitle>Earl Siachongco's blog. You may subscribe via RSS. </subtitle>
+	<entry>
+		<title type="html">Reply to reply</title>
+		<link href="http://localhost:4000/shorts/2023-08-21.html" rel="alternate" type="text/html" title="Reply to reply" />
+		<published>2023-08-08T00:40:09+08:00</published>
+		<updated>2023-08-08T00:40:09+08:00</updated>
+		<id>http://localhost:4000/shorts/2023-08-21</id>
+		<content type="html" xml:base="http://localhost:4000/shorts/2023-08-21.html">&lt;p&gt;…replying to &lt;a href=&quot;https://facebook.com&quot;&gt;facebook.com&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This is  a post about facebook.com&lt;/p&gt;
+
+&lt;h2 id=&quot;testing-header-2&quot;&gt;Testing header 2&lt;/h2&gt;</content>
+		<author>
+			<name></name>
+		</author>
+		<summary type="html">…replying to facebook.com</summary>
+	</entry>
+	<entry>
+		<title type="html">Reply to reply</title>
+		<link href="http://localhost:4000/shorts/2023-08-20.html" rel="alternate" type="text/html" title="Reply to reply" />
+		<published>2023-08-08T00:40:09+08:00</published>
+		<updated>2023-08-08T00:40:09+08:00</updated>
+		<id>http://localhost:4000/shorts/2023-08-20</id>
+		<content type="html" xml:base="http://localhost:4000/shorts/2023-08-20.html">&lt;p&gt;…replying to &lt;a href=&quot;https://docs.djangoproject.com/en/4.2/topics/templates/#&quot;&gt;my previous reply&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This is amazing!&lt;/p&gt;
+
+&lt;h2 id=&quot;testing-header-2&quot;&gt;Testing header 2&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;img/image_2023-08-27-13-41-56.png&quot; alt=&quot;image_2023-08-27-13-41-56&quot; /&gt;&lt;/p&gt;</content>
+		<author>
+			<name></name>
+		</author>
+		<summary type="html">…replying to my previous reply</summary>
+	</entry>
+	<entry>
+		<title type="html">Reply to reply</title>
+		<link href="http://localhost:4000/shorts/2023-08-19-test.html" rel="alternate" type="text/html" title="Reply to reply" />
+		<published>2023-08-08T00:40:09+08:00</published>
+		<updated>2023-08-08T00:40:09+08:00</updated>
+		<id>http://localhost:4000/shorts/test</id>
+		<content type="html" xml:base="http://localhost:4000/shorts/2023-08-19-test.html">&lt;p&gt;…replying to &lt;a href=&quot;https://docs.djangoproject.com/en/4.2/topics/templates/#&quot;&gt;my previous reply&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This is amazing!&lt;/p&gt;
+
+&lt;h2 id=&quot;testing-header-2&quot;&gt;Testing header 2&lt;/h2&gt;</content>
+		<author>
+			<name></name>
+		</author>
+		<summary type="html">…replying to my previous reply</summary>
+	</entry>
+	<entry>
+		<title type="html">Reply to reply</title>
+		<link href="http://localhost:4000/shorts/2023-08-18-test.html" rel="alternate" type="text/html" title="Reply to reply" />
+		<published>2023-08-08T00:40:09+08:00</published>
+		<updated>2023-08-08T00:40:09+08:00</updated>
+		<id>http://localhost:4000/shorts/test</id>
+		<content type="html" xml:base="http://localhost:4000/shorts/2023-08-18-test.html">&lt;p&gt;…replying to &lt;a href=&quot;http://localhost:4000/shorts/2023-08-16-test.html&quot;&gt;my previous reply&lt;/a&gt; &lt;a href=&quot;https://uses.tech/&quot;&gt; &lt;/a&gt;I was looking at &lt;a href=&quot;https://uses.tech/&quot;&gt;uses.tech website&lt;/a&gt;. I wondered how I can have an animated favicon because this is probably the first time I saw one.&lt;/p&gt;
+
+&lt;p&gt;Then I came accross this: &lt;a href=&quot;http://www.p01.org/defender_of_the_favicon/&quot;&gt;an arcade game played in the favicon&lt;/a&gt;. How cool is that!&lt;/p&gt;</content>
+		<author>
+			<name></name>
+		</author>
+		<summary type="html">…replying to my previous reply I was looking at uses.tech website. I wondered how I can have an animated favicon because this is probably the first time I saw one.</summary>
+	</entry>
+	<entry>
+		<title type="html">Reply to reply to hn</title>
+		<link href="http://localhost:4000/shorts/2023-08-17-test.html" rel="alternate" type="text/html" title="Reply to reply to hn" />
+		<published>2023-08-08T00:40:09+08:00</published>
+		<updated>2023-08-08T00:40:09+08:00</updated>
+		<id>http://localhost:4000/shorts/test</id>
+		<content type="html" xml:base="http://localhost:4000/shorts/2023-08-17-test.html">&lt;p&gt;…replying to &lt;a href=&quot;http://localhost:4000/shorts/2023-08-14-test.html&quot;&gt;reply to hn&lt;/a&gt; &lt;a href=&quot;https://uses.tech/&quot;&gt; &lt;/a&gt;I was looking at &lt;a href=&quot;https://uses.tech/&quot;&gt;uses.tech website&lt;/a&gt;. I wondered how I can have an animated favicon because this is probably the first time I saw one.&lt;/p&gt;
+
+&lt;p&gt;Then I came accross this: &lt;a href=&quot;http://www.p01.org/defender_of_the_favicon/&quot;&gt;an arcade game played in the favicon&lt;/a&gt;. How cool is that!&lt;/p&gt;</content>
+		<author>
+			<name></name>
+		</author>
+		<summary type="html">…replying to reply to hn I was looking at uses.tech website. I wondered how I can have an animated favicon because this is probably the first time I saw one.</summary>
+	</entry>
+	<entry>
+		<title type="html">Reply to reply</title>
+		<link href="http://localhost:4000/shorts/2023-08-16-test.html" rel="alternate" type="text/html" title="Reply to reply" />
+		<published>2023-08-08T00:40:09+08:00</published>
+		<updated>2023-08-08T00:40:09+08:00</updated>
+		<id>http://localhost:4000/shorts/test</id>
+		<content type="html" xml:base="http://localhost:4000/shorts/2023-08-16-test.html">&lt;p&gt;…replying to &lt;a href=&quot;http://localhost:4000/shorts/2023-08-13-test.html&quot;&gt;1&lt;/a&gt; &lt;a href=&quot;https://uses.tech/&quot;&gt; &lt;/a&gt;I was looking at &lt;a href=&quot;https://uses.tech/&quot;&gt;uses.tech website&lt;/a&gt;. I wondered how I can have an animated favicon because this is probably the first time I saw one.&lt;/p&gt;
+
+&lt;p&gt;Then I came accross this: &lt;a href=&quot;http://www.p01.org/defender_of_the_favicon/&quot;&gt;an arcade game played in the favicon&lt;/a&gt;. How cool is that!&lt;/p&gt;</content>
+		<author>
+			<name></name>
+		</author>
+		<summary type="html">…replying to 1 I was looking at uses.tech website. I wondered how I can have an animated favicon because this is probably the first time I saw one.</summary>
+	</entry>
+	<entry>
+		<title type="html">Reply to reply</title>
+		<link href="http://localhost:4000/shorts/2023-08-15-test.html" rel="alternate" type="text/html" title="Reply to reply" />
+		<published>2023-08-08T00:40:09+08:00</published>
+		<updated>2023-08-08T00:40:09+08:00</updated>
+		<id>http://localhost:4000/shorts/test</id>
+		<content type="html" xml:base="http://localhost:4000/shorts/2023-08-15-test.html">&lt;p&gt;…replying to &lt;a href=&quot;http://localhost:4000/shorts/2023-08-13-test.html&quot;&gt;my previous reply&lt;/a&gt; &lt;a href=&quot;https://uses.tech/&quot;&gt; &lt;/a&gt;I was looking at &lt;a href=&quot;https://uses.tech/&quot;&gt;uses.tech website&lt;/a&gt;. I wondered how I can have an animated favicon because this is probably the first time I saw one.&lt;/p&gt;
+
+&lt;p&gt;Then I came accross this: &lt;a href=&quot;http://www.p01.org/defender_of_the_favicon/&quot;&gt;an arcade game played in the favicon&lt;/a&gt;. How cool is that!&lt;/p&gt;</content>
+		<author>
+			<name></name>
+		</author>
+		<summary type="html">…replying to my previous reply I was looking at uses.tech website. I wondered how I can have an animated favicon because this is probably the first time I saw one.</summary>
+	</entry>
+	<entry>
+		<title type="html">Hacker News</title>
+		<link href="http://localhost:4000/shorts/2023-08-14-test.html" rel="alternate" type="text/html" title="Hacker News" />
+		<published>2023-08-08T00:40:09+08:00</published>
+		<updated>2023-08-08T00:40:09+08:00</updated>
+		<id>http://localhost:4000/shorts/test</id>
+		<content type="html" xml:base="http://localhost:4000/shorts/2023-08-14-test.html">&lt;p&gt;…replying to &lt;a href=&quot;https://news.ycombinator.com&quot;&gt;hnews&lt;/a&gt; &lt;a href=&quot;https://uses.tech/&quot;&gt; &lt;/a&gt;I was looking at &lt;a href=&quot;https://uses.tech/&quot;&gt;uses.tech website&lt;/a&gt;. I wondered how I can have an animated favicon because this is probably the first time I saw one.&lt;/p&gt;
+
+&lt;p&gt;Then I came accross this: &lt;a href=&quot;http://www.p01.org/defender_of_the_favicon/&quot;&gt;an arcade game played in the favicon&lt;/a&gt;. How cool is that!&lt;/p&gt;</content>
+		<author>
+			<name></name>
+		</author>
+		<summary type="html">…replying to hnews I was looking at uses.tech website. I wondered how I can have an animated favicon because this is probably the first time I saw one.</summary>
+	</entry>
+	<entry>
+		<title type="html">Animated favicons</title>
+		<link href="http://localhost:4000/shorts/2023-08-13-test.html" rel="alternate" type="text/html" title="Animated favicons" />
+		<published>2023-08-08T00:40:09+08:00</published>
+		<updated>2023-08-08T00:40:09+08:00</updated>
+		<id>http://localhost:4000/shorts/test</id>
+		<content type="html" xml:base="http://localhost:4000/shorts/2023-08-13-test.html">&lt;p&gt;…replying to &lt;a href=&quot;http://localhost:4000/shorts/2023-08-07-animated-favicons.html&quot;&gt;my previous post&lt;/a&gt; &lt;a href=&quot;https://uses.tech/&quot;&gt; &lt;/a&gt;I was looking at &lt;a href=&quot;https://uses.tech/&quot;&gt;uses.tech website&lt;/a&gt;. I wondered how I can have an animated favicon because this is probably the first time I saw one.&lt;/p&gt;
+
+&lt;p&gt;Then I came accross this: &lt;a href=&quot;http://www.p01.org/defender_of_the_favicon/&quot;&gt;an arcade game played in the favicon&lt;/a&gt;. How cool is that!&lt;/p&gt;</content>
+		<author>
+			<name></name>
+		</author>
+		<summary type="html">…replying to my previous post I was looking at uses.tech website. I wondered how I can have an animated favicon because this is probably the first time I saw one.</summary>
+	</entry>
+	<entry>
+		<title type="html">Animated favicons</title>
+		<link href="http://localhost:4000/shorts/2023-08-07-animated-favicons.html" rel="alternate" type="text/html" title="Animated favicons" />
+		<published>2023-08-08T00:40:09+08:00</published>
+		<updated>2023-08-08T00:40:09+08:00</updated>
+		<id>http://localhost:4000/shorts/animated-favicons</id>
+		<content type="html" xml:base="http://localhost:4000/shorts/2023-08-07-animated-favicons.html">&lt;p&gt;&lt;a href=&quot;https://uses.tech/&quot;&gt; &lt;/a&gt;I was looking at &lt;a href=&quot;https://uses.tech/&quot;&gt;uses.tech website&lt;/a&gt;. I wondered how I can have an animated favicon because this is probably the first time I saw one.&lt;/p&gt;
+
+&lt;p&gt;Then I came accross this: &lt;a href=&quot;http://www.p01.org/defender_of_the_favicon/&quot;&gt;an arcade game played in the favicon&lt;/a&gt;. How cool is that!&lt;/p&gt;</content>
+		<author>
+			<name></name>
+		</author>
+		<summary type="html">I was looking at uses.tech website. I wondered how I can have an animated favicon because this is probably the first time I saw one.</summary>
+	</entry>
+</feed>

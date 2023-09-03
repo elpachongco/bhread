@@ -1,0 +1,53 @@
+[tool.poetry]
+name = "bhread"
+version = "0.1.0"
+description = "Bhread is a blog aggregator"
+authors = ["elpachongco <earlsiachongco@gmail.com>"]
+license = "GPLv3"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+Django = "^4.2.4"
+Pillow = "^10.0.0"
+requests = "^2.31.0"
+feedparser = "^6.0.10"
+beautifulsoup4 = "^4.12.2"
+requests-cache = "^1.1.0"
+trafilatura = "^1.6.1"
+django-stubs = {extras = ["compatible-mypy"], version = "^4.2.3"}
+django-tailwind = {extras = ["reload"], version = "^3.6.0"}
+django-components = "^0.28.1"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.7.0"
+pre-commit = "^3.4.0"
+isort = "^5.12.0"
+djhtml = "^3.0.6"
+
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+plugins = ["mypy_django_plugin.main"]
+
+[tool.django-stubs]
+django_settings_module = "core.settings"

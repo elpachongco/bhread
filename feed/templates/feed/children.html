@@ -1,0 +1,63 @@
+{% extends base_template %}
+{% load static %}
+{% block content %}
+{% for reply, reply_count, favicon in replies %}
+<ol class="">
+  <div
+    class="border-solid border-l border-alto pl-4"
+    x-data="{ open: true, label: '[hide]' }"
+  >
+    <li>
+      <h3 class="flex items-center">
+        <img class="mr-2" height="15" width="15" src="{{ favicon }}" />
+        <a class="mr-2" id="{{ reply.id }}" href="{{ reply.url }}">
+          {{ reply.title }}
+          <small>
+            <a
+              href="javascript:undefined"
+              @click="open = !open; label=open? '[hide]' : '[see {{ reply_count }}]'"
+              x-text="label"
+            >
+            </a>
+          </small>
+          <small>
+            <a href="#{{ reply.parent.pk }}">[parent]</a>
+          </small>
+        </a>
+      </h3>
+      <div
+        x-show="open"
+        x-transition:enter="transition ease-in duration-150"
+        x-transition:enter-start="opacity-0 -translate-y-8"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-out duration-150"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 -translate-y-8"
+      >
+        <p>
+          {{ reply.content | safe }}
+          <a href="{{ reply.url }}">visit site</a>
+        </p>
+        <p>{{ reply.date_added|timesince }} ago</p>
+        <a
+          hx-get="{% url 'children' reply.pk %}"
+          hx-swap="afterend"
+          hx-target="#descendants-{{ reply.pk }}"
+          hx-trigger="revealed"
+          hx-indicator="#fetch-spinner"
+        >
+          {% comment %} {{ reply_count }} repl{{ reply_count|pluralize:"y,ies"}}
+          {% endcomment %}
+        </a>
+        <div id="descendants-{{ reply.pk }}"></div>
+        <img
+          width="25px"
+          id="fetch-spinner"
+          class="htmx-indicator-remove dark:invert"
+          src="{% static 'spinning-circles.svg' %}"
+        />
+      </div>
+    </li>
+  </div>
+</ol>
+{% endfor %} {% endblock %}

@@ -1,0 +1,169 @@
+{% load static tailwind_tags %}
+<!doctype html>
+<html lang="en" color-mode="user">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="shortcut icon" href="{% static 'feed/logo.svg' %}" />
+    {% tailwind_css %}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,600;0,700;1,300&family=Ubuntu&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <script defer src="https://unpkg.com/htmx.org@1.9.4"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    {% if title %}
+    <title>{{ title }}</title>
+    {% else %}
+    <title>Bhread: Blog Threads</title>
+    {% endif %}
+    <script>
+      // Functions for controlling theme
+      function theme(t) {
+        switch (t) {
+          case "dark":
+            localStorage.theme = "dark";
+            break;
+          case "light":
+            localStorage.theme = "light";
+            break;
+          case "system":
+            localStorage.removeItem("theme");
+            break;
+        }
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (
+          localStorage.theme === "dark" ||
+          (!("theme" in localStorage) &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      }
+      theme("");
+    </script>
+  </head>
+  <body
+    class="bg-white flex justify-center hover:subpixel-antialiased dark:bg-slate-900 dark:text-neutral-200"
+    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+  >
+    <div class="flex flex-col container justify-center max-w-3xl">
+      <div id="navbar" class="flex items-center py-2">
+        <div id="logo" class="flex items-center p-1">
+          <img class="h-auto w-7 mr-1" src="{% static 'feed/logo.svg' %}" />
+          <a class="mr-2 text-black dark:text-alto" href="/">bhread</a>
+        </div>
+
+        {% with 'home feeds about' as route_names %}
+        {% for item in route_names.split %}
+        <div class="border-solid border-b-lochmara hover:border-b-2">
+          <a
+            class="mx-2 flex items-center hover:no-underline"
+            href="{% url item %}"
+            hx-boost="true"
+            hx-indicator="#page-load-spinner"
+            hx-swap="innerHTML"
+          >
+            <span class="material-symbols-outlined size-20 mr-1">
+              {# icon names #} {% cycle 'home' 'rss_feed' 'bakery_dining' %}
+            </span>
+            {{ item }}
+          </a>
+        </div>
+        {% endfor %}
+        {% endwith %}
+
+        <div
+          id="darkmode"
+          class="flex items-center text-lochmara hover:border-b-2 hover:border-b-lochmara"
+          x-data="{ mode: localStorage.theme || 'system',
+                  modes: ['system', 'dark', 'light'],
+                  toggleMode() {
+                  this.mode=this.modes[(this.modes.indexOf(this.mode) + 1) % this.modes.length]
+                  }
+                  }"
+          @click="toggleMode();theme(mode)"
+        >
+          <a class="hover:no-underline" href="javascript:void(0)">
+            <div class="flex items-center" x-transition>
+              <div class="mr-1">
+                <span
+                  x-cloak
+                  class="material-symbols-outlined"
+                  x-show="mode=='light'"
+                >
+                  light_mode
+                </span>
+                <span
+                  x-cloak
+                  class="material-symbols-outlined text-lochmara"
+                  x-show="mode=='dark'"
+                >
+                  dark_mode
+                </span>
+                <span
+                  class="material-symbols-outlined text-lochmara"
+                  x-show="mode=='system'"
+                >
+                  computer
+                </span>
+              </div>
+
+              theme
+            </div>
+          </a>
+        </div>
+
+        {% if user.is_authenticated %}
+        {% with 'profile logout' as route_names %}
+        {% for item in route_names.split %}
+        <div class="border-solid border-b-lochmara hover:border-b-2">
+          <a
+            class="mx-2 flex items-center hover:no-underline"
+            hx-boost="true"
+            href="{% url item %}"
+            hx-indicator="#page-load-spinner"
+          >
+            <span class="material-symbols-outlined size-20 mr-1"
+              >{% cycle 'face' 'close' %}</span
+            >
+            {{ item }}
+          </a>
+        </div>
+        {% endfor %}
+        {% endwith %}
+        {% else %}
+        <a class="mx-2" href="{% url 'login' %}">login</a>
+        <a class="mx-2" href="{% url 'register' %}">register</a>
+        {% endif %}
+
+        <img
+          width="25px"
+          id="page-load-spinner"
+          class="htmx-indicator-remove dark:invert"
+          src="{% static 'spinning-circles.svg' %}"
+        />
+      </div>
+
+      {% if messages %} {% for message in messages %}
+      <div style="background: beige; padding: 10">{{ message }}</div>
+      {% endfor %} {% endif %}
+      <p>{% block content %} {% endblock %}</p>
+    </div>
+  </body>
+</html>

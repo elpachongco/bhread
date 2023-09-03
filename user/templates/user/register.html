@@ -1,0 +1,17 @@
+{% extends base_template %} {% block content %}
+<form method="POST">
+  {% csrf_token %}
+  <fieldset>
+    <legend>Join Today</legend>
+    {{ u_form.as_p }} {{ f_form.as_p }}
+  </fieldset>
+  <div>
+    <button type="submit">Sign up</button>
+  </div>
+</form>
+<div>
+  <small>
+    Already have an account? <a href="{% url 'login' %}">Log in</a>
+  </small>
+</div>
+{% endblock content %}

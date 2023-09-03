@@ -1,0 +1,18 @@
+{% extends base_template %} {% block content %}
+<ol>
+  {% if posts %} {% for post in posts %}
+  <li>
+    <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+    <small>{{ post.date_added | date:'M d Y c' }}</small><br />
+    <p>{{ post.content }}</p>
+    <a href="{% url 'detail' post.url %}">Replies</a>
+  </li>
+
+  {% endfor %} {% else %}
+
+  <p>alskjfd</p>
+
+  {% endif %}
+</ol>
+
+{% endblock %}

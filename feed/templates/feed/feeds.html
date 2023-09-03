@@ -1,0 +1,89 @@
+{% extends base_template %} {% block content %} {% load static %}
+<h2>Feeds Management</h2>
+<p>Submitted feeds will be scanned periodically by Bhread for updates.</p>
+<div hx-boost="true" hx-swap="innerHTML">
+  <form
+    method="POST"
+    enctype="multipart/form-data"
+    hx-indicator="#add-form-spinner"
+  >
+    {% comment %}
+    <form hx-post="{% url 'feeds' %}" hx-swap="outerHTML" hx-boost="true">
+      {% endcomment %}
+      <fieldset>
+        <legend>Add a new feed</legend>
+        {{ feed_form.as_p }}
+        <p>
+          Please limit submissions to feeds that can participate to bhread
+          discussions.
+        </p>
+        <div style="display: flex; flex-direction: row; align-items: center">
+          <button class="bg-alto dark:bg-lochmara" type="submit">Submit</button>
+          <img
+            width="25"
+            height="auto"
+            id="add-form-spinner"
+            class="htmx-indicator dark:invert"
+            src="{% static 'spinning-circles.svg' %}"
+          />
+          {% comment %}
+          <span class="material-symbols-outlined">check_circle</span>
+          {% endcomment %}
+        </div>
+      </fieldset>
+    </form>
+
+    <h3>Feeds by you</h3>
+    <ul>
+      {% for user_feed in user_feeds %}
+      <li id="feed-li">
+        <p>
+          [{% if user_feed.is_public %}PUBLIC{% else %}PRIVATE{% endif %}]
+          {% if user_feed.favicon %}
+          <img height="15" width="15" src="{{ user_feed.favicon }}" />
+          {% endif %}
+          {{ user_feed.name }} (<a href="{{ user_feed.url }}" >{{ user_feed.url }}</a >)
+          <a href="{% url 'feed-edit' user_feed.pk %}">✏️ Edit</a>
+          <a
+            href="javascript:void(0)"
+            hx-target="body"
+            hx-swap="innerHTML"
+            hx-delete="{% url 'feed-delete' user_feed.pk %}"
+            hx-confirm="Are you sure you wish to delete this feed?"
+            hx-indicator="#delete-spinner-{{ user_feed.pk }}"
+          >
+            ❌ Delete
+          </a>
+          <img
+            width="15"
+            id="delete-spinner-{{ user_feed.pk }}"
+            class="htmx-indicator dark:invert"
+            src="{% static 'spinning-circles.svg' %}"
+          />
+        </p>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <h3>All Feeds</h3>
+    <p>Public feeds from the people of bhread, including you.</p>
+    <p>
+      Search Feeds
+      <input class="" type="text" placeholder="Input search here" />
+    </p>
+    <ul>
+      {% for feed in all_feeds %}
+      <li>
+        <p>
+          {% if feed.favicon %}
+          <img height="15" width="15" src="{{ feed.favicon }}" />
+          {% endif %} {{ feed.name }} ({{ feed.url|urlize}}) by {{ feed.added_by
+          }}
+        </p>
+      </li>
+      {% endfor %}
+    </ul>
+
+    {% endblock %}
+  </form>
+</div>

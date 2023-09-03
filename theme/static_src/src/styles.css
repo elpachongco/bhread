@@ -1,0 +1,96 @@
+@tailwind base;
+
+/* Global styles */
+@layer base {
+  h1 {
+    @apply p-2 font-header text-3xl font-medium;
+  }
+  h2 {
+    @apply py-2 font-header text-2xl font-medium;
+  }
+  h3 {
+    @apply py-2 font-header text-xl font-medium;
+  }
+  h4 {
+    @apply py-2 font-header text-lg font-medium;
+  }
+  h5 {
+    @apply py-2 font-header text-sm font-medium;
+  }
+  h6 {
+    @apply py-2 font-header text-xs font-medium;
+  }
+  a {
+    @apply text-lochmara transition-all duration-75 ease-out active:translate-y-0.5;
+  }
+  a:hover {
+    @apply underline;
+  }
+
+  p {
+    @apply pb-2 font-body;
+  }
+  fieldset {
+    @apply rounded-lg border border-solid border-lochmara p-6;
+  }
+
+  button {
+    @apply mr-2 rounded-lg p-2 px-4 transition-all
+    duration-75 ease-out hover:bg-neutral-400 active:translate-y-0.5;
+  }
+  input[type="email"],
+  input[type="url"],
+  input[type="text"],
+  input[type="password"] {
+    @apply rounded-lg border-alto bg-gallery transition-colors
+    duration-500
+    ease-out focus:border-pacific/60 dark:bg-[#202B38];
+  }
+}
+
+@tailwind components;
+@tailwind utilities;
+
+/* HTMX */
+.htmx-indicator {
+  opacity: 0;
+  transition: opacity 500ms ease-in;
+}
+.htmx-request .htmx-indicator {
+  opacity: 1;
+}
+.htmx-request.htmx-indicator {
+  opacity: 1;
+}
+
+.htmx-added {
+  opacity: 100;
+}
+
+.htmx-settling {
+}
+
+.htmx-swapping {
+}
+
+li {
+  transition: opacity 80ms ease-in;
+}
+
+.htmx-indicator-remove {
+  display: none;
+  transition: scale 500ms ease-in;
+}
+
+.htmx-request .htmx-indicator-remove {
+  scale: 1;
+  display: inline;
+}
+.htmx-request.htmx-indicator-remove {
+  scale: 1;
+  display: inline;
+}
+
+[x-cloak] {
+  display: none !important;
+}
