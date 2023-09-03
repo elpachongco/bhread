@@ -14,6 +14,21 @@ For styling, Bhread uses [Water.css](https://watercss.kognise.dev/) for its base
 The [bhread diagram](./bhread.drawio) contains an ERD, and some flow diagrams.
 Threads are stored in an adjanency list structure
 
+## Running
+
+Run redis docker image:
+docker run -p 6379:6379 -it redis/redis-stack:latest
+
+Run django-q
+poetry run manage.py qcluster
+
+Run tailwind:
+poetry run manage.py tailwind start
+
+Run django:
+poetry run manage.py runserver
+
+
 ## Contribute
 
 Improvements in code or art submissions (see art/memes) are welcome!

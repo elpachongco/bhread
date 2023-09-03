@@ -1,3 +1,4 @@
+from datetime import timedelta
 from typing import Any, Dict, Iterator, List, Optional
 from urllib.parse import urlparse
 
@@ -89,6 +90,9 @@ def feed_update(feed: Feed):
             p.save()
             feed_post.parent = p
             feed_post.save()
+
+    feed.last_scan = timezone.now()
+    feed.save()
     ancestors_fill_content()
 
 
@@ -96,12 +100,10 @@ def feed_update_all():
     """Create posts"""
 
     """ This builds the tree of posts """
-    for feed in Feed.objects.all():
+    for feed in Feed.objects.filter(
+        last_scan__lte=timezone.now() - timedelta(minutes=1)
+    ):
         feed_update(feed)
-
-    """ Ancestors will be empty at this point.
-    Fill them with title and content. """
-    ancestors_fill_content()
 
 
 def get_favicon_path(url: str) -> str:

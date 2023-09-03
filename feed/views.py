@@ -9,13 +9,13 @@ from django.views.generic.edit import DeleteView
 
 from feed import selectors as sel
 from feed import services as ser
+from feed import tasks
 
 from .forms import FeedUpdateForm, PageCreateForm
 from .models import Feed, Post
 
 
 def home(request):
-    ser.feed_update_all()
     context = {
         "posts": [],
         "favicons": [],

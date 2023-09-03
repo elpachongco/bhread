@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "tailwind",
     "theme",
     "django_browser_reload",
+    "django_q",
 ]
 
 MIDDLEWARE = [
@@ -157,3 +158,20 @@ TAILWIND_APP_NAME = "theme"
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+Q_CLUSTER = {
+    "name": "bhread",
+    # 'workers': 8,
+    "recycle": 500,
+    "timeout": 100,
+    "compress": True,
+    "save_limit": 250,
+    "queue_limit": 500,
+    "cpu_affinity": 1,
+    "label": "Django Q",
+    "redis": {
+        "host": "127.0.0.1",
+        "port": 6379,
+        "db": 0,
+    },
+}
