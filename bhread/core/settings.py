@@ -163,7 +163,7 @@ Q_CLUSTER = {
     "name": "bhread",
     # 'workers': 8,
     "recycle": 500,
-    "timeout": 100,
+    "timeout": 60,
     "compress": True,
     "save_limit": 250,
     "queue_limit": 500,

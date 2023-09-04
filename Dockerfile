@@ -1,26 +1,29 @@
-# syntax=docker/dockerfile:1
-FROM python:3.11.5-slim as python-base
-WORKDIR /
-ENV POETRY_VERSION=1.6.1 \
-    PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PIP_NO_CACHE_DIR=off \
-    PIP_DISABLE_PIP_VERSION_CHECK=on \
-    PIP_DEFAULT_TIMEOUT=100 \
-    POETRY_HOME="/opt/poetry" \
-    POETRY_VIRTUALENVS_IN_PROJECT=true \
-    POETRY_NO_INTERACTION=1 \
-    PYSETUP_PATH="/opt/pysetup" \
-    VENV_PATH="/opt/pysetup/.venv"
-RUN apt-get update \
-    && apt-get install --no-install-recommends -y \
-        curl \
-        build-essential
-
+# The builder image, used to build the virtual environment
+FROM python:3.11-buster as builder
+ENV POETRY_VERSION=1.6.1 
+ENV POETRY_HOME=/etc/poetry 
 RUN curl -sSL https://install.python-poetry.org | python3 -
-WORKDIR $PYSETUP_PATH
-COPY ./poetry.lock ./pyproject.toml ./
-COPY . .
-RUN $POETRY_HOME/bin/poetry install --only main
-EXPOSE 8000
-CMD ["poetry", "run", "python3", "manage.py", "runserver", "0.0.0.0:8000"]
+
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    POETRY_VIRTUALENVS_CREATE=1 \
+    POETRY_CACHE_DIR=/tmp/poetry_cache
+
+WORKDIR /app
+
+COPY pyproject.toml poetry.lock ./
+RUN touch README.md
+
+ENV PATH="$POETRY_HOME/bin:$PATH"
+RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR
+
+# The runtime image, used to just run the code provided its virtual environment
+FROM python:3.11-slim-buster as runtime
+
+ENV VIRTUAL_ENV=/app/.venv \
+    PATH="/app/.venv/bin:$PATH"
+# ENV POETRY_HOME=/etc/poetry 
+
+COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+
+COPY bhread/* .
