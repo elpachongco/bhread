@@ -1,8 +1,51 @@
+version: '2'
 services:
-  web:
-    build: .
-    ports:
-      - "8000:8000"
-    command: python manage.py runserver 0.0.0.0:8000
   redis:
     image: "redis:alpine"
+    ports:
+      - 6379:6379
+  db:
+    image: postgres
+      # volumes:
+      #   - ./data/db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  tailwind:
+    build: .
+    volumes:
+      - .:/code
+    command: python /code/bhread/manage.py tailwind start
+
+    # Without tty, no stdin, and tailwind watcher aborts
+    # https://github.com/tailwindlabs/tailwindcss/issues/5324
+    tty: true
+  djangoq:
+      build: .
+      command: python /code/bhread/manage.py qcluster
+      environment:
+        - POSTGRES_DB=postgres
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+      volumes:
+        - .:/code
+      depends_on:
+        - redis
+  web:
+      build: .
+      ports:
+        - "8000:8000"
+      command: python /code/bhread/manage.py runserver 0.0.0.0:8000
+      volumes:
+        - .:/code
+      environment:
+        - POSTGRES_DB=postgres
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+      depends_on:
+        - db
+        - djangoq
+        - tailwind

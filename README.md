@@ -32,6 +32,10 @@ Run Dockerfile:
 docker build -t testing-bhread .
 docker run -p 127.0.0.1:8000:8000 testing-bhread
 
+Run docker compose:
+docker compose up --build or
+docker compose up 
+
 ## Contribute
 
 Improvements in code or art submissions (see art/memes) are welcome!

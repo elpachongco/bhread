@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -95,9 +96,17 @@ WSGI_APPLICATION = "core.wsgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    # "default": {
+    #     "ENGINE": "django.db.backends.sqlite3",
+    #     "NAME": BASE_DIR / "db.sqlite3",
+    # }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_NAME'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
 
@@ -156,12 +165,12 @@ LOGIN_URL = "login"
 
 TAILWIND_APP_NAME = "theme"
 INTERNAL_IPS = [
-    "127.0.0.1",
+        "0.0.0.0",
 ]
 
 Q_CLUSTER = {
     "name": "bhread",
-    # 'workers': 8,
+    # 'workers': 8,  # Use default
     "recycle": 500,
     "timeout": 60,
     "compress": True,
@@ -170,7 +179,7 @@ Q_CLUSTER = {
     "cpu_affinity": 1,
     "label": "Django Q",
     "redis": {
-        "host": "127.0.0.1",
+        "host": "redis",
         "port": 6379,
         "db": 0,
     },
