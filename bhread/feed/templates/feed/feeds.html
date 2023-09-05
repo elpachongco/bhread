@@ -77,8 +77,7 @@
         <p>
           {% if feed.favicon %}
           <img height="15" width="15" src="{{ feed.favicon }}" />
-          {% endif %} {{ feed.name }} ({{ feed.url|urlize}}) by {{ feed.added_by
-          }}
+          {% endif %} {{ feed.name }} ({{ feed.url|urlize}}) by {{ feed.added_by }}
         </p>
       </li>
       {% endfor %}
