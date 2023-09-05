@@ -7,7 +7,6 @@ import requests
 import requests_cache
 from bs4 import BeautifulSoup
 from django.utils import timezone
-
 from feed import selectors as sel
 
 from .models import Feed, Post, User, Vote
@@ -100,6 +99,7 @@ def feed_update_all():
     """Create posts"""
 
     """ This builds the tree of posts """
+
     for feed in Feed.objects.filter(
         last_scan__lte=timezone.now() - timedelta(minutes=1)
     ):

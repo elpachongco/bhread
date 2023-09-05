@@ -6,7 +6,6 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_http_methods
 from django.views.generic.edit import DeleteView
-
 from feed import selectors as sel
 from feed import services as ser
 from feed import tasks

@@ -7,7 +7,6 @@ import requests
 import requests_cache
 from bs4 import BeautifulSoup
 from django.utils import timezone
-
 from feed import services as ser
 
 from .models import Feed, Page, Post, User, Vote

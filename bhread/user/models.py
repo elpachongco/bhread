@@ -1,8 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
-from PIL import Image
-
 from feed.models import Feed
+from PIL import Image
 
 
 class Profile(models.Model):

@@ -20,7 +20,6 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import include, path
 from django.views.generic import TemplateView
-
 from feed import views as feed_views
 from user import views as user_views
 

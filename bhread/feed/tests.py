@@ -1,5 +1,4 @@
 from django.test import TestCase
-
 from user.models import User
 
 from .models import Feed, Post

@@ -100,13 +100,13 @@ DATABASES = {
     #     "ENGINE": "django.db.backends.sqlite3",
     #     "NAME": BASE_DIR / "db.sqlite3",
     # }
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_NAME'),
-        'USER': os.environ.get('POSTGRES_USER'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'HOST': 'db',
-        'PORT': 5432,
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("POSTGRES_NAME"),
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "HOST": "0.0.0.0",
+        "PORT": 5432,
     }
 }
 
@@ -165,7 +165,7 @@ LOGIN_URL = "login"
 
 TAILWIND_APP_NAME = "theme"
 INTERNAL_IPS = [
-        "0.0.0.0",
+    "0.0.0.0",
 ]
 
 Q_CLUSTER = {
@@ -179,7 +179,7 @@ Q_CLUSTER = {
     "cpu_affinity": 1,
     "label": "Django Q",
     "redis": {
-        "host": "redis",
+        "host": "0.0.0.0",
         "port": 6379,
         "db": 0,
     },

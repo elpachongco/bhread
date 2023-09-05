@@ -7,6 +7,6 @@ class FeedConfig(AppConfig):
 
     def ready(self):
         import feed.signals
-        # from feed.tasks import schedule_update_feeds
 
+        # from feed.tasks import schedule_update_feeds
         # schedule_update_feeds()
