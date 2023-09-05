@@ -14,6 +14,12 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    # Test if pg is ready
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
   tailwind:
     build: .
     volumes:
@@ -40,7 +46,9 @@ services:
       network_mode: "host"
       ports:
         - "8000:8000"
-      command: python /code/bhread/manage.py runserver 0.0.0.0:8000
+      command: >
+        sh -c "python /code/bhread/manage.py migrate
+        && python /code/bhread/manage.py runserver 0.0.0.0:8000"
       volumes:
         - .:/code
       environment:
@@ -48,6 +56,5 @@ services:
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=postgres
       depends_on:
-        - db
-        - djangoq
-        - tailwind
+        db:
+          condition: service_healthy
