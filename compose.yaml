@@ -19,12 +19,12 @@ services:
     volumes:
       - .:/code
     command: python /code/bhread/manage.py tailwind start
-
     # Without tty, no stdin, and tailwind watcher aborts
     # https://github.com/tailwindlabs/tailwindcss/issues/5324
     tty: true
   djangoq:
       build: .
+      network_mode: "host"
       command: python /code/bhread/manage.py qcluster
       environment:
         - POSTGRES_DB=postgres
@@ -36,6 +36,8 @@ services:
         - redis
   web:
       build: .
+      # Allow access of ports in the host machine (for Test feeds):
+      network_mode: "host"
       ports:
         - "8000:8000"
       command: python /code/bhread/manage.py runserver 0.0.0.0:8000
