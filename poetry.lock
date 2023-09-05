@@ -373,20 +373,6 @@ files = [
 Django = ">=3.2"
 
 [[package]]
-name = "django-components"
-version = "0.28.1"
-description = "A way to create simple reusable template components in Django."
-optional = false
-python-versions = "*"
-files = [
-    {file = "django_components-0.28.1-py3-none-any.whl", hash = "sha256:fe550bcfcc97e46e98378f0defa04f098d1834936c4d2c585975a36a13031458"},
-    {file = "django_components-0.28.1.tar.gz", hash = "sha256:673cab142b6ea0930da500334591be9a6a42854629c191bceed284556cb0229f"},
-]
-
-[package.dependencies]
-Django = ">=3.2"
-
-[[package]]
 name = "django-picklefield"
 version = "3.1"
 description = "Pickled object field for Django"
@@ -1353,6 +1339,23 @@ files = [
 ]
 
 [[package]]
+name = "slippers"
+version = "0.6.2"
+description = "Build reusable components in Django without writing a single line of Python."
+optional = false
+python-versions = ">=3.8.0"
+files = [
+    {file = "slippers-0.6.2-py3-none-any.whl", hash = "sha256:739e05f85354becbf0a65daab831eea62557d89e7512042209ab629af4378bca"},
+    {file = "slippers-0.6.2.tar.gz", hash = "sha256:4cb555b8822ba0d404e5405723f5d723994022c29046008ee917081031bc0cf1"},
+]
+
+[package.dependencies]
+Django = ">=3.2"
+PyYAML = ">=5.4.0"
+typeguard = ">=2.13.3,<3.0.0"
+typing-extensions = ">=4.4.0"
+
+[[package]]
 name = "soupsieve"
 version = "2.4.1"
 description = "A modern CSS selector implementation for Beautiful Soup."
@@ -1413,6 +1416,21 @@ urllib3 = {version = ">=1.26,<3", markers = "python_version >= \"3.7\""}
 [package.extras]
 all = ["brotli", "cchardet (>=2.1.7)", "faust-cchardet (>=2.1.18)", "htmldate[speed] (>=1.4.3)", "py3langid (>=0.2.2)", "pycurl (>=7.45.2)"]
 gui = ["Gooey (>=1.0.1)"]
+
+[[package]]
+name = "typeguard"
+version = "2.13.3"
+description = "Run-time type checker for Python"
+optional = false
+python-versions = ">=3.5.3"
+files = [
+    {file = "typeguard-2.13.3-py3-none-any.whl", hash = "sha256:5e3e3be01e887e7eafae5af63d1f36c849aaa94e3a0112097312aabfa16284f1"},
+    {file = "typeguard-2.13.3.tar.gz", hash = "sha256:00edaa8da3a133674796cf5ea87d9f4b4c367d77476e185e80251cc13dfbb8c4"},
+]
+
+[package.extras]
+doc = ["sphinx-autodoc-typehints (>=1.2.0)", "sphinx-rtd-theme"]
+test = ["mypy", "pytest", "typing-extensions"]
 
 [[package]]
 name = "types-pytz"
@@ -1540,4 +1558,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "0627058db18445c7b3ed284551f00fadb4ce287bb14bfb8316e5c145dd7fa66a"
+content-hash = "973365a215bcffa65854a1d80fb389a0749787e4868483ccd64b942c717a9610"
