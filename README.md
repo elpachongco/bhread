@@ -16,6 +16,11 @@ Threads are stored in an adjanency list structure
 
 ## Running
 
+Run pre-commit in a new repo:
+
+poetry run pre-commit install
+or poetry run pre-commit run --all-files
+
 Run redis docker image:
 docker run -p 6379:6379 -it redis/redis-stack:latest
 
@@ -34,7 +39,7 @@ docker run -p 127.0.0.1:8000:8000 testing-bhread
 
 Run docker compose:
 docker compose up --build or
-docker compose up 
+docker compose up
 
 ## Contribute
 
