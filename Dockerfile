@@ -36,4 +36,3 @@ COPY --from=node_base / /
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
 COPY . /code/
-RUN python /code/bhread/manage.py tailwind install
