@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    "allauth.socialaccount.providers.github",  # Add gmail next
+    "allauth.socialaccount.providers.github",
+    "allauth.socialaccount.providers.google",
 ]
 
 MIDDLEWARE = [
@@ -67,7 +68,9 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            BASE_DIR / "templates" / "allauth",
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -193,20 +196,40 @@ SITE_ID = 1
 
 # Provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
-    # 'google': {
-    #     # For each OAuth based provider, either add a ``SocialApp``
-    #     # (``socialaccount`` app) containing the required client
-    #     # credentials, or list them here:
-    #     'APP': {
-    #         'client_id': '123',
-    #         'secret': '456',
-    #         'key': ''
-    #     }
-    # },
+    # NOTE: If adding new provider, install them
+    "google": {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        "APP": {
+            "client_id": Path(os.environ.get("GOOGLE_AUTH_CLIENT_ID"))
+            .read_text()
+            .strip("\n"),
+            "secret": Path(os.environ.get("GOOGLE_AUTH_SECRET"))
+            .read_text()
+            .strip("\n"),
+            "key": "",
+        },
+        "SCOPE": [
+            "email",
+        ],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
+        "OAUTH_PKCE_ENABLED": True,
+    },
     "github": {
         # For each OAuth based provider, either add a ``SocialApp``
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
-        "APP": {"client_id": "123", "secret": "456", "key": ""}
-    }
+        "APP": {
+            "client_id": Path(os.environ.get("GITHUB_AUTH_CLIENT_ID"))
+            .read_text()
+            .strip("\n"),
+            "secret": Path(os.environ.get("GITHUB_AUTH_SECRET"))
+            .read_text()
+            .strip("\n"),
+            "key": "",
+        }
+    },
 }
