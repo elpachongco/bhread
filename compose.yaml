@@ -61,11 +61,14 @@ services:
       command: python /code/bhread/manage.py qcluster
 
 secrets:
+  # Initial installation: you need to create the files and put content
+  # github: https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app
+  # google: ?
   github_auth_secret:
-    file: github_auth_secret.txt
+    file: secrets/github_auth_secret.txt
   github_auth_client_id:
-    file: github_auth_client_id.txt
+    file: secrets/github_auth_client_id.txt
   google_auth_secret:
-    file: google_auth_secret.txt
+    file: secrets/google_auth_secret.txt
   google_auth_client_id:
-    file: google_auth_client_id.txt
+    file: secrets/google_auth_client_id.txt
