@@ -28,6 +28,8 @@ WORKDIR /code
 
 ENV VIRTUAL_ENV=/app/.venv \
     PATH="/app/.venv/bin:$PATH" \
+    PYTHONWRITEBYTECODE=1 \
+    PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1
 
 COPY --from=node_base / /
