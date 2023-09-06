@@ -88,6 +88,29 @@
         {% endfor %}
         {% endwith %}
 
+        {% if user.is_authenticated %}
+        {% with 'profile logout' as route_names %}
+        {% for item in route_names.split %}
+        <div class="border-solid border-b-lochmara hover:border-b-2">
+          <a
+            class="mx-2 flex items-center hover:no-underline"
+            hx-boost="true"
+            href="{% url item %}"
+            hx-indicator="#page-load-spinner"
+          >
+            <span class="material-symbols-outlined size-20 mr-1"
+              >{% cycle 'face' 'close' %}</span
+            >
+            {{ item }}
+          </a>
+        </div>
+        {% endfor %}
+        {% endwith %}
+        {% else %}
+        <a class="mx-2" href="{% url 'login' %}">login</a>
+        <a class="mx-2" href="{% url 'register' %}">register</a>
+        {% endif %}
+
         <div
           id="darkmode"
           class="flex items-center text-lochmara hover:border-b-2 hover:border-b-lochmara"
@@ -128,29 +151,6 @@
             </div>
           </a>
         </div>
-
-        {% if user.is_authenticated %}
-        {% with 'profile logout' as route_names %}
-        {% for item in route_names.split %}
-        <div class="border-solid border-b-lochmara hover:border-b-2">
-          <a
-            class="mx-2 flex items-center hover:no-underline"
-            hx-boost="true"
-            href="{% url item %}"
-            hx-indicator="#page-load-spinner"
-          >
-            <span class="material-symbols-outlined size-20 mr-1"
-              >{% cycle 'face' 'close' %}</span
-            >
-            {{ item }}
-          </a>
-        </div>
-        {% endfor %}
-        {% endwith %}
-        {% else %}
-        <a class="mx-2" href="{% url 'login' %}">login</a>
-        <a class="mx-2" href="{% url 'register' %}">register</a>
-        {% endif %}
 
         <img
           width="25px"
