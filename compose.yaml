@@ -44,6 +44,7 @@ services:
       build: .
       # Allow access of ports in the host machine (for Test feeds):
       network_mode: "host"
+      restart: unless-stopped
       ports:
         - "8000:8000"
       command: >

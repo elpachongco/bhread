@@ -39,11 +39,16 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     "slippers",
     "tailwind",
     "theme",
     "django_browser_reload",
     "django_q",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.github",  # Add gmail next
 ]
 
 MIDDLEWARE = [
@@ -61,9 +66,9 @@ ROOT_URLCONF = "core.urls"
 
 TEMPLATES = [
     {
-        "APP_DIRS": True,
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [],
+        "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
@@ -148,11 +153,14 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_REDIRECT_URL = "profile"
 LOGIN_URL = "login"
 
+"""TAILWIND settings"""
 TAILWIND_APP_NAME = "theme"
 INTERNAL_IPS = [
     "0.0.0.0",
 ]
 
+
+"""Djangoq settings"""
 Q_CLUSTER = {
     "name": "bhread",
     # 'workers': 8,  # Use default
@@ -168,4 +176,37 @@ Q_CLUSTER = {
         "port": 6379,
         "db": 0,
     },
+}
+
+"""
+All-auth settings
+"""
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
+    # `allauth` specific authentication methods, such as login by email
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+
+SITE_ID = 1
+
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    # 'google': {
+    #     # For each OAuth based provider, either add a ``SocialApp``
+    #     # (``socialaccount`` app) containing the required client
+    #     # credentials, or list them here:
+    #     'APP': {
+    #         'client_id': '123',
+    #         'secret': '456',
+    #         'key': ''
+    #     }
+    # },
+    "github": {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        "APP": {"client_id": "123", "secret": "456", "key": ""}
+    }
 }
