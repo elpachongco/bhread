@@ -89,23 +89,34 @@
         {% endwith %}
 
         {% if user.is_authenticated %}
-        {% with 'profile account_logout' as route_names %}
-        {% for item in route_names.split %}
         <div class="border-solid border-b-lochmara hover:border-b-2">
           <a
             class="mx-2 flex items-center hover:no-underline"
             hx-boost="true"
-            href="{% url item %}"
+            href="{% url 'profile' %}"
             hx-indicator="#page-load-spinner"
           >
             <span class="material-symbols-outlined size-20 mr-1"
-              >{% cycle 'face' 'close' %}</span
+              >face</span
             >
-            {{ item }}
+            profile
           </a>
         </div>
-        {% endfor %}
-        {% endwith %}
+
+        <div class="border-solid border-b-lochmara hover:border-b-2">
+          <a
+            class="mx-2 flex items-center hover:no-underline"
+            hx-boost="true"
+            href="{% url 'account_logout' %}"
+            hx-indicator="#page-load-spinner"
+          >
+            <span class="material-symbols-outlined size-20 mr-1"
+              >close</span
+            >
+            logout
+          </a>
+        </div>
+
         {% else %}
         <a class="mx-2" href="{% url 'account_login' %}">login</a>
         <a class="mx-2" href="{% url 'account_signup' %}">sign up</a>
