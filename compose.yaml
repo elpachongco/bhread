@@ -20,27 +20,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-  tailwind:
-    build: .
-    volumes:
-      - .:/code
-    command: python /code/bhread/manage.py tailwind start
-    # Without tty, no stdin, and tailwind watcher aborts
-    # https://github.com/tailwindlabs/tailwindcss/issues/5324
-    tty: true
-  djangoq:
-      build: .
-      network_mode: "host"
-      command: python /code/bhread/manage.py qcluster
-      environment:
-        - POSTGRES_DB=postgres
-        - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=postgres
-      volumes:
-        - .:/code
-      depends_on:
-        - redis
   web:
+      &web
       build: .
       # Allow access of ports in the host machine (for Test feeds):
       network_mode: "host"
@@ -57,6 +38,34 @@ services:
         - POSTGRES_DB=postgres
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=postgres
+        - GITHUB_AUTH_CLIENT_ID=/run/secrets/github_auth_client_id
+        - GITHUB_AUTH_SECRET=/run/secrets/github_auth_secret
+        - GOOGLE_AUTH_CLIENT_ID=/run/secrets/google_auth_client_id
+        - GOOGLE_AUTH_SECRET=/run/secrets/google_auth_secret
       depends_on:
         db:
           condition: service_healthy
+      secrets:
+        - github_auth_secret
+        - github_auth_client_id
+        - google_auth_secret
+        - google_auth_client_id
+  tailwind:
+      <<: *web
+      command: python /code/bhread/manage.py qcluster
+      # Without tty, no stdin, and tailwind watcher aborts
+      # https://github.com/tailwindlabs/tailwindcss/issues/5324
+      tty: true
+  djangoq:
+      <<: *web
+      command: python /code/bhread/manage.py qcluster
+
+secrets:
+  github_auth_secret:
+    file: github_auth_secret.txt
+  github_auth_client_id:
+    file: github_auth_client_id.txt
+  google_auth_secret:
+    file: google_auth_secret.txt
+  google_auth_client_id:
+    file: google_auth_client_id.txt
