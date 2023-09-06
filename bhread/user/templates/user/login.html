@@ -1,4 +1,14 @@
 {% extends "feed/base.html" %} {% block content %}
+{% load socialaccount %}
+<h1>Testing django allauth</h1>
+{% if user.is_authenticated %}
+<p>Welcome {{ user.username }} </p>
+{% else %}
+<a href="{% provider_login_url 'github' %}">Sign Up</a>
+{% endif %}
+{% endblock content %}
+
+{% comment %}
 <form method="POST">
   {% csrf_token %}
   <fieldset>
@@ -13,3 +23,5 @@
   <small> Need an account? <a href="{% url 'login' %}">Sign up now</a> </small>
 </div>
 {% endblock content %}
+
+{% endcomment %}

@@ -89,7 +89,7 @@
         {% endwith %}
 
         {% if user.is_authenticated %}
-        {% with 'profile logout' as route_names %}
+        {% with 'profile account_logout' as route_names %}
         {% for item in route_names.split %}
         <div class="border-solid border-b-lochmara hover:border-b-2">
           <a
@@ -107,8 +107,8 @@
         {% endfor %}
         {% endwith %}
         {% else %}
-        <a class="mx-2" href="{% url 'login' %}">login</a>
-        <a class="mx-2" href="{% url 'register' %}">register</a>
+        <a class="mx-2" href="{% url 'account_login' %}">login</a>
+        <a class="mx-2" href="{% url 'account_signup' %}">sign up</a>
         {% endif %}
 
         <div

@@ -48,7 +48,8 @@ services:
       ports:
         - "8000:8000"
       command: >
-        sh -c "python /code/bhread/manage.py migrate
+        sh -c "python /code/bhread/manage.py makemigrations \
+        && python /code/bhread/manage.py migrate \
         && python /code/bhread/manage.py runserver 0.0.0.0:8000"
       volumes:
         - .:/code
