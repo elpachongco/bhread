@@ -1,23 +1,23 @@
-{% block reply %} {# Unused #}
-<li style="margin-bottom: 25px">
-  <div>
-    <h3>
-      <img height="15" width="15" src="{{ favicon }}" />
-      <a href="{{ reply.url }}">{{ reply.title }}</a>
-    </h3>
-    <p>
-      {{ reply.content | truncatechars_html:150 | safe }}
-      <a href="{{ reply.url }}">visit site</a>
-    </p>
-  </div>
-  {{ reply.date_added|timesince }} ago
-  <a
-    hx-get="{% url 'children' reply.pk %}"
-    hx-swap="outerHTML"
-    hx-target="#descendants"
-  >
-    {{ reply_count }} repl{{ reply_count|pluralize:"y,ies"}}
-  </a>
-  <div id="descendants"></div>
-</li>
-{% endblock %}
+{% block reply %}
+    {# Unused #}
+    <li>
+        <div>
+            <h3>
+                <img height="15"
+                     width="15"
+                     src="{{ favicon }}"
+                     alt="site icon of the reply origin" />
+                <a href="{{ reply.url }}">{{ reply.title }}</a>
+            </h3>
+            <p>
+                {{ reply.content | truncatechars_html:150 | safe }}
+                <a href="{{ reply.url }}">visit site</a>
+            </p>
+        </div>
+        {{ reply.date_added|timesince }} ago
+        <a hx-get="{% url 'children' reply.pk %}"
+           hx-swap="outerHTML"
+           hx-target="#descendants">{{ reply_count }} repl{{ reply_count|pluralize:"y,ies" }}</a>
+        <div id="descendants"></div>
+    </li>
+{% endblock content %}

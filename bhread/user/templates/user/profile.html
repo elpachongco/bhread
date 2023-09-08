@@ -1,12 +1,13 @@
-{% extends base_template %} {% block content %}
-<p>{{ user.username }} {{ user.email }}</p>
-<img src="{{ user.profile.image.url }}" />
-<form method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
-  <fieldset>
-    <legend>Profile Info</legend>
-    {{ u_form.as_p }} {{ p_form.as_p }} {{ f_form.as_p }}
-    <button class="mt-2 bg-alto dark:bg-lochmara" type="submit">Update</button>
-  </fieldset>
-</form>
+{% extends base_template %}
+{% block content %}
+    <p>{{ user.username }} {{ user.email }}</p>
+    <img src="{{ user.profile.image.url }}" alt="user's display picture" />
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Profile Info</legend>
+            {{ u_form.as_p }} {{ p_form.as_p }} {{ f_form.as_p }}
+            <button class="mt-2 bg-alto dark:bg-lochmara" type="submit">Update</button>
+        </fieldset>
+    </form>
 {% endblock content %}

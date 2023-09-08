@@ -1,0 +1,75 @@
+{% load static %}
+<div id="navbar-right"
+     class="flex flex-row ml-20 pt-4 text-xl h-screen justify-left sticky top-0 text-alto">
+    <div class="w-52 flex flex-col justify-between">
+        <div class="border rounded-md border-alto w-full flex items-center  ring-lochmara focus-within:ring focus-within:text-black">
+            <span class="material-symbols-outlined size-20 ml-2">search</span>
+            <input class="rounded-md border-none w-full focus:ring-0"
+                   placeholder="search">
+        </input>
+    </div>
+    <div>
+        <div class="flex justify-between">
+            <div id="theming"
+                 class="flex items-center  dark:color-white"
+                 x-data="{ mode: localStorage.theme || 'system', modes: ['system', 'dark', 'light'], toggleMode() { this.mode=this.modes[(this.modes.indexOf(this.mode) + 1) % this.modes.length] } }"
+                 @click="toggleMode();theme(mode)">
+                <a class="hover:no-underline " href="javascript:void(0)">
+                    <div class="flex items-center" x-transition>
+                        <div>
+                            {% with "dark_mode light_mode computer" as icon_names %}
+                                {% for icon_name in icon_names.split %}
+                                    {% cycle 'dark' 'light' 'system' as mode silent %}
+                                    <span x-cloak
+                                          class="material-symbols-outlined dark:text-white"
+                                          x-show="mode=='{{ mode }}'">{{ icon_name }}</span>
+                                {% endfor %}
+                            {% endwith %}
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <span class="material-symbols-outlined">notifications</span>
+            <span class="material-symbols-outlined">settings</span>
+        </div>
+        <div class="text-sm mb-4">
+            <div class="mt-8">bhread v0.0.0</div>
+            <div class="mt-1">
+                {% with "about privacy source" as a %}
+                    {% for item in a.split %}
+                        {% cycle 'home' 'home' 'home' as urls silent %}
+                        <a class="pr-2 text-alto dark:text-white" href="{% url urls %}">{{ item }}</a>
+                    {% endfor %}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    // Functions for controlling theme
+    function theme(t) {
+      switch (t) {
+        case "dark":
+          localStorage.theme = "dark";
+          break;
+        case "light":
+          localStorage.theme = "light";
+          break;
+        case "system":
+          localStorage.removeItem("theme");
+          break;
+      }
+      // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+      if (
+        localStorage.theme === "dark" ||
+        (!("theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    }
+    theme("");
+</script>

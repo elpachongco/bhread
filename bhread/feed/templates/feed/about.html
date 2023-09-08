@@ -1,78 +1,71 @@
-{% extends "feed/base.html" %} {% block content %} {% load static %}
-<h2>Welcome to Bhread.com</h2>
-<p>
-  Bhread.com is a blog aggregator that makes threads out of blogs. 'blog
-  threads'
-</p>
-<h3>Get started</h3>
-
-<p>You need</p>
-
-<ul>
-  <li>A blog with an RSS or Atom Feed</li>
-</ul>
-
-Register an account to bhread.com and add a feed. Copy the URL of your blog's
-feed to the form and click submit.
-
-<p>
-  Make a blog post, start it with 'replying to' and a link to some web page e.g.
-  bhread.com:
-</p>
-<code>
-  replying to <a href="https://bhread.com">bhread.com</a>
-
-  Hello World!
-</code>
-
-<p>
-  Bhread will politely scan your feed every x seconds and if it finds a post
-  starting with 'replying to &lt;link&gt;', it will make a thread from it.
-  That's it!
-</p>
-
-<h2 id="idea">Idea</h2>
-<p>
-  The idea of bhread is to create a centralized hub of interactions without
-  centralizing data.
-</p>
-<p>
-  When I search for something today, I usually use site:reddit.com to find
-  something valuable. For example I google:
-  <code> best anime 2023 site:reddit.com </code>.
-</p>
-<p>
-  I always use reddit.com, sometimes specifying a subreddit because comments
-  there are <em>mostly</em> from people. I&#39;d use facebook if they allowed
-  search engines to crawl their sites but they don&#39;t. It&#39;s unfortunate
-  because some of the most active and knowledgeable groups I found on the
-  internet is on Facebook.
-</p>
-<p>
-  This is inefficient and it's not how the internet should be. Humanity&#39;s
-  knowledge should not belong to a single entity.
-</p>
-<p>
-  This is why bhread was created. I want the same interactions as facebook,
-  reddit, twitter but without the centralization of data.
-</p>
-<p>
-  In theory, bhread solves a lot of social media problems we have today[1]. If
-  you have time, help me test it out. Register your blog feed today on
-  <a href="https://bhread.com">bhread.com</a>. If you don&#39;t have a blog,
-  <a href="https://www.youtube.com/watch?v=o5g-lUuFgpg"
-    >create one for yourself</a
-  >
-  and have your own piece of the internet.
-</p>
-
-<p>
-  [1] - Although it also introduces new problems (moderation, for example), it's
-  <em>forgivable</em>.
-</p>
-
-<h4>tldr(?):</h4>
-<img src="{% static 'meme.jpg' %}" />
-<p>- earl</p>
-{% endblock %} meme ideas - satan vs jesus satan: Your child will not abandon
+{% extends "feed/base.html" %}
+{% block content %}
+    {% load static %}
+    <h2>Welcome to Bhread.com</h2>
+    <p>
+        Bhread.com is a blog aggregator that makes threads out of blogs. 'blog
+        threads'
+    </p>
+    <h3>Get started</h3>
+    <p>You need</p>
+    <ul>
+        <li>A blog with an RSS or Atom Feed</li>
+    </ul>
+    Register an account to bhread.com and add a feed. Copy the URL of your blog's
+    feed to the form and click submit.
+    <p>
+        Make a blog post, start it with 'replying to' and a link to some web page e.g.
+        bhread.com:
+    </p>
+    <code>
+        replying to <a href="https://bhread.com">bhread.com</a>
+        Hello World!
+    </code>
+    <p>
+        Bhread will politely scan your feed every x seconds and if it finds a post
+        starting with 'replying to &lt;link&gt;', it will make a thread from it.
+        That's it!
+    </p>
+    <h2 id="idea">Idea</h2>
+    <p>
+        The idea of bhread is to create a centralized hub of interactions without
+        centralizing data.
+    </p>
+    <p>
+        When I search for something today, I usually use site:reddit.com to find
+        something valuable. For example I google:
+        <code> best anime 2023 site:reddit.com </code>.
+    </p>
+    <p>
+        I always use reddit.com, sometimes specifying a subreddit because comments
+        there are <em>mostly</em> from people. I'd use facebook if they allowed
+        search engines to crawl their sites but they don't. It's unfortunate
+        because some of the most active and knowledgeable groups I found on the
+        internet is on Facebook.
+    </p>
+    <p>
+        This is inefficient and it's not how the internet should be. Humanity's
+        knowledge should not belong to a single entity.
+    </p>
+    <p>
+        This is why bhread was created. I want the same interactions as facebook,
+        reddit, twitter but without the centralization of data.
+    </p>
+    <p>
+        In theory, bhread solves a lot of social media problems we have today[1]. If
+        you have time, help me test it out. Register your blog feed today on
+        <a href="https://bhread.com">bhread.com</a>. If you don't have a blog,
+        <a href="https://www.youtube.com/watch?v=o5g-lUuFgpg">create one for yourself</a>
+        and have your own piece of the internet.
+    </p>
+    <p>
+        [1] - Although it also introduces new problems (moderation, for example), it's
+        <em>forgivable</em>.
+    </p>
+    <h4>tldr(?):</h4>
+    <img src="{% static 'meme.jpg' %}"
+         alt="meme showing a cartoon dog on fire saying 'this is fine' referencing the text 'site:reddit.com pancake recipe'" />
+    <p>- earl</p>
+{% endblock content %}
+meme ideas - satan vs jesus satan: Your child will not abandon
 twitter jesus: My child will type 'replying to '.

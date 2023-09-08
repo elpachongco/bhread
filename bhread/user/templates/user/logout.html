@@ -1,8 +1,9 @@
-{% extends "feed/base.html" %} {% block content %}
-<h2>Logged out</h2>
-<div>
-  <small>
-    <a href="{% url 'login' %}">Log in again</a>
-  </small>
-</div>
+{% extends "feed/base.html" %}
+{% block content %}
+    <h2>Logged out</h2>
+    <div>
+        <small>
+            <a href="{% url 'login' %}">Log in again</a>
+        </small>
+    </div>
 {% endblock content %}

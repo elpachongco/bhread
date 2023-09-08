@@ -21,7 +21,7 @@ def home(request):
         "base_template": "feed/base.html",
         "url_name": "home",
     }
-    for post in sel.ancestors():
+    for post in Post.objects.filter(feed__isnull=False):
         replies = sel.descendants_count(post)
         favicon = sel.favicon(post)
         context["posts"].append((ser.post_render(post), replies, favicon))

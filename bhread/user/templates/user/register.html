@@ -1,17 +1,16 @@
-{% extends base_template %} {% block content %}
-<form method="POST">
-  {% csrf_token %}
-  <fieldset>
-    <legend>Join Today</legend>
-    {{ u_form.as_p }} {{ f_form.as_p }}
-    <button class="bg-alto dark:bg-lochmara" type="submit">Sign up</button>
-  </fieldset>
-  <div>
-  </div>
-</form>
-<div>
-  <small>
-    Already have an account? <a href="{% url 'login' %}">Log in</a>
-  </small>
-</div>
+{% extends base_template %}
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Join Today</legend>
+            {{ u_form.as_p }} {{ f_form.as_p }}
+            <button class="bg-alto dark:bg-lochmara" type="submit">Sign up</button>
+        </fieldset>
+    </form>
+    <div>
+        <small>
+            Already have an account? <a href="{% url 'login' %}">Log in</a>
+        </small>
+    </div>
 {% endblock content %}

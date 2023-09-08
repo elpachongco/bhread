@@ -1,0 +1,50 @@
+{% load static %}
+<div id="navbar-left"
+     class="flex flex-col h-screen text-xl sticky top-0 items-end mr-20">
+    <div class="w-52 h-full overflow-y-auto">
+        <a id="logo"
+           class="text-black font-semibold dark:text-alto"
+           href="{% url "home" %}">
+            <div class="flex items-center mt-8 mb-5 pl-2">
+                <img class="h-auto w-9 mr-2" src="{% static "feed/logo.svg" %}" alt="logo of bhread.com" />
+                bhread
+            </div>
+        </a>
+        <div class="flex flex-col ">
+            {% with "home feeds about" as route_names %}
+                {% for item in route_names.split %}
+                    <a text-lochmara
+                       class="text-lg text-gray-500 hover:text-black flex items-center hover:no-underline p-3 hover:bg-gallery/80 hover:transition-opacity duration-100 rounded-lg font-header"
+                       href="{% url item %}"
+                       hx-boost="true"
+                       hx-indicator="#page-load-spinner"
+                       hx-swap="innerHTML">
+                        <span class="material-symbols-outlined size-20 mr-2">{% cycle "home" "rss_feed" "bakery_dining" %}</span>
+                        {{ item }}
+                    </a>
+                {% endfor %}
+            {% endwith %}
+            {% if user.is_authenticated %}
+                {% with "profile logout" as button_names %}
+                    {% for button_name in button_names.split %}
+                        {% cycle "profile" "account_logout" as route silent %}
+                        {% cycle "face" "close" as icon_name silent %}
+                        <a class="text-lg text-gray-500 hover:text-black flex items-center hover:no-underline p-3 hover:bg-gallery"
+                           href="{% url route %}"
+                           hx-boost="true"
+                           hx-indicator="#page-load-spinner"
+                           hx-swap="innerHTML">
+                            <span class="material-symbols-outlined size-20 mr-2">{{ icon_name }}</span>
+                            {{ button_name }}
+                        </a>
+                    {% endfor %}
+                {% endwith %}
+            {% else %}
+                <a class="text-black flex items-center hover:no-underline p-4 hover:bg-gallery"
+                   href="{% url "account_login" %}">login</a>
+                <a class="text-black flex items-center hover:no-underline p-4 hover:bg-gallery"
+                   href="{% url "account_signup" %}">sign up</a>
+            {% endif %}
+        </div>
+    </div>
+</div>

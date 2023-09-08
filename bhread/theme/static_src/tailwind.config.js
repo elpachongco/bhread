@@ -66,7 +66,8 @@ module.exports = {
       },
     },
     fontFamily: {
-      body: ["Ubuntu", "Arial", "sans-serif"],
+      // body: ["Ubuntu", "Arial", "sans-serif"],
+      body: ["Heebo", "Arial", "sans-serif"],
       header: ["Rubik", "Arial", "sans-serif"],
       // 'serif': [],
       // 'mono': [],
