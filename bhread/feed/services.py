@@ -116,6 +116,8 @@ def feed_verify(feed):
     - If post has no content, GET it then test that.
     """
     post = feed.verification
+    if post is None:
+        return
     # generate verification str "bhread.com/users/<username>/verification"
     # search = request.build_absolute_uri(reverse("proof", args=[request.user.username]))
     search = "bhread.com" + reverse("proof", args=[feed.owner.username])
