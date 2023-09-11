@@ -1,83 +1,86 @@
 {% extends base_template %}
 {% block content %}
-    {% load static %}
-    <h2>Feeds Management</h2>
-    <p>Submitted feeds will be scanned periodically by Bhread for updates.</p>
-    <div hx-boost="true" hx-swap="innerHTML">
-        <form method="post"
-              enctype="multipart/form-data"
-              hx-indicator="#add-form-spinner">
-            <fieldset>
-                <legend>Add a new feed</legend>
-                {{ feed_form.as_p }}
-                <p>
-                    Please limit submissions to feeds that can participate to bhread
-                    discussions.
-                </p>
-                <div>
-                    <button class="bg-alto dark:bg-lochmara" type="submit">Submit</button>
-                    <img width="25"
-                         height="auto"
-                         id="add-form-spinner"
-                         class="htmx-indicator dark:invert"
-                         alt="loading indicator"
-                         src="{% static 'spinning-circles.svg' %}" />
-                    {% comment %}
-            <span class="material-symbols-outlined">check_circle</span>
-                    {% endcomment %}
-                </div>
-            </fieldset>
+    <div>
+        <h2 class="font-header text-black text-lg mt-6 mb-5 font-medium">Feed Submission</h2>
+        <p>Ready to participate? Here are the (2) steps to verify on bhread.com</p>
+        <h3 class="font-header font-medium my-10">Step 1: Submit your blog's RSS/Atom Feed URL.</h3>
+        <form class="my-6 w-full" action="{% url 'feeds' %}" method="post">
+            {% csrf_token %}
+            {% for field in feed_form %}
+                <input class="w-4/6 mr-4"
+                       id="id_url"
+                       name="{{ field.name }}"
+                       type="url"
+                       maxlength="200"
+                       required=""
+                       placeholder="Paste feed url here" />
+            {% endfor %}
+            <button class="bg-lochmara text-white font-header font-medium px-6 hover:bg-gull"
+                    type="submit">Submit</button>
         </form>
-        <h3>Feeds by you</h3>
-        <ul>
-            {% for user_feed in user_feeds %}
-                <li id="feed-li">
-                    <p>
-                        [
-                        {% if user_feed.is_public %}
-                            PUBLIC
+        <h3 class="font-header font-medium my-10">Step 2: Verify ownership of blog by saying hello.</h3>
+        <p>Publish a post in your blog containing the url:</p>
+        <pre class="my-4">https://bhread.com/user/elpachongco/verification</pre>
+        <p>(as a link or plain text)</p>
+        <p class="my-4">Example:</p>
+        <pre class="my-4">
+    Hello World! I'm joining bhread.com!
+    &lt;a href="https://bhread.com/user/elpachongco/verification"&gt;
+        Verification link
+    &lt;/a&gt;
+</pre>
+        <h2 class="my-4 font-medium font-header border border-green-400 bg-green-50 p-2 rounded-md text-green-600">
+            That's it!
+        </h2>
+        <ul class="list-disc list-inside mb-14">
+            <li>It may take bhread some time to verify. Please wait a few minutes or proceed to step 3 if verification fails.</li>
+            <li>If the verification post was published before the submission of feed, you may proceed to step 3.</li>
+            <li>You may track the status of the submitted feeds in the table below.</li>
+        </ul>
+        <h3 class="font-header font-medium my-4">Step 3 (Optional):</h3>
+        <p>This step may be skipped.</p>
+        <div class="mt-2">
+            <p>You may use this feature if:</p>
+            <ul class="list-disc list-inside">
+                <li class="mb-2">bhread fails to find the verification post.</li>
+                <li class="mb-2">the verification post was published before the submission of a feed.</li>
+                <li class="mb-2">You want to explicitly set the verification post.</li>
+            </ul>
+        </div>
+        <p>Paste the link of the post containing the verification url to the input below and submit.</p>
+        <form class="my-6 w-full" action="{% url 'feed-verify' %}" method="post">
+            {% csrf_token %}
+            {{ verification_form }}
+            <input class="w-4/6 mr-4"
+                   type="url"
+                   placeholder="Verification post url here" />
+            <button class="bg-lochmara text-white font-header font-medium px-6">Submit</button>
+        </form>
+        <table class="table-auto border-collapse my-4 w-full my-8">
+            <thead class="border-b-2">
+                <tr>
+                    <th class="text-left">Feed URL</th>
+                    <th class="text-left">Verification Post</th>
+                    <th class="text-left">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for feed in user_feeds %}
+                    <tr class="border-b">
+                        <td>{{ feed.url }}</td>
+                        {% if feed.verification %}
+                            <td>{{ feed.verification.url }}</td>
                         {% else %}
-                            PRIVATE
+                            <td>Unavailable</td>
                         {% endif %}
-                        ]
-                        {% if user_feed.favicon %}
-                            <img height="15"
-                                 width="15"
-                                 src="{{ user_feed.favicon }}"
-                                 alt="feed site icon" />
+                        {% if feed.is_verified %}
+                            <td>Successful</td>
+                        {% else %}
+                            <td>Unverified</td>
                         {% endif %}
-                        {{ user_feed.name }} (<a href="{{ user_feed.url }}">{{ user_feed.url }}</a>)
-                        <a href="{% url 'feed-edit' user_feed.pk %}">✏️ Edit</a>
-                        <a href="javascript:void(0)"
-                           hx-target="body"
-                           hx-swap="innerHTML"
-                           hx-delete="{% url 'feed-delete' user_feed.pk %}"
-                           hx-confirm="Are you sure you wish to delete this feed?"
-                           hx-indicator="#delete-spinner-{{ user_feed.pk }}">❌ Delete</a>
-                        <img width="15"
-                             id="delete-spinner-{{ user_feed.pk }}"
-                             class="htmx-indicator dark:invert"
-                             alt="feed delete loading indicator"
-                             src="{% static 'spinning-circles.svg' %}" />
-                    </p>
-                </li>
-            {% endfor %}
-        </ul>
-        <h3>All Feeds</h3>
-        <p>Public feeds from the people of bhread, including you.</p>
-        <p>
-            Search Feeds
-            <input type="text" placeholder="Input search here" />
-        </p>
-        <ul>
-            {% for feed in all_feeds %}
-                <li>
-                    <p>
-                        {% if feed.favicon %}<img height="15" width="15" src="{{ feed.favicon }}" alt="feed favicon" />{% endif %}
-                        {{ feed.name }} ({{ feed.url|urlize }}) by {{ feed.added_by }}
-                    </p>
-                </li>
-            {% endfor %}
-        </ul>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% endblock content %}

@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <meta name="keywords" content="blog, links, community, social" />
-        <meta name="description" content="Bhread is an online community of blogs.">
+        <meta name="description" content="Bhread is an online community of blogs." />
         <link rel="shortcut icon" href="{% static 'feed/logo.svg' %}" />
         {% tailwind_css %}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -27,22 +27,21 @@
             <title>Bhread: Blog Threads</title>
         {% endif %}
     </head>
-    <body class="bg-white subpixel-antialiased dark:bg-slate-900 dark:text-neutral-200"
+    <body class="subpixel-antialiased bg-white dark:bg-slate-900 dark:text-neutral-200"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-        <div class="flex items-center justify-center">
+        <div class="flex justify-center items-center">
             <main class="flex flex-row justify-center w-full lg:max-w-7xl">
-                {% #nav-left user=user %}
+                {% #nav-left user=user url_name=url_name %}
                 <span>Hello {{ name|title }}!</span>
-                {% /nav-left %}
-                {% comment %}
-      <img width="25px" id="page-load-spinner" class="htmx-indicator-remove dark:invert" src="{% static 'spinning-circles.svg' %}" />
+                {% /nav-left %} {% comment %}
+        <img width="25px" id="page-load-spinner" class="htmx-indicator-remove dark:invert" src="{% static 'spinning-circles.svg' %}" />
                 {% endcomment %}
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="p-2 rounded-md bg-orange-200 dark:bg-slate-700">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
-                <div class="mt-2 min-h-screen w-full lg:max-w-2xl">
+                <div class="m w-full min-h-screen lg:max-w-5xl">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="p-2 bg-orange-200 rounded-md dark:bg-slate-700">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
                     {% block content %}
                     {% endblock content %}
                 </div>

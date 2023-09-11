@@ -7,7 +7,6 @@ from PIL import Image
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default="default.png", upload_to="profile_pics")
-    feeds = models.ManyToManyField(Feed)
 
     def __str__(self):
         return f"{self.user.username} Profile"
@@ -21,3 +20,7 @@ class Profile(models.Model):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.image.path)
+
+
+class Settings(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)

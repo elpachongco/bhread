@@ -1,29 +1,25 @@
 from bs4 import BeautifulSoup
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy
 from django.views.decorators.http import require_http_methods
-from django.views.generic.edit import DeleteView
 from feed import selectors as sel
 from feed import services as ser
 from feed import tasks
 
-from .forms import FeedUpdateForm, PageCreateForm
+from .forms import FeedRegisterForm, FeedUpdateForm, PageCreateForm, VerificationForm
 from .models import Feed, Post
 
 
 def home(request):
     context = {
         "posts": [],
-        "favicons": [],
         "base_template": "feed/base.html",
         "url_name": "home",
     }
-    for post in Post.objects.filter(feed__isnull=False):
+    for post in Post.objects.filter(content__isnull=False):
         replies = sel.descendants_count(post)
-        favicon = sel.favicon(post)
+        favicon = ""
         context["posts"].append((ser.post_render(post), replies, favicon))
     return render(request, "feed/home.html", context)
 
@@ -32,20 +28,21 @@ def home(request):
 def feeds(request):
     context = {"base_template": "feed/base.html", "url_name": "feeds"}
     if request.method == "POST":
-        f_form = FeedUpdateForm(request.POST)
-        f_form.instance.added_by = request.user
+        f_form = FeedRegisterForm(request.POST)
+        f_form.instance.owner = request.user
         if f_form.is_valid():
             f_form.save()
-            request.user.profile.feeds.add(f_form.instance)
             tasks.feed_update(f_form.instance)
             messages.success(request, "Feed created")
         else:
-            messages.error(request, "Invalid Form")
+            messages.error(request, "You can't submit duplicate")
 
     context["user_feeds"] = sel.user_feeds(request.user)
 
-    feed_form = FeedUpdateForm
+    feed_form = FeedRegisterForm
+    verification_form = VerificationForm(user=request.user)
     context["feed_form"] = feed_form
+    context["verification_form"] = verification_form
     context["all_feeds"] = sel.feeds()
 
     return render(request, "feed/feeds.html", context)
@@ -74,6 +71,27 @@ def feed_posts(request):
 
 
 @login_required
+def feed_verify(request, user=""):
+    if request.method == "POST":
+        v_form = VerificationForm(request.POST, user=request.user)
+        if v_form.is_valid():
+            post_url = v_form.cleaned_data.get("url")
+            feed = v_form.cleaned_data.get("feed")
+            post, created = Post.objects.get_or_create(url=post_url, feed=feed)
+            feed.verification = post
+            ser.feed_verify(feed)
+            feed.save()
+            messages.success(request, "Verification post added")
+        else:
+            messages.error(
+                request,
+                "Invalid post - Post should belong to the \
+                           same domain/subdomain as feed",
+            )
+    return redirect("feeds")
+
+
+@login_required
 @require_http_methods(["DELETE"])
 def feed_delete(request, pk):
     try:
@@ -91,21 +109,21 @@ def post_children(request, pk):
     replies = sel.children(Post.objects.get(id=pk))
     for reply in replies:
         count = sel.descendants_count(reply)
-        favicon = sel.favicon(reply)
+        favicon = ""
         context["replies"].append((reply, count, favicon))
     return render(request, "feed/children.html", context)
 
 
-def post_detail(request, pk=None):
+def post_detail(request, url=None):
     context = {"replies": [], "base_template": "feed/base.html"}
-    post = Post.objects.get(id=pk)
+    post = Post.objects.get(url=url)
     context["post"] = ser.post_render(post)
-    context["post_favicon"] = sel.favicon(post)
+    context["post_favicon"] = ""
     context["post_count"] = sel.descendants_count(post)
 
     for child in sel.children(post):
         replies = sel.descendants_count(child)
-        favicon = sel.favicon(child)
+        favicon = ""
         context["replies"].append((ser.post_render(child), replies, favicon))
 
     return render(request, "feed/detail.html", context)

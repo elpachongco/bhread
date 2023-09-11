@@ -6,6 +6,7 @@ import feedparser
 import requests
 import requests_cache
 from bs4 import BeautifulSoup
+from django.urls import reverse
 from django.utils import timezone
 from feed import selectors as sel
 
@@ -22,7 +23,7 @@ session = requests_cache.CachedSession()
 
 
 def ancestors_fill_content():
-    for post in Post.objects.filter(title="", content=""):
+    for post in Post.objects.filter(title=None, content=None):
         a = requests.get(post.url)
         soup = BeautifulSoup(a.text)
         title = " ".join(soup.title.stripped_strings)
@@ -72,10 +73,10 @@ def feed_make_posts(*, feed: Feed) -> Iterator[Post]:
     for entry in d.entries:
         content = content_to_html(entry.content)
         title = entry.title
-        if Post.objects.filter(feed=feed, url=entry.link).exists():
+        if Post.objects.filter(url=entry.link).exists():
             #### Test Update functionality
-            post = Post.objects.get(feed=feed, url=entry.link)
-            update = post_update(post=post, title=title, content=content)
+            post = Post.objects.get(url=entry.link)
+            update = post_update(post=post, title=title, content=content, feed=feed)
             if update:
                 yield update
 
@@ -84,6 +85,8 @@ def feed_make_posts(*, feed: Feed) -> Iterator[Post]:
 
 
 def feed_update(feed: Feed):
+    if not feed.is_verified:
+        feed_verify(feed)
     for feed_post in feed_make_posts(feed=feed):
         for p in post_make_posts(post=feed_post, feed=feed):
             p.save()
@@ -92,7 +95,7 @@ def feed_update(feed: Feed):
 
     feed.last_scan = timezone.now()
     feed.save()
-    ancestors_fill_content()
+    # ancestors_fill_content()
 
 
 def feed_update_all():
@@ -104,6 +107,31 @@ def feed_update_all():
         last_scan__lte=timezone.now() - timedelta(minutes=1)
     ):
         feed_update(feed)
+
+
+def feed_verify(feed):
+    """Verify the feed.
+    - Check if post belongs to the same domain and subdomain
+    - If post has content, test that.
+    - If post has no content, GET it then test that.
+    """
+    post = feed.verification
+    # generate verification str "bhread.com/users/<username>/verification"
+    # search = request.build_absolute_uri(reverse("proof", args=[request.user.username]))
+    search = "bhread.com" + reverse("proof", args=[feed.owner.username])
+
+    if urlparse(post.url).netloc != urlparse(feed.url).netloc:
+        return
+
+    post_html = ""
+    if not post.content:
+        post_html = requests.get(post.url).text
+        post.content = post_html
+
+    if search in post_html:  # Check overflow risk
+        feed.is_verified = True
+        feed.save()
+    post.save()
 
 
 def get_favicon_path(url: str) -> str:
@@ -166,7 +194,7 @@ def html_find_reply(s: str, reply_format="replying to") -> Dict[str, str]:
 def post_render(post):
     if post.parent:
         post.content = html_clean(post.content)
-    else:
+    elif post.content:
         post.content = BeautifulSoup(post.content).text[:355]
     return post
 
@@ -175,28 +203,38 @@ def post_make_posts(post: Post, feed: Feed) -> Iterator[Post]:
     """Create posts from post. If post is a reply, and parent post
     doesn't exist, create the post."""
     stack: List[Post] = []
+    urls: List[str] = []  # track unsaved urls
     stack.append(post)
+    urls.append(post.url)
 
     while stack:
         stack_item = stack.pop()
+        if not stack_item.content:  # None or empty string
+            continue
         reply = html_find_reply(s=stack_item.content)
         if not reply["url"]:
             continue
-        p = None
-        if not Post.objects.filter(feed=feed, url=reply["url"]).exists():
-            p = Post(
-                feed=feed,
+        parent = None
+        if (
+            not Post.objects.filter(url=reply["url"]).exists()
+            and reply["url"] not in urls
+        ):
+            parent = Post(
                 url=reply["url"],
             )
         else:
-            p = Post.objects.get(feed=feed, url=reply["url"])
+            parent = Post.objects.get(url=reply["url"])
 
-        stack.append(p)
-        yield p
+        urls.append(parent.url)
+        stack.append(parent)
+        yield parent
 
 
-def post_update(*, post: Post, content, title) -> Optional[Post]:
+def post_update(*, post: Post, content, title, feed) -> Optional[Post]:
     changed = False
+    if post.feed is None and feed is not None:
+        post.feed = feed
+        changed = True
     if post.content != content:
         post.content = content
         changed = True

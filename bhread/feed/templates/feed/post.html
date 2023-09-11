@@ -1,24 +1,54 @@
-<div class="border-b border-b-gallery mt-2 mb-4 px-6">
-    <div class="flex">
-        <div class="flex flex-col mr-4 mt-2">
+<li class="px-6 mt-2 mb-4 border-b border-b-gallery">
+    {% if post.parent %}
+        <div id="reply" class="w-full mb-3">
+            <div class="flex w-full">
+                <div class="h-auto w-6 mr-2">
+                    <img class="w-full h-full"
+                         src="https://www.google.com/s2/favicons?domain={{ post.parent.url }}&sz=24"
+                         alt="site favicon">
+                </div>
+                <div class="flex justify-between w-full">
+                    <a class="font-header text-sm text-lochmara font-medium"
+                       href="{{ post.parent.url }}">
+                        {% if "https://" in post.parent.url %}
+                            {{ post.parent.url | slice:"8:"| truncatechars:50 }}
+                        {% elif "http://" in post.parent.url %}
+                            {{ post.parent.url | slice:"7:"| truncatechars:50 }}
+                        {% else %}
+                            {{ post.parent.url |truncatechars:50 }}
+                        {% endif %}
+                    </a>
+                    <a class="text-xs" href="{% url 'detail' post.parent.url %}">see thread</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <article class="flex">
+        <div class="flex flex-col mt-2 mr-4">
             <div class="w-10">
-                <img class="w-full mb-2"
-                     src="{{ user.profile.image.url }}"
+                <img class="mb-2 w-full"
+                     src="{{ post.feed.owner.profile.image.url }}"
                      alt="display picture of user." />
             </div>
             {% comment %}
-      <div class="h-full bg-gradient-to-r from-gallery to-gallery bg-no-repeat bg-center bg-[length:2px_100%]">
-      </div>
+      <div class="h-full bg-gradient-to-r from-gallery to-gallery bg-no-repeat bg-center bg-[length:2px_100%]"></div>
             {% endcomment %}
         </div>
-        <div class="mb-4">
+        <div class="mb-4 w-full">
             <div class="mb-2">
-                <div class="flex items-center justify-start">
-                    <h3 class="text-lochmara font-header text-lg font-medium mr-2">{{ user.username }}</h3>
-                    <p class="text-sm text-gray-500 p-0">({{ post.feed.url }})</p>
+                <div class="flex w-full justify-between items-center">
+                    <h3 class="mr-2 text-lg font-medium text-lochmara font-header">{{ user.username }}</h3>
+                    <p class="text-xs text-gray-500">{{ post.date_added | timesince }} ago</p>
+                    {% comment %}
+          <p class="p-0 text-sm text-gray-500">({{ post.feed.url }})</p>
+                    {% endcomment %}
                 </div>
                 <div>
-                    <p class="text-sm text-gray-500">{{ post.date_added | timesince }} ago</p>
+                    {% comment %}
+          <p class="text-sm text-gray-500">
+            {{ post.date_added | timesince }} ago
+          </p>
+                    {% endcomment %}
                 </div>
             </div>
             <div hx-disable x-ignore class="text-base">
@@ -27,10 +57,10 @@
                 {% endautoescape %}
             </div>
             <div>
-                <a class="text-sm" href="{% url 'detail' post.pk %}">See post ({{ replies }} repl{{ replies|pluralize:"y,ies" }})</a>
+                <a class="text-sm" href="{% url 'detail' post.url %}">See post ({{ replies }} repl{{ replies|pluralize:"y,ies" }})</a>
             </div>
         </div>
-    </div>
+    </article>
     {% comment %}
   <div class="flex mt-2 mb-4">
     <a class="text-sm" href="{% url 'detail' post.pk %}">
@@ -38,4 +68,4 @@
     </a>
   </div>
     {% endcomment %}
-</div>
+</li>

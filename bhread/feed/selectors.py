@@ -89,7 +89,7 @@ def favicon(post):
 
 
 def user_feeds(user) -> Iterator[Feed]:
-    return user.profile.feeds.all()
+    return Feed.objects.filter(owner=user)
 
 
 def user_pages(user):

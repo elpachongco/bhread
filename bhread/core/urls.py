@@ -14,10 +14,10 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from allauth.account import views as all_auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
 from django.urls import include, path
 from django.views.generic import TemplateView
 from feed import views as feed_views
@@ -30,6 +30,9 @@ urlpatterns = [
     path("feed-edit/<int:pk>/", feed_views.feed_edit, name="feed-edit"),
     path("feed-delete/<int:pk>/", feed_views.feed_delete, name="feed-delete"),
     path("feeds/", feed_views.feeds, name="feeds"),
+    path("users/<str:user>/verification", feed_views.feed_verify, name="proof"),
+    path("verify/", feed_views.feed_verify, name="feed-verify"),
+    path("login/", all_auth_views.LoginView.as_view(), name="login"),
     path(
         "about/",
         TemplateView.as_view(
@@ -39,7 +42,7 @@ urlpatterns = [
     ),
     path("feed-posts/", feed_views.feed_posts, name="userposts"),
     path("post-children/<int:pk>/", feed_views.post_children, name="children"),
-    path("post/<int:pk>/", feed_views.post_detail, name="detail"),
+    path("post/<path:url>/", feed_views.post_detail, name="detail"),
     path("profile/", user_views.profile, name="profile"),
     path("admin/", admin.site.urls),
     path("__reload__/", include("django_browser_reload.urls")),
