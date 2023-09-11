@@ -48,6 +48,8 @@ services:
         - github_auth_client_id
         - google_auth_secret
         - google_auth_client_id
+          # tty: true
+          # stdin_open: true
   tailwind:
       <<: *web
       command: >
@@ -58,7 +60,10 @@ services:
       tty: true
   djangoq:
       <<: *web
-      command: python /code/bhread/manage.py qcluster
+      command: >
+        sh -c "python /code/bhread/manage.py makeschedules \
+        && python /code/bhread/manage.py qcluster"
+
 
 secrets:
   # Initial installation: you need to create the files and put content

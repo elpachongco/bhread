@@ -70,6 +70,11 @@ docker compose up --build or
 docker compose up
 ```
 
+
+management command
+
+python3 manage.py makeschedules -> adds a schedule for updating feeds every minute
+
 ## Contribute
 
 Improvements in code or art submissions (see art/memes) are welcome!
