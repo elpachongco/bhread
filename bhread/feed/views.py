@@ -1,3 +1,5 @@
+from urllib.parse import urlparse
+
 from bs4 import BeautifulSoup
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -27,23 +29,37 @@ def home(request):
 @login_required
 def feeds(request):
     context = {"base_template": "feed/base.html", "url_name": "feeds"}
-    if request.method == "POST":
-        f_form = FeedRegisterForm(request.POST)
-        f_form.instance.owner = request.user
-        if f_form.is_valid():
-            f_form.save()
-            tasks.feed_update(f_form.instance)
-            messages.success(request, "Feed created")
-        else:
-            messages.error(request, "You can't submit duplicate")
-
     context["user_feeds"] = sel.user_feeds(request.user)
-
     feed_form = FeedRegisterForm
     verification_form = VerificationForm(user=request.user)
     context["feed_form"] = feed_form
     context["verification_form"] = verification_form
     context["all_feeds"] = sel.feeds()
+
+    if request.method == "POST":
+        if "feed_submit" in request.POST:
+            f_form = FeedRegisterForm(request.POST)
+            f_form.instance.owner = request.user
+            if f_form.is_valid():
+                f_form.save()
+                tasks.feed_update(f_form.instance)
+                messages.success(request, "Feed created")
+            else:
+                context["feed_form"] = f_form
+        elif "verification_post" in request.POST:
+            v_form = VerificationForm(request.POST, user=request.user)
+            if v_form.is_valid():
+                post_url = v_form.cleaned_data.get("url")
+                feed = v_form.cleaned_data.get("feed")
+                post, created = Post.objects.get_or_create(url=post_url, feed=feed)
+                feed.verification = post
+                ser.feed_verify(feed=feed, feed_post=post)
+                feed.save()
+                messages.success(request, "Verification post added")
+            else:
+                context["verification_form"] = v_form
+                print(v_form.__dict__)
+                messages.error(request, "Failed to register verification post")
 
     return render(request, "feed/feeds.html", context)
 
@@ -70,25 +86,10 @@ def feed_posts(request):
     return render(request, "feed/home.html", context)
 
 
-@login_required
 def feed_verify(request, user=""):
-    if request.method == "POST":
-        v_form = VerificationForm(request.POST, user=request.user)
-        if v_form.is_valid():
-            post_url = v_form.cleaned_data.get("url")
-            feed = v_form.cleaned_data.get("feed")
-            post, created = Post.objects.get_or_create(url=post_url, feed=feed)
-            feed.verification = post
-            ser.feed_verify(feed)
-            feed.save()
-            messages.success(request, "Verification post added")
-        else:
-            messages.error(
-                request,
-                "Invalid post - Post should belong to the \
-                           same domain/subdomain as feed",
-            )
-    return redirect("feeds")
+    feed = Feed.objects.filter(owner__username=user, is_verified=True)
+    url = urlparse(feed[0].url)
+    return redirect("https://" + url.netloc)
 
 
 @login_required

@@ -85,17 +85,16 @@ def feed_make_posts(*, feed: Feed) -> Iterator[Post]:
 
 
 def feed_update(feed: Feed):
-    if not feed.is_verified:
-        feed_verify(feed)
     for feed_post in feed_make_posts(feed=feed):
         for p in post_make_posts(post=feed_post, feed=feed):
             p.save()
             feed_post.parent = p
             feed_post.save()
+        if not feed.is_verified:
+            feed_verify(feed=feed, feed_post=feed_post)
 
     feed.last_scan = timezone.now()
     feed.save()
-    # ancestors_fill_content()
 
 
 def feed_update_all():
@@ -109,13 +108,14 @@ def feed_update_all():
         feed_update(feed)
 
 
-def feed_verify(feed):
+def feed_verify(*, feed=None, feed_post=None):
     """Verify the feed.
     - Check if post belongs to the same domain and subdomain
     - If post has content, test that.
     - If post has no content, GET it then test that.
+    Note: A better version would be to return something, don't save directly
     """
-    post = feed.verification
+    post = feed_post or feed.verification
     if post is None:
         return
     # generate verification str "bhread.com/users/<username>/verification"
@@ -125,13 +125,16 @@ def feed_verify(feed):
     if urlparse(post.url).netloc != urlparse(feed.url).netloc:
         return
 
-    post_html = ""
-    if not post.content:
+    post_html = post.content
+    if not post_html:
         post_html = requests.get(post.url).text
         post.content = post_html
 
-    if search in post_html:  # Check overflow risk
+    # Check overflow risk
+    if search in post_html or search.removesuffix("/") in post_html:
         feed.is_verified = True
+        if not feed.verification:
+            feed.verification = feed_post
         feed.save()
     post.save()
 

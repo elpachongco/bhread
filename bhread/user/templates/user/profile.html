@@ -1,10 +1,20 @@
 {% extends base_template %}
 {% block content %}
     <div class="flex items-center mb-4 pt-4">
-        <img class="w-20 rounded-md mr-4 border"
+        <img class="w-20 rounded-full mr-4 border"
              src="{{ user.profile.image.url }}"
              alt="user's display picture" />
-        <h3 class="font-header text-lg">{{ user.username }} {{ user.email }}</h3>
+        <div>
+            <h3 class="font-header font-semibold text-sm">{{ user.username }}</h3>
+            <h3 class="font-header font-semibold text-sm">{% firstof user.email "No email" %}</h3>
+            <h3 class="font-header font-semibold text-sm">
+                {% if verified %}
+                    Verified
+                {% else %}
+                    Unverified
+                {% endif %}
+            </h3>
+        </div>
     </div>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}

@@ -94,3 +94,7 @@ def user_feeds(user) -> Iterator[Feed]:
 
 def user_pages(user):
     return Page.objects.filter(user=user)
+
+
+def user_has_verified(user):
+    return Feed.objects.filter(owner=user, is_verified=True).exists()

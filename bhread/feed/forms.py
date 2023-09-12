@@ -28,6 +28,8 @@ class FeedRegisterForm(FeedForm):
 
 
 class VerificationForm(forms.ModelForm):
+    # If passed a url belonging to post already existing, this will
+    # invalidate the form
     class Meta:
         model = Post
         fields = ["url", "feed"]
@@ -38,13 +40,15 @@ class VerificationForm(forms.ModelForm):
         self.fields["feed"].queryset = Feed.objects.filter(owner=self.user)
 
     def clean(self):
-        """Check if Post belongs to Feed site"""
-        # Use the parent's handling of required fields, etc.
+        """Check if Post exists or if Post belongs to Feed site"""
         cleaned_data = super().clean()
-        if (
-            urlparse(cleaned_data.get("url")).netloc
-            != urlparse(cleaned_data.get("feed").url).netloc
-        ):
+        post_url = cleaned_data.get("url")
+        feed = cleaned_data.get("feed")
+
+        if Post.objects.filter(url=post_url, feed=feed).exists():
+            self.instance = Post.objects.get(url=post_url, feed=feed)
+
+        if urlparse(post_url).netloc != urlparse(feed.url).netloc:
             raise ValidationError(
                 _(
                     "Verification Post must belong to the same domain/subdomain as feed."

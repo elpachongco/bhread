@@ -37,7 +37,7 @@
             <div class="mt-1">
                 {% with "about privacy source" as a %}
                     {% for item in a.split %}
-                        {% cycle 'home' 'home' 'home' as urls silent %}
+                        {% cycle 'about' 'home' 'home' as urls silent %}
                         <a class="pr-2 dark:text-white text-alto" href="{% url urls %}">{{ item }}</a>
                     {% endfor %}
                 {% endwith %}

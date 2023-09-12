@@ -16,18 +16,19 @@
                        placeholder="Paste feed url here" />
             {% endfor %}
             <button class="bg-lochmara text-white font-header font-medium px-6 hover:bg-gull"
+                    name="feed_submit"
                     type="submit">Submit</button>
         </form>
         <h3 class="font-header font-medium my-10">Step 2: Verify ownership of blog by saying hello.</h3>
         <p>Publish a post in your blog containing the url:</p>
-        <pre class="my-4">https://bhread.com/user/elpachongco/verification</pre>
+        <pre class="my-4">https://bhread.com/feeds/{{ user.username }}/verification</pre>
         <p>(as a link or plain text)</p>
         <p class="my-4">Example:</p>
         <pre class="my-4">
-    Hello World! I'm joining bhread.com!
-    &lt;a href="https://bhread.com/user/elpachongco/verification"&gt;
-        Verification link
-    &lt;/a&gt;
+    Hello World! I'm joining bhread.com as
+    &lt;a href="https://bhread.com/feeds/{{ user.username }}/verification"&gt;
+        {{ user.username }}
+    &lt;/a&gt;!
 </pre>
         <h2 class="my-4 font-medium font-header border border-green-400 bg-green-50 p-2 rounded-md text-green-600">
             That's it!
@@ -37,24 +38,32 @@
             <li>If the verification post was published before the submission of feed, you may proceed to step 3.</li>
             <li>You may track the status of the submitted feeds in the table below.</li>
         </ul>
-        <h3 class="font-header font-medium my-4">Step 3 (Optional):</h3>
-        <p>This step may be skipped.</p>
+        <h3 class="font-header font-medium my-4">(Optional) Step 3: Custom verification post.</h3>
         <div class="mt-2">
             <p>You may use this feature if:</p>
             <ul class="list-disc list-inside">
-                <li class="mb-2">bhread fails to find the verification post.</li>
+                <li class="mb-2">bhread fails to find the verification post (10 minutes).</li>
                 <li class="mb-2">the verification post was published before the submission of a feed.</li>
                 <li class="mb-2">You want to explicitly set the verification post.</li>
             </ul>
         </div>
         <p>Paste the link of the post containing the verification url to the input below and submit.</p>
-        <form class="my-6 w-full" action="{% url 'feed-verify' %}" method="post">
+        <form class="my-6 w-full" action="{% url 'feeds' %}" method="post">
             {% csrf_token %}
-            {{ verification_form }}
-            <input class="w-4/6 mr-4"
-                   type="url"
-                   placeholder="Verification post url here" />
-            <button class="bg-lochmara text-white font-header font-medium px-6">Submit</button>
+            {{ verification_form.non_field_errors }}
+            {% for field in verification_form %}
+                <div class="fieldWrapper">
+                    {{ field.error }}
+                    <p>
+                        {# {{ field.label_tag }} #}
+                        {% cycle 'Post Url' 'Feed' %}
+                        : {{ field }}
+                        {{ field.help_text|safe }}
+                    </p>
+                </div>
+            {% endfor %}
+            <button name="verification_post"
+                    class="bg-lochmara text-white font-header font-medium px-6">Submit</button>
         </form>
         <table class="table-auto border-collapse my-4 w-full my-8">
             <thead class="border-b-2">
@@ -66,19 +75,21 @@
             </thead>
             <tbody>
                 {% for feed in user_feeds %}
-                    <tr class="border-b">
-                        <td>{{ feed.url }}</td>
-                        {% if feed.verification %}
-                            <td>{{ feed.verification.url }}</td>
-                        {% else %}
-                            <td>Unavailable</td>
-                        {% endif %}
-                        {% if feed.is_verified %}
-                            <td>Successful</td>
-                        {% else %}
-                            <td>Unverified</td>
-                        {% endif %}
-                    </tr>
+                    {% with feed.is_verified as verified %}
+                        <tr class="border-b {% if verified %}bg-green-200{% endif %} ">
+                            <td>{{ feed.url }}</td>
+                            {% if feed.verification %}
+                                <td>{{ feed.verification.url }}</td>
+                            {% else %}
+                                <td>Unavailable</td>
+                            {% endif %}
+                            {% if verified %}
+                                <td>Successful</td>
+                            {% else %}
+                                <td>Unverified</td>
+                            {% endif %}
+                        </tr>
+                    {% endwith %}
                 {% endfor %}
             </tbody>
         </table>

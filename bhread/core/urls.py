@@ -30,7 +30,7 @@ urlpatterns = [
     path("feed-edit/<int:pk>/", feed_views.feed_edit, name="feed-edit"),
     path("feed-delete/<int:pk>/", feed_views.feed_delete, name="feed-delete"),
     path("feeds/", feed_views.feeds, name="feeds"),
-    path("users/<str:user>/verification", feed_views.feed_verify, name="proof"),
+    path("feeds/<str:user>/verification", feed_views.feed_verify, name="proof"),
     path("verify/", feed_views.feed_verify, name="feed-verify"),
     path("login/", all_auth_views.LoginView.as_view(), name="login"),
     path(

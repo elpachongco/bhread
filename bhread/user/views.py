@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from feed import selectors as sel
 from feed.forms import FeedRegisterForm, FeedUpdateForm
 
 from .forms import ProfileUpdateForm, UserRegisterForm, UserUpdateForm
@@ -45,6 +46,7 @@ def profile(request):
         "u_form": u_form,
         "p_form": p_form,
         "f_form": "",  # TODO: remove
+        "verified": sel.user_has_verified(request.user),
         "base_template": "feed/base.html",
     }
 
