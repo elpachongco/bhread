@@ -50,10 +50,12 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.github",
     "allauth.socialaccount.providers.google",
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
     "django_browser_reload.middleware.BrowserReloadMiddleware",  # See docs for position
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -158,9 +160,19 @@ LOGIN_URL = "login"
 
 """TAILWIND settings"""
 TAILWIND_APP_NAME = "theme"
-INTERNAL_IPS = [
-    "0.0.0.0",
-]
+
+# INTERNAL_IPS = [
+#     "0.0.0.0",
+# ]
+if DEBUG:
+    # Docker
+    import socket  # only if you haven't already imported this
+
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + [
+        "127.0.0.1",
+        "10.0.2.2",
+    ]
 
 
 """Djangoq settings"""

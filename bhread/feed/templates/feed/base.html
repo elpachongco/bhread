@@ -29,6 +29,20 @@
     </head>
     <body class="subpixel-antialiased bg-white dark:bg-slate-900 dark:text-neutral-200"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+        {% if debug %}
+            <script>
+        if (typeof window.htmx !== "undefined") {
+            htmx.on("htmx:afterSettle", function(detail) {
+                if (
+                    typeof window.djdt !== "undefined"
+                    && detail.target instanceof HTMLBodyElement
+                ) {
+                    djdt.show_toolbar();
+                }
+            });
+        }
+            </script>
+        {% endif %}
         <div class="flex justify-center items-center">
             <main class="flex flex-row justify-center w-full lg:max-w-7xl">
                 {% #nav-left user=user url_name=url_name %}
