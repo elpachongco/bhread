@@ -1,0 +1,19 @@
+<a href="{{ url }}" class=" no-underline hover:no-underline">
+    <div class="border border-gallery rounded-md p-4 hover:bg-gallery transition-colors">
+        <div class="flex mb-2">
+            <img class="w-6 h-auto mr-2"
+                 src="https://www.google.com/s2/favicons?domain={{ url }}&sz=24"
+                 alt="site favicon" />
+            <span class="font-header font-medium text-base text-lochmara hover:underline">
+                {% if "https://" in url %}
+                    {{ url | slice:"8:"| truncatechars:50 }}
+                {% elif "http://" in url %}
+                    {{ url | slice:"7:"| truncatechars:50 }}
+                {% else %}
+                    {{ post.parent.url |truncatechars:50 }}
+                {% endif %}
+            </span>
+        </div>
+        <span class="text-black">A Minimalist LED Lamp : 7 Steps (with Pictures) - Instructables</span>
+    </div>
+</a>

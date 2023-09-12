@@ -8,6 +8,33 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <meta name="keywords" content="blog, links, community, social" />
         <meta name="description" content="Bhread is an online community of blogs." />
+        <script>
+            // Functions for controlling theme
+            function theme(t) {
+              switch (t) {
+                case "dark":
+                  localStorage.theme = "dark";
+                  break;
+                case "light":
+                  localStorage.theme = "light";
+                  break;
+                case "system":
+                  localStorage.removeItem("theme");
+                  break;
+              }
+              // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+              if (
+                localStorage.theme === "dark" ||
+                (!("theme" in localStorage) &&
+                  window.matchMedia("(prefers-color-scheme: dark)").matches)
+              ) {
+                document.documentElement.classList.add("dark");
+              } else {
+                document.documentElement.classList.remove("dark");
+              }
+            }
+            theme("");
+        </script>
         <link rel="shortcut icon" href="{% static 'feed/logo.svg' %}" />
         {% tailwind_css %}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -43,26 +70,20 @@
         }
             </script>
         {% endif %}
-        <div class="flex justify-center items-center">
-            <main class="flex flex-row justify-center w-full lg:max-w-7xl">
-                {% #nav-left user=user url_name=url_name %}
-                <span>Hello {{ name|title }}!</span>
-                {% /nav-left %} {% comment %}
-        <img width="25px" id="page-load-spinner" class="htmx-indicator-remove dark:invert" src="{% static 'spinning-circles.svg' %}" />
-                {% endcomment %}
-                <div class="m w-full min-h-screen lg:max-w-5xl">
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="p-2 bg-orange-200 rounded-md dark:bg-slate-700">{{ message }}</div>
-                        {% endfor %}
-                    {% endif %}
-                    {% block content %}
-                    {% endblock content %}
-                </div>
-                {% #nav-right heading="I am the heading" %}
-                <span>Hello {{ name|title }}!</span>
-                {% /nav-right %}
+        <div class="flex justify-center">
+            {% #nav-left user=user url_name=url_name %} {% /nav-left %}
+            <main class="flex flex-col justify-center min-h-screen lg:max-w-3xl border-x border-gallery px-2 sm:px-4 shrink">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="p-2 rounded-md {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} bg-red-300 {% else %} bg-orange-200 dark:bg-slate-700 {% endif %} ">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                {% block content %}
+                {% endblock content %}
             </main>
+            {% #nav-right %} {% /nav-right %}
         </div>
     </body>
 </html>

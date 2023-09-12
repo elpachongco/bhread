@@ -1,50 +1,49 @@
 {% load static %}
-<aside id="navbar-left"
-       class="flex sticky top-0 flex-col items-end mr-20 h-screen text-xl">
-    <div class="overflow-y-auto w-52 h-full">
-        <a id="logo"
-           class="font-semibold text-black dark:text-alto"
-           href="{% url "home" %}">
-            <div class="flex items-center pl-2 mt-8 mb-5">
-                <img class="mr-2 w-9 h-auto" src="{% static "feed/logo.svg" %}" alt="logo of bhread.com" />
-                bhread
-            </div>
-        </a>
-        <nav class="flex flex-col">
-            {% with "home feeds about" as route_names %}
-                {% for item in route_names.split %}
-                    <a text-lochmara
-                       class="flex items-center p-3 text-lg rounded-lg duration-100 hover:text-black hover:no-underline hover:transition-opacity font-header hover:bg-gallery/80 {% if url_name == item %} text-black {% else %} text-gull {% endif %}"
-                       href="{% url item %}"
-                       hx-boost="false"
+{% #sidebar %}
+<div class="overflow-y-auto h-full flex-initial">
+    <a id="logo"
+       class="font-semibold text-black dark:text-alto"
+       href="{% url "home" %}">
+        <div class="flex items-center pl-2 mt-8 mb-5">
+            <img class="mr-2 w-9 h-auto" src="{% static "feed/logo.svg" %}" alt="logo of bhread.com" />
+            <span class="hidden lg:block">bhread</span>
+        </div>
+    </a>
+    <nav class="flex flex-col">
+        {% with "home feeds about" as route_names %}
+            {% for item in route_names.split %}
+                <a text-lochmara
+                   class="flex items-center p-3 text-lg rounded-lg duration-100 hover:text-black hover:no-underline hover:transition-opacity font-header hover:bg-gallery/80 {% if url_name == item %} text-black {% else %} text-gull {% endif %}"
+                   href="{% url item %}"
+                   hx-boost="false"
+                   hx-indicator="#page-load-spinner"
+                   hx-swap="innerHTML">
+                    <span class="mr-2 material-symbols-outlined size-20 ">{% cycle "home" "rss_feed" "bakery_dining" %}</span>
+                    <span class="hidden lg:block">{{ item }}</span>
+                </a>
+            {% endfor %}
+        {% endwith %}
+        {% if user.is_authenticated %}
+            {% with "profile logout" as button_names %}
+                {% for button_name in button_names.split %}
+                    {% cycle "profile" "account_logout" as route silent %}
+                    {% cycle "face" "close" as icon_name silent %}
+                    <a class="flex items-center p-3 text-lg text-gull hover:text-black hover:no-underline hover:bg-gallery"
+                       href="{% url route %}"
+                       hx-boost="true"
                        hx-indicator="#page-load-spinner"
                        hx-swap="innerHTML">
-                        <span class="mr-2 material-symbols-outlined size-20">{% cycle "home" "rss_feed" "bakery_dining" %}</span>
-                        {{ item }}
+                        <span class="mr-2 material-symbols-outlined size-20">{{ icon_name }}</span>
+                        <span class="hidden lg:block">{{ button_name }}</span>
                     </a>
                 {% endfor %}
             {% endwith %}
-            {% if user.is_authenticated %}
-                {% with "profile logout" as button_names %}
-                    {% for button_name in button_names.split %}
-                        {% cycle "profile" "account_logout" as route silent %}
-                        {% cycle "face" "close" as icon_name silent %}
-                        <a class="flex items-center p-3 text-lg text-gull hover:text-black hover:no-underline hover:bg-gallery"
-                           href="{% url route %}"
-                           hx-boost="true"
-                           hx-indicator="#page-load-spinner"
-                           hx-swap="innerHTML">
-                            <span class="mr-2 material-symbols-outlined size-20">{{ icon_name }}</span>
-                            {{ button_name }}
-                        </a>
-                    {% endfor %}
-                {% endwith %}
-            {% else %}
-                <a class="flex items-center p-4 text-black hover:no-underline hover:bg-gallery"
-                   href="{% url "account_login" %}">login</a>
-                <a class="flex items-center p-4 text-black hover:no-underline hover:bg-gallery"
-                   href="{% url "account_signup" %}">sign up</a>
-            {% endif %}
-        </nav>
-    </div>
-</aside>
+        {% else %}
+            <a class="flex items-center p-4 text-black hover:no-underline hover:bg-gallery"
+               href="{% url "account_login" %}">login</a>
+            <a class="flex items-center p-4 text-black hover:no-underline hover:bg-gallery"
+               href="{% url "account_signup" %}">sign up</a>
+        {% endif %}
+    </nav>
+</div>
+{% /sidebar %}

@@ -1,62 +1,15 @@
 {% extends base_template %}
 {% block content %}
-    {% if post.parent %}
-        <a href="{% url 'detail' post.parent.id %}">Parent post</a>
-    {% endif %}
-    {% if post %}
-        <h2 class="flex items-center">
-            <img class="mr-2" width="20" src="{{ post_favicon }}" alt="site favicon" />
-            <a id="post-{{ post.id }}" href="javascript:undefined">{{ post.title }}</a>
-        </h2>
-        <div hx-disable>{{ post.content |truncatechars_html:150 | safe }}</div>
-        <a href="javascript:undefined" target="_blank" rel="noopener noreferrer">site 🔗</a>
-        <p>
-            <a href="javascript:undefined">Reply to this post</a>
-        </p>
-        <h3>{{ post_count }} Repl{{ post_count|pluralize:"y,ies" }}</h3>
-        <div class="min-h-screen">
-            <ol>
-                <div>
-                    {% for reply, reply_count, favicon in replies %}
-                        <li class="p-2 px-4 pb-4 mb-4 rounded-lg border border-solid border-alto">
-                            <div x-data="{ open: true, label: '[hide]' }">
-                                <h2 class="flex items-center">
-                                    <img class="mr-2" width="15" src="{{ favicon }}" alt="site favicon" />
-                                    <a id="{{ reply.id }}" class="mr-2" href="{{ reply.url }}">{{ reply.title }}</a>
-                                    <small>
-                                        <a href="javascript:undefined"
-                                           @click="open = !open; label=open? '[hide]' : '[see {{ reply_count }}]'"
-                                           x-text="label"></a>
-                                    </small>
-                                </h2>
-                                <div x-show="open"
-                                     x-transition:enter="transition ease-in duration-100"
-                                     x-transition:enter-start="opacity-0 -translate-y-8"
-                                     x-transition:enter-end="opacity-100 translate-y-0"
-                                     x-transition:leave="transition ease-out duration-100"
-                                     x-transition:leave-start="opacity-100 translate-y-0"
-                                     x-transition:leave-end="opacity-0 -translate-y-8">
-                                    <div hx-disable>{{ reply.content | safe }}</div>
-                                    <a href="{{ reply.url }}">visit site</a>
-                                    <p>{{ reply.date_added|timesince }} ago</p>
-                                    <a hx-get="{% url 'children' reply.pk %}"
-                                       hx-swap="outerHTML"
-                                       hx-target="#descendants-{{ reply.pk }}"
-                                       hx-trigger="intersect once, click once"></a>
-                                    <div id="descendants-{{ reply.pk }}-parent">
-                                        <div id="descendants-{{ reply.pk }}"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <div>
-                        {% empty %} No replies found
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <h1>Post not found</h1>
-                {% endif %}
-            </div>
-        </ol>
+    <div class="w-full">
+        {% if post.parent %}
+            <a href="{% url 'detail' post.parent.url %}">Parent post</a>
+        {% endif %}
+        {% if parent.parent.content %}
+            lkasjfd
+        {% else %}
+            {% #post-contentless url=parent.url %} {% /post-contentless %}
+            ancestor
+        {% endif %}
+        <h3>{{ parent_replies }} Repl{{ parent_replies | pluralize:"y,ies" }}</h3>
     </div>
 {% endblock content %}

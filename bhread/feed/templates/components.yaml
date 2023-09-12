@@ -4,3 +4,5 @@ components:
   nav-right: "feed/nav-right.html"
   post: "feed/post.html"
   post-dummy: "feed/post-dummy.html"
+  sidebar: "feed/sidebar.html"
+  post-contentless: "feed/post-contentless.html"

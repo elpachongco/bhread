@@ -117,15 +117,11 @@ def post_children(request, pk):
 
 def post_detail(request, url=None):
     context = {"replies": [], "base_template": "feed/base.html"}
-    post = Post.objects.get(url=url)
-    context["post"] = ser.post_render(post)
-    context["post_favicon"] = ""
-    context["post_count"] = sel.descendants_count(post)
+    parent = Post.objects.get(url=url)
 
-    for child in sel.children(post):
-        replies = sel.descendants_count(child)
-        favicon = ""
-        context["replies"].append((ser.post_render(child), replies, favicon))
+    context["parent"] = parent
+    context["parent_replies"] = sel.descendants_count(parent)
+    context["children"] = Post.objects.filter()
 
     return render(request, "feed/detail.html", context)
 
