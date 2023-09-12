@@ -1,15 +1,21 @@
 {% extends base_template %}
 {% block content %}
-    <div class="w-full">
-        {% if post.parent %}
-            <a href="{% url 'detail' post.parent.url %}">Parent post</a>
-        {% endif %}
+    <div class="min-h-screen">
+        <div class="my-2">
+            {% if parent.parent %}
+                <a href="{% url 'detail' parent.parent.url %}">Parent post</a>
+            {% else %}
+                <a href="{% url 'home' %}">Back</a>
+            {% endif %}
+        </div>
         {% if parent.parent.content %}
             lkasjfd
         {% else %}
-            {% #post-contentless url=parent.url %} {% /post-contentless %}
-            ancestor
+            {% post-contentless url=parent.url %}
         {% endif %}
-        <h3>{{ parent_replies }} Repl{{ parent_replies | pluralize:"y,ies" }}</h3>
+        <h3 class="font-medium font-header my-4">{{ parent_replies }} Repl{{ parent_replies | pluralize:"y,ies" }}</h3>
+        {% for child in children %}
+            {% post-reply post=child %}
+        {% endfor %}
     </div>
 {% endblock content %}

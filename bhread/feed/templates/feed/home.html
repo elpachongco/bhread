@@ -5,18 +5,16 @@
         <ol class="list-none">
             {% for post, replies, feed_image in posts %}
                 <li>
-                    <article>{% #post post=post user=user replies=replies %} Hello! {% /post %}</article>
+                    <article>{% #post post=post user=user replies=replies %}{% /post %}</article>
                 </li>
-                {% comment %}
-    <a class="flex items-center hover:no-underline" href="{% url 'detail' post.id %}" hx-boost="true" hx-indicator="#page-load-spinner" hx-swap="innerHTML">
-    </a>
-                {% endcomment %} {% empty %}
+            {% empty %}
                 <h2>No posts found</h2>
                 <p>
                     If your feed is configured, you may add a post by publishing a blog post
                     starting with: 'replying to [link here]'
                 </p>
             {% endfor %}
+            <li class="text-center justify-center">This is the end of the feed.</li>
         </ol>
     </div>
 {% endblock content %}

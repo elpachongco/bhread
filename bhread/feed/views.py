@@ -19,7 +19,7 @@ def home(request):
         "base_template": "feed/base.html",
         "url_name": "home",
     }
-    for post in Post.objects.filter(content__isnull=False):
+    for post in Post.objects.filter(content__isnull=False, feed__is_verified=True):
         replies = sel.descendants_count(post)
         favicon = ""
         context["posts"].append((ser.post_render(post), replies, favicon))
@@ -121,7 +121,7 @@ def post_detail(request, url=None):
 
     context["parent"] = parent
     context["parent_replies"] = sel.descendants_count(parent)
-    context["children"] = Post.objects.filter()
+    context["children"] = Post.objects.filter(parent=parent)
 
     return render(request, "feed/detail.html", context)
 
