@@ -85,13 +85,16 @@ def feed_make_posts(*, feed: Feed) -> Iterator[Post]:
 
 
 def feed_update(feed: Feed):
+    feed_is_verified = feed.is_verified
+
     for feed_post in feed_make_posts(feed=feed):
+        if not feed_is_verified:
+            feed_verify(feed=feed, feed_post=feed_post)
+            continue
         for p in post_make_posts(post=feed_post, feed=feed):
             p.save()
             feed_post.parent = p
             feed_post.save()
-        if not feed.is_verified:
-            feed_verify(feed=feed, feed_post=feed_post)
 
     feed.last_scan = timezone.now()
     feed.save()
