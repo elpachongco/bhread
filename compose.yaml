@@ -94,9 +94,12 @@ services:
         sh -c "python /code/bhread/manage.py migrate \
         && python /code/bhread/manage.py tailwind build --no-input \
         && python /code/bhread/manage.py collectstatic --no-input \
-        && python /code/bhread/manage.py runserver 0.0.0.0:8000"
+        && gunicorn --chdir /code/bhread core.wsgi:application --bind 0.0.0.0:8000"
+      expose:
+        - 8000
       volumes:
         - .:/code
+        - static_volume:/home/app/web/staticfiles
       environment:
         - POSTGRES_DB=bhread
         - POSTGRES_USER=postgres
@@ -127,6 +130,16 @@ services:
         && python /code/bhread/manage.py qcluster"
       profiles: ["prod"]
 
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+    restart: unless-stopped
+    ports:
+      - 1337:80
+    depends_on:
+      - web_prod
+
 secrets:
   # Initial installation: you need to create the files and put content
   # github: https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app
@@ -143,3 +156,8 @@ secrets:
     file: secrets/django_secret_key.txt
   db_password:
     file: secrets/db_password.txt
+
+
+volumes:
+  # postgres_data:
+  static_volume:

@@ -35,4 +35,7 @@ ENV VIRTUAL_ENV=/app/.venv \
 COPY --from=node_base / /
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
+RUN mkdir /home/app
+RUN mkdir /home/app/staticfiles
+
 COPY . /code/
