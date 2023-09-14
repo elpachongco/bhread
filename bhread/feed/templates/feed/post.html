@@ -30,27 +30,15 @@
                      src="{{ post.feed.owner.profile.image.url }}"
                      alt="display picture of user." />
             </div>
-            {% comment %}
-      <div class="h-full bg-gradient-to-r from-gallery to-gallery bg-no-repeat bg-center bg-[length:2px_100%]"></div>
-            {% endcomment %}
         </div>
         <div class="mb-4 w-full">
-            <div class="mb-2">
+            <div class="mb-1">
                 <div class="flex w-full justify-between items-center">
                     <h3 class="mr-2 text-lg font-medium text-lochmara font-header">{{ user.username }}</h3>
                     <p class="text-xs text-gray-500">{{ post.date_added | timesince }} ago</p>
-                    {% comment %}
-          <p class="p-0 text-sm text-gray-500">({{ post.feed.url }})</p>
-                    {% endcomment %}
-                </div>
-                <div>
-                    {% comment %}
-          <p class="text-sm text-gray-500">
-            {{ post.date_added | timesince }} ago
-          </p>
-                    {% endcomment %}
                 </div>
             </div>
+            {% if post.content|length > 300 %}<span class="font-header font-medium mb-2">{{ post.title }}</span>{% endif %}
             <div hx-disable x-ignore class="text-base">
                 {% autoescape off %}
                     {{ post.content }}
