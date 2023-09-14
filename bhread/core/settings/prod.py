@@ -5,7 +5,7 @@ from .base import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = [".bhread.com"]
+ALLOWED_HOSTS = [".bhread.com", "localhost", "137.184.189.131"]
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
