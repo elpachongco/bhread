@@ -5,7 +5,7 @@ from .base import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = [".bhread.com", "localhost", "137.184.189.131"]
+ALLOWED_HOSTS = [".bhread.com", "localhost", "137.184.189.131", "127.0.0.1"]
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
@@ -17,7 +17,7 @@ DATABASES = {
         "PASSWORD": (Path(os.environ.get("POSTGRES_PASSWORD_FILE")))
         .read_text()
         .strip("\n"),
-        "HOST": "0.0.0.0",
+        "HOST": "db",
         "PORT": 5432,
     },
 }

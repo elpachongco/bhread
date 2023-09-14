@@ -12,7 +12,8 @@ services:
   db:
     image: postgres
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      #  - ./data/db:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     secrets:
       - db_password
     ports:
@@ -88,7 +89,6 @@ services:
       build: .
       profiles: ["prod"]
       # Allow access of ports in the host machine (for Test feeds):
-      network_mode: "host"
       restart: unless-stopped
       command: >
         sh -c "python /code/bhread/manage.py migrate \
@@ -98,8 +98,9 @@ services:
       expose:
         - 8000
       volumes:
-        - .:/code
-        - static_volume:/home/app/web/staticfiles
+        # - .:/code
+        - static_volume:/code/bhread/staticfiles
+        - media_volume:/code/bhread/mediafiles
       environment:
         - POSTGRES_DB=bhread
         - POSTGRES_USER=postgres
@@ -132,8 +133,10 @@ services:
 
   nginx:
     build: ./nginx
+    profiles: ["prod"]
     volumes:
-      - static_volume:/home/app/web/staticfiles
+      - static_volume:/code/bhread/staticfiles
+      - media_volume:/code/bhread/mediafiles
     restart: unless-stopped
     ports:
       - 1337:80
@@ -159,5 +162,6 @@ secrets:
 
 
 volumes:
-  # postgres_data:
+  postgres_data:
   static_volume:
+  media_volume:
