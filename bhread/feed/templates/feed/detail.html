@@ -1,17 +1,21 @@
 {% extends base_template %}
 {% block content %}
     <div class="min-h-screen">
-        <div class="my-2">
+        <div class="my-4">
             {% if parent.parent %}
                 <a href="{% url 'detail' parent.parent.url %}">Parent post</a>
             {% else %}
                 <a href="{% url 'home' %}">Back</a>
             {% endif %}
         </div>
-        {% if parent.parent.content %}
-            lkasjfd
+        {% if parent.parent %}
+            {% post-reply post=parent is_parent=True %}
         {% else %}
-            {% post-contentless url=parent.url %}
+            {% if parent.content %}
+                {% post-reply post=parent is_parent=True %}
+            {% else %}
+                {% post-contentless url=parent.url %}
+            {% endif %}
         {% endif %}
         <h3 class="font-medium font-header my-4">{{ parent_replies }} Repl{{ parent_replies | pluralize:"y,ies" }}</h3>
         {% for child in children %}

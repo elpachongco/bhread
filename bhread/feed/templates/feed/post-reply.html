@@ -1,14 +1,15 @@
 {% var post=post %}
 {% var title=title|default:False %}
-<div class="flex flex-col border-b mb-4">
+{% var is_parent=is_parent|default:False %}
+<div class="flex flex-col pb-2 mb-2">
     <div class="flex flex-row">
         <div>
-            <img class="w-8 h-auto mr-2"
+            <img class="w-11 h-auto mr-4 rounded-full"
                  src="{{ post.feed.owner.profile.image.url }}"
                  alt="author profile picture " />
         </div>
         <div class="flex flex-col w-full">
-            <div class="flex justify-between">
+            <div class="flex justify-between mb-1">
                 <h3 class="text-lochmara font-header font-medium">{{ post.feed.owner.username }}</h3>
                 <p class="text-xs text-gray-500">{{ post.date_added | timesince }} ago</p>
             </div>
@@ -16,6 +17,9 @@
             <div hx-disable x-ignore>
                 <p>{{ post.content | safe }}</p>
             </div>
+            {% if not is_parent %}
+                <a class="text-sm mt-2" href="{% url 'detail' post.url %}">See post (0 Replies)</a>
+            {% endif %}
         </div>
     </div>
 </div>

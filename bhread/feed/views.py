@@ -14,12 +14,15 @@ from .models import Feed, Post
 
 
 def home(request):
+    ser.feed_update_all()
     context = {
         "posts": [],
         "base_template": "feed/base.html",
         "url_name": "home",
     }
-    for post in Post.objects.filter(content__isnull=False, feed__is_verified=True):
+    for post in Post.objects.filter(
+        content__isnull=False, feed__is_verified=True
+    ).order_by("-date_added", "-date_modified"):
         replies = sel.descendants_count(post)
         favicon = ""
         context["posts"].append((ser.post_render(post), replies, favicon))

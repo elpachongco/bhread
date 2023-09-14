@@ -18,7 +18,7 @@ def schedule_update_feeds():
         "feed.services.feed_update_all",
         name="feed_update_all",
         schedule_type=Schedule.MINUTES,
-        minutes=2,
+        minutes=1,
         repeats=-1,
     )
 

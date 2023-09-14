@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 from django.urls import reverse
 from django.utils import timezone
 from feed import selectors as sel
+from feed import tasks
 
 from .models import Feed, Post, User, Vote
 
@@ -42,7 +43,7 @@ def content_to_html(entry_content):
     return c
 
 
-def feed_make_posts(*, feed: Feed) -> Iterator[Post]:
+def feed_make_posts(*, feed: Feed, parser=feedparser.parse) -> Iterator[Post]:
     """Convert feed entries to Posts if entry is a reply.
 
     Returns Post if Post with url already exists.
@@ -56,7 +57,7 @@ def feed_make_posts(*, feed: Feed) -> Iterator[Post]:
     #         feed.url, etag=feed.etag, modified=feed.last_modified
     #     )  # ~~TODO: check caching http headers~~
     # else:
-    d = feedparser.parse(feed.url)
+    d = parser(feed.url)
     # feed.last_scan = timezone.now()
     # feed.save()
 
@@ -71,7 +72,7 @@ def feed_make_posts(*, feed: Feed) -> Iterator[Post]:
     #     feed.save()
 
     for entry in d.entries:
-        content = content_to_html(entry.content)
+        content = content_to_html(entry.content) if "content" in entry else None
         title = entry.title
         if Post.objects.filter(url=entry.link).exists():
             #### Test Update functionality
@@ -84,17 +85,27 @@ def feed_make_posts(*, feed: Feed) -> Iterator[Post]:
             yield Post(feed=feed, url=entry.link, title=title, content=content)
 
 
-def feed_update(feed: Feed):
+def feed_update(feed: Feed, parser=feedparser.parse):
+    """Update a feed.
+    - If feed is unverified, check each post for verification text
+    - else, create save each posts.
+    - For each post that is a reply, create its parent post
+    - If user is verified and post is not a reply, create the post.
+    """
     feed_is_verified = feed.is_verified
 
-    for feed_post in feed_make_posts(feed=feed):
+    for feed_post in feed_make_posts(feed=feed, parser=parser):
         if not feed_is_verified:
             feed_verify(feed=feed, feed_post=feed_post)
-            continue
-        for p in post_make_posts(post=feed_post, feed=feed):
-            p.save()
-            feed_post.parent = p
-            feed_post.save()
+        else:
+            is_reply = False
+            for p in post_make_parents(post=feed_post, feed=feed):
+                p.save()
+                feed_post.parent = p
+                feed_post.save()
+                is_reply = True
+            if not is_reply:
+                feed_post.save()
 
     feed.last_scan = timezone.now()
     feed.save()
@@ -103,12 +114,10 @@ def feed_update(feed: Feed):
 def feed_update_all():
     """Create posts"""
 
-    """ This builds the tree of posts """
-
     for feed in Feed.objects.filter(
         last_scan__lte=timezone.now() - timedelta(minutes=1)
     ):
-        feed_update(feed)
+        tasks.feed_update(feed)
 
 
 def feed_verify(*, feed=None, feed_post=None):
@@ -207,9 +216,9 @@ def post_render(post):
     return post
 
 
-def post_make_posts(post: Post, feed: Feed) -> Iterator[Post]:
-    """Create posts from post. If post is a reply, and parent post
-    doesn't exist, create the post."""
+def post_make_parents(post: Post, feed: Feed) -> Iterator[Post]:
+    """Create parents from reply posts. If post is a reply, and parent post
+    doesn't exist, create the post. If post is not a reply, ignore"""
     stack: List[Post] = []
     urls: List[str] = []  # track unsaved urls
     stack.append(post)
@@ -220,8 +229,10 @@ def post_make_posts(post: Post, feed: Feed) -> Iterator[Post]:
         if not stack_item.content:  # None or empty string
             continue
         reply = html_find_reply(s=stack_item.content)
+
         if not reply["url"]:
             continue
+
         parent = None
         if (
             not Post.objects.filter(url=reply["url"]).exists()
