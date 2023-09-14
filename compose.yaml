@@ -4,25 +4,33 @@ services:
     image: "redis:alpine"
     ports:
       - 6379:6379
+    healthcheck:
+       test: ["CMD", "redis-cli","ping"]
+       interval: 5s
+       timeout: 5s
+       retries: 5
   db:
     image: postgres
-      # volumes:
-      #   - ./data/db:/var/lib/postgresql/data
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    secrets:
+      - db_password
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_DB=postgres
+      - POSTGRES_DB=bhread
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    # Test if pg is ready
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
-  web:
-      &web
+
+  web_dev:
+      &web_dev
       build: .
+      profiles: ["dev"]
       # Allow access of ports in the host machine (for Test feeds):
       network_mode: "host"
       restart: unless-stopped
@@ -33,37 +41,91 @@ services:
       volumes:
         - .:/code
       environment:
-        - POSTGRES_DB=postgres
+        - POSTGRES_DB=bhread
         - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
         - GITHUB_AUTH_CLIENT_ID=/run/secrets/github_auth_client_id
         - GITHUB_AUTH_SECRET=/run/secrets/github_auth_secret
         - GOOGLE_AUTH_CLIENT_ID=/run/secrets/google_auth_client_id
         - GOOGLE_AUTH_SECRET=/run/secrets/google_auth_secret
+        - DJANGO_SETTINGS_MODULE=core.settings.local
       depends_on:
         db:
+          condition: service_healthy
+        redis:
           condition: service_healthy
       secrets:
         - github_auth_secret
         - github_auth_client_id
         - google_auth_secret
         - google_auth_client_id
+        - db_password
           # tty: true
           # stdin_open: true
   tailwind:
-      <<: *web
+      <<: *web_dev
       command: >
         sh -c "python /code/bhread/manage.py tailwind install \
         && python /code/bhread/manage.py tailwind start"
       # Without tty, no stdin, and tailwind watcher aborts
       # https://github.com/tailwindlabs/tailwindcss/issues/5324
       tty: true
-  djangoq:
-      <<: *web
+      profiles: ["dev"]
+  djangoq_dev:
+      <<: *web_dev
       command: >
         sh -c "python /code/bhread/manage.py makeschedules \
         && python /code/bhread/manage.py qcluster"
+      profiles: ["dev"]
 
+
+  ## PRODUCTION Environment CONFIGURATION
+  ## Run with `docker compose --profile prod up`
+
+
+  web_prod:
+      &web_prod
+      build: .
+      profiles: ["prod"]
+      # Allow access of ports in the host machine (for Test feeds):
+      network_mode: "host"
+      restart: unless-stopped
+      command: >
+        sh -c "python /code/bhread/manage.py migrate \
+        && python /code/bhread/manage.py tailwind build --no-input \
+        && python /code/bhread/manage.py collectstatic --no-input \
+        && python /code/bhread/manage.py runserver 0.0.0.0:8000"
+      volumes:
+        - .:/code
+      environment:
+        - POSTGRES_DB=bhread
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
+        - GITHUB_AUTH_CLIENT_ID=/run/secrets/github_auth_client_id
+        - GITHUB_AUTH_SECRET=/run/secrets/github_auth_secret
+        - GOOGLE_AUTH_CLIENT_ID=/run/secrets/google_auth_client_id
+        - GOOGLE_AUTH_SECRET=/run/secrets/google_auth_secret
+        - DJANGO_SETTINGS_MODULE=core.settings.prod
+        - DJANGO_SECRET_KEY=/run/secrets/django_secret_key
+      depends_on:
+        db:
+          condition: service_healthy
+        redis:
+          condition: service_healthy
+      secrets:
+        - github_auth_secret
+        - github_auth_client_id
+        - google_auth_secret
+        - google_auth_client_id
+        - django_secret_key
+        - db_password
+
+  djangoq_prod:
+      <<: *web_prod
+      command: >
+        sh -c "python /code/bhread/manage.py makeschedules \
+        && python /code/bhread/manage.py qcluster"
+      profiles: ["prod"]
 
 secrets:
   # Initial installation: you need to create the files and put content
@@ -77,3 +139,7 @@ secrets:
     file: secrets/google_auth_secret.txt
   google_auth_client_id:
     file: secrets/google_auth_client_id.txt
+  django_secret_key:
+    file: secrets/django_secret_key.txt
+  db_password:
+    file: secrets/db_password.txt
