@@ -74,7 +74,7 @@ def feed_make_posts(*, feed: Feed, parser=feedparser.parse) -> Iterator[Post]:
     for entry in d.entries:
         content = content_to_html(entry.content) if "content" in entry else None
         title = entry.title
-        if Post.objects.filter(url=entry.link).exists():
+        if Post.objects.filter(url=entry.link, feed=feed).exists():
             #### Test Update functionality
             post = Post.objects.get(url=entry.link, feed=feed)
             update = post_update(post=post, title=title, content=content, feed=feed)
