@@ -134,6 +134,8 @@ services:
     build: ./nginx
     profiles: ["prod"]
     volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
       - static_volume:/code/bhread/staticfiles
       - media_volume:/code/bhread/mediafiles
     restart: unless-stopped

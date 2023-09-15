@@ -70,6 +70,13 @@ docker compose up --build or
 docker compose up
 ```
 
+(Initial deployment)
+Obtain ssl certificate:
+
+```sh
+sudo ./init-letsencrypt.sh
+```
+
 
 management command
 
