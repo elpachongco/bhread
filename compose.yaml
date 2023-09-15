@@ -130,7 +130,6 @@ services:
         sh -c "python /code/bhread/manage.py makeschedules \
         && python /code/bhread/manage.py qcluster"
       profiles: ["prod"]
-
   nginx:
     build: ./nginx
     profiles: ["prod"]
@@ -138,10 +137,19 @@ services:
       - static_volume:/code/bhread/staticfiles
       - media_volume:/code/bhread/mediafiles
     restart: unless-stopped
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     ports:
-      - 1337:80
+      - 80:80
+      - 443:443
     depends_on:
       - web_prod
+  certbot:
+    profiles: ["prod"]
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 secrets:
   # Initial installation: you need to create the files and put content
