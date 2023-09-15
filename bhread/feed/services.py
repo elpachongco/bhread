@@ -74,13 +74,12 @@ def feed_make_posts(*, feed: Feed, parser=feedparser.parse) -> Iterator[Post]:
     for entry in d.entries:
         content = content_to_html(entry.content) if "content" in entry else None
         title = entry.title
-        if Post.objects.filter(url=entry.link, feed=feed).exists():
+        if Post.objects.filter(url=entry.link, feed__owner=feed.owner).exists():
             #### Test Update functionality
-            post = Post.objects.get(url=entry.link, feed=feed)
+            post = Post.objects.get(url=entry.link, feed__owner=feed.owner)
             update = post_update(post=post, title=title, content=content, feed=feed)
             if update:
                 yield update
-
         else:
             yield Post(feed=feed, url=entry.link, title=title, content=content)
 
@@ -98,14 +97,11 @@ def feed_update(feed: Feed, parser=feedparser.parse):
         if not feed_is_verified:
             feed_verify(feed=feed, feed_post=feed_post)
         else:
-            is_reply = False
-            for p in post_make_parents(post=feed_post, feed=feed):
-                p.save()
-                feed_post.parent = p
-                feed_post.save()
-                is_reply = True
-            if not is_reply:
-                feed_post.save()
+            parent = post_make_parent(feed_post)
+            if parent is not None:
+                parent.save()
+                feed_post.parent = parent
+            feed_post.save()
 
     feed.last_scan = timezone.now()
     feed.save()
@@ -214,6 +210,22 @@ def post_render(post):
     elif post.content:
         post.content = BeautifulSoup(post.content).text[:355]
     return post
+
+
+def post_make_parent(post: Post) -> Optional[Post]:
+    """Scan post if it's a reply.
+    - If it's a reply
+        - Retrieve verified parent if it exists
+        - else
+    """
+    reply = html_find_reply(s=post.content)
+    parent_url = reply["url"]
+    if parent_url:
+        if Post.objects.filter(url=parent_url).exists():
+            return Post.objects.get(url=parent_url)
+        else:
+            return Post(url=parent_url)
+    return None
 
 
 def post_make_parents(post: Post, feed: Feed) -> Iterator[Post]:
