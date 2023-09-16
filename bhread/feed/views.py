@@ -14,7 +14,6 @@ from .models import Feed, Post
 
 
 def home(request):
-    ser.feed_update_all()
     context = {
         "posts": [],
         "base_template": "feed/base.html",

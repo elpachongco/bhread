@@ -83,8 +83,8 @@ def feed_update(feed: Feed, parser=feedparser.parse):
     """
     feed_text: str = feed_get(feed)
 
-    verified = False
-    if not feed.is_verified:
+    verified = feed.is_verified
+    if not verified:
         verified = feed_verify(feed, feed_text)
 
     if verified:
@@ -123,7 +123,7 @@ def feed_verify(feed, text_content: str) -> bool:
         content = verification_post.content
 
     if not content:
-        content = feed_get(feed)
+        content = text_content
 
     if search in content or search.removesuffix("/") in content:
         verified = True
@@ -134,13 +134,24 @@ def feed_verify(feed, text_content: str) -> bool:
 
 
 def feed_verify_url(feed, url):
-    """Verify feed using a url"""
+    """Verify feed using a url
+    - If feed is already verified, return
+    """
     if feed.is_verified:
         return
-    a = requests.get(url)
-    post = Post.objects.create(url=url, feed=feed, content=a.text)
+    if Post.objects.filter(url=url, feed__owner=feed.owner).exists():
+        post = Post.objects.get(url=url, feed__owner=feed.owner)
+    else:
+        post = Post.objects.create(url=url, feed=feed)
+
+    a = ""
+    if post.content:
+        a = post.content
+    else:
+        a = requests.get(url).text
+    post.content = a
     feed.verification = post
-    verified = feed_verify(feed, a.text)
+    verified = feed_verify(feed, a)
     return verified
 
 
