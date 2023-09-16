@@ -28,17 +28,12 @@ services:
       timeout: 5s
       retries: 5
 
-  web_dev:
-      &web_dev
+  web_base:
+      &web_base
       build: .
       profiles: ["dev"]
-      # Allow access of ports in the host machine (for Test feeds):
       network_mode: "host"
-      restart: unless-stopped
-      command: >
-        sh -c "python /code/bhread/manage.py makemigrations \
-        && python /code/bhread/manage.py migrate \
-        && python /code/bhread/manage.py runserver 0.0.0.0:8000"
+      # Allow access of ports in the host machine (for Test feeds):
       volumes:
         - .:/code
       environment:
@@ -61,23 +56,32 @@ services:
         - google_auth_secret
         - google_auth_client_id
         - db_password
-          # tty: true
-          # stdin_open: true
+
+  web_dev:
+      <<: *web_base
+      restart: unless-stopped
+      ports:
+        - 8000:8000
+      command: >
+        sh -c "python /code/bhread/manage.py makemigrations \
+        && python /code/bhread/manage.py migrate \
+        && python /code/bhread/manage.py runserver 0.0.0.0:8000"
+
   tailwind:
-      <<: *web_dev
+      <<: *web_base
+      restart: unless-stopped
       command: >
         sh -c "python /code/bhread/manage.py tailwind install \
         && python /code/bhread/manage.py tailwind start"
       # Without tty, no stdin, and tailwind watcher aborts
       # https://github.com/tailwindlabs/tailwindcss/issues/5324
       tty: true
-      profiles: ["dev"]
   djangoq_dev:
-      <<: *web_dev
+      <<: *web_base
+      restart: unless-stopped
       command: >
         sh -c "python /code/bhread/manage.py makeschedules \
         && python /code/bhread/manage.py qcluster"
-      profiles: ["dev"]
 
 
   ## PRODUCTION Environment CONFIGURATION

@@ -29,6 +29,24 @@ DATABASES = {
     },
 }
 
+"""Djangoq settings"""
+Q_CLUSTER = {
+    "name": "bhread",
+    # 'workers': 8,  # Use default
+    "recycle": 500,
+    "timeout": 60,
+    "compress": True,
+    "save_limit": 250,
+    "queue_limit": 500,
+    "cpu_affinity": 1,
+    "label": "Django Q",
+    "redis": {
+        "host": "0.0.0.0",
+        "port": 6379,
+        "db": 0,
+    },
+}
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
