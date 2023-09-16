@@ -150,6 +150,7 @@ def feed_verify_url(feed, url):
     else:
         a = requests.get(url).text
     post.content = a
+    post.save()
     feed.verification = post
     verified = feed_verify(feed, a)
     return verified
