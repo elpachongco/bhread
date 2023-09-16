@@ -3,6 +3,7 @@ from urllib.parse import urlparse
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
+from feed import services as ser
 
 from .models import Feed, Page, Post
 
@@ -48,7 +49,7 @@ class VerificationForm(forms.ModelForm):
         if Post.objects.filter(url=post_url, feed=feed).exists():
             self.instance = Post.objects.get(url=post_url, feed=feed)
 
-        if urlparse(post_url).netloc != urlparse(feed.url).netloc:
+        if not ser.url_same_origin(post_url, feed.url):
             raise ValidationError(
                 _(
                     "Verification Post must belong to the same domain/subdomain as feed."

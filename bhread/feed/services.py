@@ -109,7 +109,7 @@ def feed_update_all():
         tasks.feed_update(feed)
 
 
-def feed_verify(feed, content: str) -> bool:
+def feed_verify(feed, text_content: str) -> bool:
     """Verify feed.
     If feed.verification post exists, use that.
     Else, fetch feed text and find search string.
@@ -126,10 +126,25 @@ def feed_verify(feed, content: str) -> bool:
         content = feed_get(feed)
 
     if search in content or search.removesuffix("/") in content:
-        feed.is_verified = True
         verified = True
+        feed.is_verified = True
+        feed.save()
 
     return verified
+
+
+def feed_verify_url(feed, url):
+    """Verify feed using a url"""
+    a = requests.get(url)
+    post = Post.objects.create(url=url, feed=feed, content=a.text)
+    feed.verification = post
+    verified = feed_verify(feed, a.text)
+    return verified
+
+
+def url_same_origin(url1, url2) -> bool:
+    """Compare two urls if they're from the same site"""
+    return urlparse(url1).netloc == urlparse(url2).netloc
 
 
 def get_favicon_path(url: str) -> str:

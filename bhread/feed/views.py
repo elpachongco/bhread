@@ -52,12 +52,9 @@ def feeds(request):
         elif "verification_post" in request.POST:
             v_form = VerificationForm(request.POST, user=request.user)
             if v_form.is_valid():
-                post_url = v_form.cleaned_data.get("url")
+                url = v_form.cleaned_data.get("url")
                 feed = v_form.cleaned_data.get("feed")
-                post, created = Post.objects.get_or_create(url=post_url, feed=feed)
-                feed.verification = post
-                ser.feed_verify(feed)
-                feed.save()
+                ser.feed_verify_url(feed, url)
                 messages.success(request, "Verification post added")
             else:
                 context["verification_form"] = v_form
