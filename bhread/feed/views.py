@@ -56,12 +56,11 @@ def feeds(request):
                 feed = v_form.cleaned_data.get("feed")
                 post, created = Post.objects.get_or_create(url=post_url, feed=feed)
                 feed.verification = post
-                ser.feed_verify(feed=feed, feed_post=post)
+                ser.feed_verify(feed)
                 feed.save()
                 messages.success(request, "Verification post added")
             else:
                 context["verification_form"] = v_form
-                print(v_form.__dict__)
                 messages.error(request, "Failed to register verification post")
 
     return render(request, "feed/feeds.html", context)

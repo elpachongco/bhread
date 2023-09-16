@@ -51,7 +51,7 @@ def feed_get(feed) -> str:
     return a.text
 
 
-def feed_make_posts(*, feed: Feed, feed_object) -> Iterator[Post]:
+def feed_make_posts(*, feed: Feed, parsed_feed) -> Iterator[Post]:
     """Convert feed entries to Posts.
 
     Returns Post if Post with url already exists.
@@ -59,10 +59,10 @@ def feed_make_posts(*, feed: Feed, feed_object) -> Iterator[Post]:
     - If post with url doesn't exist, return new post.
     - If post is not new and is not an update, ignore
     """
-    if "entries" not in feed_object:
+    if "entries" not in parsed_feed:
         return
 
-    for entry in feed_object.entries:
+    for entry in parsed_feed.entries:
         content = content_to_html(entry.content) if "content" in entry else None
         title = entry.title if "title" in entry else None
         if Post.objects.filter(url=entry.link, feed=feed).exists():
@@ -76,20 +76,20 @@ def feed_make_posts(*, feed: Feed, feed_object) -> Iterator[Post]:
 
 def feed_update(feed: Feed, parser=feedparser.parse):
     """Update a feed.
-    - If feed is unverified, check each post for verification string
-    - else, create save each posts.
+    - If feed is unverified, check feed text for verification string
+    - else, create each post.
     - For each post that is a reply, create its parent post
     - If user is verified and post is not a reply, create the post.
     """
-    content = feed_get(feed)
+    feed_text: str = feed_get(feed)
 
     verified = False
     if not feed.is_verified:
-        verified = feed_verify(content)
+        verified = feed_verify(feed, feed_text)
 
     if verified:
-        feed_object = parser(content)
-        for feed_post in feed_make_posts(feed=feed, feed_object=feed_object):
+        parsed_feed = parser(feed_text)
+        for feed_post in feed_make_posts(feed=feed, parsed_feed=parsed_feed):
             parent = post_make_parent(feed_post)
             if parent is not None:
                 parent.save()
@@ -109,7 +109,7 @@ def feed_update_all():
         tasks.feed_update(feed)
 
 
-def feed_verify(feed) -> bool:
+def feed_verify(feed, content: str) -> bool:
     """Verify feed.
     If feed.verification post exists, use that.
     Else, fetch feed text and find search string.
