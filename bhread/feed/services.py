@@ -43,40 +43,30 @@ def content_to_html(entry_content):
     return c
 
 
-def feed_make_posts(*, feed: Feed, parser=feedparser.parse) -> Iterator[Post]:
-    """Convert feed entries to Posts if entry is a reply.
+def feed_get(feed) -> str:
+    """Return content of feed as string"""
+    # NOTE: THIS SHOULD USE the HTTP 304 status code,
+    # NOTE: last_modified, etag
+    a = requests.get(feed.url)
+    return a.text
+
+
+def feed_make_posts(*, feed: Feed, feed_object) -> Iterator[Post]:
+    """Convert feed entries to Posts.
 
     Returns Post if Post with url already exists.
     - If url exists but new data is present, return updated post (keep pk).
     - If post with url doesn't exist, return new post.
     - If post is not new and is not an update, ignore
     """
-    d = None
-    # if False:  ##  Fix
-    #     d = feedparser.parse(
-    #         feed.url, etag=feed.etag, modified=feed.last_modified
-    #     )  # ~~TODO: check caching http headers~~
-    # else:
-    d = parser(feed.url)
-    # feed.last_scan = timezone.now()
-    # feed.save()
+    if "entries" not in feed_object:
+        return
 
-    # changed = False
-    # if "etag" in d:
-    #     feed.etag = d.etag
-    #     changed = True
-    # if "modified" in d:
-    #     feed.last_modified = d.modified
-    #     changed = True
-    # if changed:
-    #     feed.save()
-
-    for entry in d.entries:
+    for entry in feed_object.entries:
         content = content_to_html(entry.content) if "content" in entry else None
-        title = entry.title
-        if Post.objects.filter(url=entry.link, feed__owner=feed.owner).exists():
-            #### Test Update functionality
-            post = Post.objects.get(url=entry.link, feed__owner=feed.owner)
+        title = entry.title if "title" in entry else None
+        if Post.objects.filter(url=entry.link, feed=feed).exists():
+            post = Post.objects.get(url=entry.link, feed=feed)
             update = post_update(post=post, title=title, content=content, feed=feed)
             if update:
                 yield update
@@ -86,17 +76,20 @@ def feed_make_posts(*, feed: Feed, parser=feedparser.parse) -> Iterator[Post]:
 
 def feed_update(feed: Feed, parser=feedparser.parse):
     """Update a feed.
-    - If feed is unverified, check each post for verification text
+    - If feed is unverified, check each post for verification string
     - else, create save each posts.
     - For each post that is a reply, create its parent post
     - If user is verified and post is not a reply, create the post.
     """
-    feed_is_verified = feed.is_verified
+    content = feed_get(feed)
 
-    for feed_post in feed_make_posts(feed=feed, parser=parser):
-        if not feed_is_verified:
-            feed_verify(feed=feed, feed_post=feed_post)
-        else:
+    verified = False
+    if not feed.is_verified:
+        verified = feed_verify(content)
+
+    if verified:
+        feed_object = parser(content)
+        for feed_post in feed_make_posts(feed=feed, feed_object=feed_object):
             parent = post_make_parent(feed_post)
             if parent is not None:
                 parent.save()
@@ -116,35 +109,27 @@ def feed_update_all():
         tasks.feed_update(feed)
 
 
-def feed_verify(*, feed=None, feed_post=None):
-    """Verify the feed.
-    - Check if post belongs to the same domain and subdomain
-    - If post has content, test that.
-    - If post has no content, GET it then test that.
-    Note: A better version would be to return something, don't save directly
+def feed_verify(feed) -> bool:
+    """Verify feed.
+    If feed.verification post exists, use that.
+    Else, fetch feed text and find search string.
     """
-    post = feed_post or feed.verification
-    if post is None:
-        return
-    # generate verification str "bhread.com/users/<username>/verification"
-    # search = request.build_absolute_uri(reverse("proof", args=[request.user.username]))
+    verified = False
     search = "bhread.com" + reverse("proof", args=[feed.owner.username])
+    content = ""
+    verification_post = feed.verification
 
-    if urlparse(post.url).netloc != urlparse(feed.url).netloc:
-        return
+    if verification_post:
+        content = verification_post.content
 
-    post_html = post.content
-    if not post_html:
-        post_html = requests.get(post.url).text
-        post.content = post_html
+    if not content:
+        content = feed_get(feed)
 
-    # Check overflow risk
-    if search in post_html or search.removesuffix("/") in post_html:
+    if search in content or search.removesuffix("/") in content:
         feed.is_verified = True
-        if not feed.verification:
-            feed.verification = feed_post
-        feed.save()
-    post.save()
+        verified = True
+
+    return verified
 
 
 def get_favicon_path(url: str) -> str:

@@ -64,10 +64,11 @@ docker run -p 127.0.0.1:8000:8000 testing-bhread
 
 Run docker compose:
 ```sh
-docker compose up --build or
+docker compose --profile dev up --build
 ```
+or
 ```sh
-docker compose up
+docker compose --profile dev up
 ```
 
 (Initial deployment)
@@ -78,9 +79,13 @@ sudo ./init-letsencrypt.sh
 ```
 
 
-management command
+
+## management commands
 
 python3 manage.py makeschedules -> adds a schedule for updating feeds every minute
+
+
+
 
 ## Contribute
 
