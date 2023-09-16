@@ -135,6 +135,8 @@ def feed_verify(feed, text_content: str) -> bool:
 
 def feed_verify_url(feed, url):
     """Verify feed using a url"""
+    if feed.is_verified:
+        return
     a = requests.get(url)
     post = Post.objects.create(url=url, feed=feed, content=a.text)
     feed.verification = post

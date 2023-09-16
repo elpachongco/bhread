@@ -116,7 +116,7 @@ def post_children(request, pk):
 
 def post_detail(request, url=None):
     context = {"replies": [], "base_template": "feed/base.html"}
-    parent = Post.objects.get(url=url, feed__is_verified=True)
+    parent = Post.objects.get(url=url)
 
     context["parent"] = parent
     context["parent_replies"] = sel.descendants_count(parent)
