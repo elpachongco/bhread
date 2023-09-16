@@ -1,13 +1,21 @@
-from django_q.management.commands.qcluster import Command as BaseCommand
+# from django_q.management.commands.qcluster import Command as BaseCommand
+from django.core.management.base import BaseCommand
 from feed import tasks
 
 # from django_q.models import Schedule
 
 
+# class Command(BaseCommand):
+#     def handle(self, *args, **kwargs):
+#         tasks.schedule_update_feeds()
+#         super().handle(*args, **kwargs)
+
+
 class Command(BaseCommand):
+    help = "Creates a schedule to periodically update all feeds."
+
     def handle(self, *args, **kwargs):
         tasks.schedule_update_feeds()
-        super().handle(*args, **kwargs)
 
 
 # def ensure_schedule_updated():
