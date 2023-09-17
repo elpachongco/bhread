@@ -47,8 +47,9 @@ def feed_get(feed) -> str:
     """Return content of feed as string"""
     # NOTE: THIS SHOULD USE the HTTP 304 status code,
     # NOTE: last_modified, etag
-    a = requests.get(feed.url)
-    return a.text
+    # a = requests.get(feed.url)
+    # return a.text
+    # return feedparser.parse()
 
 
 def feed_make_posts(*, feed: Feed, parsed_feed) -> Iterator[Post]:
@@ -81,15 +82,13 @@ def feed_update(feed: Feed, parser=feedparser.parse):
     - For each post that is a reply, create its parent post
     - If user is verified and post is not a reply, create the post.
     """
-    feed_text: str = feed_get(feed)
-
     verified = feed.is_verified
-    if not verified:
-        verified = feed_verify(feed, feed_text)
 
-    if verified:
-        parsed_feed = parser(feed_text)
-        for feed_post in feed_make_posts(feed=feed, parsed_feed=parsed_feed):
+    parsed_feed = parser(feed.url)
+    for feed_post in feed_make_posts(feed=feed, parsed_feed=parsed_feed):
+        if not verified:
+            feed_verify(feed, feed_post.content)
+        else:
             parent = post_make_parent(feed_post)
             if parent is not None:
                 parent.save()
@@ -149,8 +148,8 @@ def feed_verify_url(feed, url):
         a = post.content
     else:
         a = requests.get(url).text
-    post.content = a
-    post.save()
+        post.content = a
+        post.save()
     feed.verification = post
     verified = feed_verify(feed, a)
     return verified

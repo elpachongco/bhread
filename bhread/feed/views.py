@@ -44,7 +44,7 @@ def feeds(request):
             f_form.instance.owner = request.user
             if f_form.is_valid():
                 f_form.save()
-                tasks.feed_update(f_form.instance)
+                ser.feed_update(f_form.instance)
                 messages.success(request, "Feed created")
             else:
                 context["feed_form"] = f_form
