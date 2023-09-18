@@ -42,7 +42,7 @@ urlpatterns = [
     ),
     path("feed-posts/", feed_views.feed_posts, name="userposts"),
     path("post-children/<int:pk>/", feed_views.post_children, name="children"),
-    path("post/<path:url>/", feed_views.post_detail, name="detail"),
+    path("post/<path:url>", feed_views.post_detail, name="detail"),
     path("profile/", user_views.profile, name="profile"),
     path("admin/", admin.site.urls),
     path("__reload__/", include("django_browser_reload.urls")),
