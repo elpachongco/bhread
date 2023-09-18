@@ -12,6 +12,9 @@ from .feedgen import make_feed, make_item
 
 class PrototypeTest(TestCase):
     def customParser(self, items):
+        """Useful for injecting a parser dependency so that
+        no http request will happen.
+        """
         return feedparser.parse(
             make_feed(items, link="https://bhread.com/feed/shorts.xml")
         )
@@ -117,9 +120,6 @@ class PrototypeTest(TestCase):
         ser.feed_update(feed=self.feed, parser=customcustomParser)
         self.assertEqual(self.feed.is_verified, True)
 
-    def test_verification_from_post_owned_by_users_other_feed(self):
-        pass
-
     def test_verification_post_is_created(self):
         self.feed.is_verified = False
         self.feed.verification = None
@@ -141,4 +141,35 @@ class PrototypeTest(TestCase):
 
         self.assertEqual(self.feed.is_verified, True)
         self.assertEqual(len(Post.objects.all()), 1)
+        self.assertEqual(len(Post.objects.filter(url="https://bhread.com/post/1")), 1)
+
+    def test_verify_from_post_owned_by_users_other_feed_does_not_create_new_post(self):
+        self.feed.is_verified = False
+        self.feed.verification = None
+        self.feed.save()
+
+        items = [
+            make_item(
+                title="test item 1",
+                link="https://bhread.com/post/1",
+                content=f"https://bhread.com/feeds/{self.user.username}/verification",
+            ),
+        ]
+
+        def customcustomParser(url):
+            return self.customParser(items)
+
+        ser.feed_update(feed=self.feed, parser=customcustomParser)
+
+        self.assertEqual(self.feed.is_verified, True)
+        self.assertEqual(len(Post.objects.all()), 1)
+        self.assertEqual(len(Post.objects.filter(url="https://bhread.com/post/1")), 1)
+
+        feed_to_verify = Feed.objects.create(
+            url="https://bhread.com/other",
+            owner=self.user,
+        )
+
+        ser.feed_verify_url(feed_to_verify, "https://bhread.com/post/1")
+        self.assertEqual(feed_to_verify.is_verified, True)
         self.assertEqual(len(Post.objects.filter(url="https://bhread.com/post/1")), 1)
