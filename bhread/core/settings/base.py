@@ -155,9 +155,10 @@ TAILWIND_APP_NAME = "theme"
 Q_CLUSTER = {
     "name": "bhread",
     # 'workers': 8,  # Use default
+    "workers": 1,
     "recycle": 500,
     "timeout": 60,
-    "compress": True,
+    # "compress": True,
     "save_limit": 250,
     "queue_limit": 500,
     "cpu_affinity": 1,
