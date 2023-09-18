@@ -159,6 +159,8 @@ def feed_verify_url(feed, url):
         post.content = a
     feed.verification = post
     verified = feed_verify(feed, a)
+    if verified:
+        feed_update(feed)
     return verified
 
 
