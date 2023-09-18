@@ -116,7 +116,7 @@ def feed_verify(feed, text_content: str) -> bool:
     Else, fetch feed text and find search string.
     """
     verified = False
-    search = "bhread.com" + reverse("proof", args=[feed.owner.username])
+    search = feed_make_verification_string(feed.owner.username)
     content = ""
     verification_post = feed.verification
 
@@ -132,6 +132,10 @@ def feed_verify(feed, text_content: str) -> bool:
         feed.save()
 
     return verified
+
+
+def feed_make_verification_string(name):
+    return "bhread.com" + reverse("proof", args=[name])
 
 
 def feed_verify_url(feed, url):
