@@ -83,19 +83,26 @@ def feed_update(feed: Feed, parser=feedparser.parse):
     - If user is verified and post is not a reply, create the post.
     """
     verified = feed.is_verified
+    just_verified = False
 
     parsed_feed = parser(feed.url)
     for feed_post in feed_make_posts(feed=feed, parsed_feed=parsed_feed):
         if not verified:
             verified = feed_verify(feed, feed_post.content)
             if verified:
+                just_verified = True
                 feed_post.save()
+                feed.verification = feed_post
         else:
             parent = post_make_parent(feed_post)
             if parent is not None:
                 parent.save()
                 feed_post.parent = parent
             feed_post.save()
+
+    if just_verified and feed.verification:  # Verification should be the latest post.
+        feed.verification.date_added = timezone.now()
+        feed.verification.save()
 
     feed.last_scan = timezone.now()
     feed.save()
