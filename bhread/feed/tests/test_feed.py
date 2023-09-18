@@ -116,3 +116,29 @@ class PrototypeTest(TestCase):
         ]
         ser.feed_update(feed=self.feed, parser=customcustomParser)
         self.assertEqual(self.feed.is_verified, True)
+
+    def test_verification_from_post_owned_by_users_other_feed(self):
+        pass
+
+    def test_verification_post_is_created(self):
+        self.feed.is_verified = False
+        self.feed.verification = None
+        self.feed.save()
+        self.assertEqual(self.feed.is_verified, False)
+
+        items = [
+            make_item(
+                title="test item 1",
+                link="https://bhread.com/post/1",
+                content=f"https://bhread.com/feeds/{self.user.username}/verification",
+            ),
+        ]
+
+        def customcustomParser(url):
+            return self.customParser(items)
+
+        ser.feed_update(feed=self.feed, parser=customcustomParser)
+
+        self.assertEqual(self.feed.is_verified, True)
+        self.assertEqual(len(Post.objects.all()), 1)
+        self.assertEqual(len(Post.objects.filter(url="https://bhread.com/post/1")), 1)

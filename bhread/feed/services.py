@@ -87,7 +87,9 @@ def feed_update(feed: Feed, parser=feedparser.parse):
     parsed_feed = parser(feed.url)
     for feed_post in feed_make_posts(feed=feed, parsed_feed=parsed_feed):
         if not verified:
-            feed_verify(feed, feed_post.content)
+            verified = feed_verify(feed, feed_post.content)
+            if verified:
+                feed_post.save()
         else:
             parent = post_make_parent(feed_post)
             if parent is not None:
@@ -135,13 +137,15 @@ def feed_verify(feed, text_content: str) -> bool:
 def feed_verify_url(feed, url):
     """Verify feed using a url
     - If feed is already verified, return
+    - If url exists in one of user's feeds, use that
     """
     if feed.is_verified:
         return
+
     if Post.objects.filter(url=url, feed__owner=feed.owner).exists():
         post = Post.objects.get(url=url, feed__owner=feed.owner)
     else:
-        post = Post.objects.create(url=url, feed=feed)
+        post = Post(url=url, feed=feed)
 
     a = ""
     if post.content:
@@ -149,7 +153,6 @@ def feed_verify_url(feed, url):
     else:
         a = requests.get(url).text
         post.content = a
-        post.save()
     feed.verification = post
     verified = feed_verify(feed, a)
     return verified
