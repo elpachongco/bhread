@@ -45,7 +45,7 @@
                     <p class="text-xs text-gray-500">{{ post.date_added | timesince }} ago</p>
                 </div>
             </div>
-            {% if post.content|length > 300 and post.title %}
+            {% if post.content|striptags|length > 300 and post.title %}
                 <span class="font-header font-medium mb-2">{{ post.title }}</span>
             {% endif %}
             <div hx-disable x-ignore class="text-base">
