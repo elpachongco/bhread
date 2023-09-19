@@ -24,7 +24,7 @@ def home(request):
     ).order_by("-date_added", "-date_modified"):
         replies = sel.descendants_count(post)
         favicon = ""
-        context["posts"].append((ser.post_render(post), replies, favicon))
+        context["posts"].append((post, replies, favicon))
     return render(request, "feed/home.html", context)
 
 

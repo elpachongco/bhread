@@ -1,4 +1,4 @@
-<li class="sm:px-2 mt-2 mb-4 border-b border-b-gallery">
+<li class="sm:px-4 mt-2 mb-4 border-b border-b-gallery">
     {% if post.parent %}
         <div id="reply" class="w-full mb-3">
             <div class="flex w-full">
@@ -8,7 +8,7 @@
                          alt="site favicon">
                 </div>
                 <div class="flex justify-between w-full">
-                    <a class="font-header text-sm text-lochmara font-medium"
+                    <a class="font-header text-sm text-lochmara font-medium overflow-hidden"
                        href="{{ post.parent.url }}">
                         {% if "https://" in post.parent.url %}
                             {{ post.parent.url | slice:"8:"| truncatechars:50 }}
@@ -34,7 +34,14 @@
         <div class="mb-4 w-full">
             <div class="mb-1">
                 <div class="flex w-full justify-between items-center">
-                    <h3 class="mr-2 text-lg font-medium text-lochmara font-header">{{ post.feed.owner.username }}</h3>
+                    <div class="flex flex-1 items-center">
+                        <h3 class="mr-2 text-lg font-medium text-lochmara font-header">{{ post.feed.owner.username }}</h3>
+                        <a href="{{ post.url }}"
+                           target="_blank"
+                           class="flex items-center hover:no-underline">
+                            <span class="material-symbols-outlined text-lochmara hover:text-gull">link</span>
+                        </a>
+                    </div>
                     <p class="text-xs text-gray-500">{{ post.date_added | timesince }} ago</p>
                 </div>
             </div>
@@ -43,19 +50,12 @@
             {% endif %}
             <div hx-disable x-ignore class="text-base">
                 {% autoescape off %}
-                    {{ post.content }}
+                    {{ post.content|truncatechars_html:500 }}
                 {% endautoescape %}
             </div>
             <div>
-                <a class="text-sm" href="{% url 'detail' post.url %}">See post ({{ replies }} repl{{ replies|pluralize:"y,ies" }})</a>
+                <a class="text-sm" href="{% url 'detail' post.url %}">See ({{ replies }} repl{{ replies|pluralize:"y,ies" }})</a>
             </div>
         </div>
     </article>
-    {% comment %}
-  <div class="flex mt-2 mb-4">
-    <a class="text-sm" href="{% url 'detail' post.pk %}">
-      See post ({{ replies }} repl{{ replies|pluralize:"y,ies"}})
-    </a>
-  </div>
-    {% endcomment %}
 </li>
