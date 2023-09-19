@@ -1,0 +1,27 @@
+{# {% extends "account/base.html" %} #}
+{% extends "feed/base.html" %}
+{% load i18n %}
+{% block head_title %}
+    {% trans "Signup" %}
+{% endblock head_title %}
+{% block content %}
+    <div class="flex flex-col items-center justify-center">
+        <h1 class="font-header text-lg mb-2">{% trans "Sign Up" %}</h1>
+        <p>
+            {% blocktrans %}Already have an account? <a href="{{ login_url }}">Sign in</a>.{% endblocktrans %}
+        </p>
+        <form class="signup"
+              id="signup_form"
+              method="post"
+              action="{% url 'account_signup' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            {% if redirect_field_value %}
+                <input type="hidden"
+                       name="{{ redirect_field_name }}"
+                       value="{{ redirect_field_value }}" />
+            {% endif %}
+            <button type="submit" class="bg-lochmara text-white font-header font-medium">{% trans "Sign Up" %}</button>
+        </form>
+    </div>
+{% endblock content %}

@@ -24,7 +24,7 @@
   input[type="url"],
   input[type="text"],
   input[type="password"] {
-    @apply rounded-lg border-alto bg-gallery transition-colors
+    @apply rounded-lg border-alto bg-gallery my-1 transition-colors
     duration-500
     ease-out focus:border-pacific/60 dark:bg-[#202B38];
   }

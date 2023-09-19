@@ -11,7 +11,7 @@
             </div>
         </a>
         <nav class="flex flex-col">
-            {% with "home feeds about" as route_names %}
+            {% with "home feeds" as route_names %}
                 {% for item in route_names.split %}
                     <a text-lochmara
                        class="flex items-center p-3 text-lg rounded-lg duration-100 hover:text-black hover:no-underline hover:transition-opacity font-header hover:bg-gallery/80 {% if url_name == item %} text-black {% else %} text-gull {% endif %}"
@@ -19,16 +19,16 @@
                        hx-boost="false"
                        hx-indicator="#page-load-spinner"
                        hx-swap="innerHTML">
-                        <span class="mr-2 material-symbols-outlined size-20 ">{% cycle "home" "rss_feed" "bakery_dining" %}</span>
+                        <span class="mr-2 material-symbols-outlined size-20 ">{% cycle "home" "rss_feed" %}</span>
                         <span class="hidden lg:block">{{ item }}</span>
                     </a>
                 {% endfor %}
             {% endwith %}
             {% if user.is_authenticated %}
-                {% with "profile logout" as button_names %}
+                {% with "profile" as button_names %}
                     {% for button_name in button_names.split %}
-                        {% cycle "profile" "account_logout" as route silent %}
-                        {% cycle "face" "close" as icon_name silent %}
+                        {% cycle "profile" as route silent %}
+                        {% cycle "face" as icon_name silent %}
                         <a class="flex items-center p-3 text-lg text-gull hover:text-black hover:no-underline hover:bg-gallery"
                            href="{% url route %}"
                            hx-boost="true"
@@ -39,20 +39,20 @@
                         </a>
                     {% endfor %}
                 {% endwith %}
-                {% comment %}
-        {% else %}
-            <a class="flex items-center p-4 text-black hover:no-underline hover:bg-gallery" href="{% url "account_login" %}">login</a>
-            <a class="flex items-center p-4 text-black hover:no-underline hover:bg-gallery" href="{% url "account_signup" %}">sign up</a>
-                {% endcomment %}
             {% endif %}
         </nav>
     </div>
     <div class="h-24">
-        <a href="{% url 'account_signup' %}"
-           class="hover:text-white hover:no-underline">
-            <div class="flex items-center justify-center text-lochmara border border-lochmara rounded text-sm px-2 py-1 hover:bg-lochmara hover:text-white font-header">
+        <a href="
+            {% if user.is_authentcated %}
+                {% url 'account_logout' %}"
+            {% else %}
+                {% url 'account_signup' %}"
+            {% endif %}
+            class="hover:text-white hover:no-underline">
+            <div class="flex items-center justify-center text-lochmara border border-lochmara rounded text-sm px-2 py-1 hover:bg-lochmara hover:border-gull hover:text-white font-header  transition-all duration-75 active:translate-y-0.5">
                 {% if user.is_authenticated %}
-                    Signed in as {{ user.username }}
+                    Log out
                 {% else %}
                     Sign up
                 {% endif %}
