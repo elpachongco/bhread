@@ -1,0 +1,7 @@
+{% load static %}
+<div class="flex flex-row justify-between items-center fixed min-h-[65px] bottom-0 left-0 right-0 md:hidden border-t border-t-gallery bg-gray-50">
+    <a href="{% url 'home' %}"
+       class="px-6 h-full w-auto {% if url_name == 'home' %} text-black {% else %} text-gull {% endif %}"> <span class="mr-2 material-symbols-outlined">home</span> </a>
+    <a href="{% url 'home' %}"
+       class="px-6 min-h-full w-auto {% if url_name == 'more' %} text-black {% else %} text-gull {% endif %}"> <span class="mr-2 material-symbols-outlined">more_horiz</span> </a>
+</div>

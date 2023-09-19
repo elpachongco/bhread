@@ -2,6 +2,7 @@ components:
   card: "feed/card.html"
   nav-left: "feed/nav-left.html"
   nav-right: "feed/nav-right.html"
+  nav-bottom: "feed/nav-bottom.html"
   post: "feed/post.html"
   post-contentless: "feed/post-contentless.html"
   post-dummy: "feed/post-dummy.html"

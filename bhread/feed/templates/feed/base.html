@@ -75,7 +75,7 @@
         <div class="flex justify-center">
             {% nav-left user=user url_name=url_name %}
             {# <main class="flex flex-col justify-center min-h-screen lg:max-w-3xl border-x border-gallery px-2 sm:px-4 sm:max-w-2xl shrink"> #}
-            <main class="flex flex-col justify-center min-h-screen  border-x border-gallery shrink w-full lg:max-w-3xl sm:max-w-2xl">
+            <main class="flex flex-col justify-center min-h-[calc(100vh-65px)] pb-[65px] md:pb-4 md:min-h-screen  border-x border-gallery shrink w-full lg:max-w-3xl sm:max-w-2xl">
                 {% if messages %}
                     {% for message in messages %}
                         <div class="p-2 rounded-md {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} bg-red-300 {% else %} bg-orange-200 dark:bg-slate-700 {% endif %}">
@@ -85,6 +85,7 @@
                 {% endif %}
                 {% block content %}
                 {% endblock content %}
+                {% nav-bottom url_name=url_name %}
             </main>
             {% nav-right %}
         </div>
