@@ -35,7 +35,7 @@
                 document.documentElement.classList.remove("dark");
               }
             }
-            theme("");
+            theme(localStorage.theme || "system");
         </script>
         <link rel="shortcut icon" href="{% static 'feed/logo.svg' %}" />
         {% tailwind_css %}
