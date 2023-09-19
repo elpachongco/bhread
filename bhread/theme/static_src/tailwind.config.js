@@ -64,6 +64,12 @@ module.exports = {
           DEFAULT: "#0096BF",
         },
       },
+      keyframes: {
+        barStripe: {
+          '100%': {'background-position': '100px 0' },
+          '0%': {'background-position': '0 0' },
+        }
+      }
     },
     fontFamily: {
       // body: ["Ubuntu", "Arial", "sans-serif"],

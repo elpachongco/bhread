@@ -1,6 +1,7 @@
 {% load static %}
 {% #sidebar %}
-<div class="flex flex-col flex-initial overflow-y-auto justify-between">
+<div class="flex flex-col flex-initial overflow-y-auto justify-between"
+     hx-boost="true">
     <div>
         <a id="logo"
            class="font-semibold text-black dark:text-alto"
@@ -16,8 +17,6 @@
                     <a text-lochmara
                        class="flex items-center p-3 text-lg rounded-lg duration-100 hover:text-black hover:no-underline hover:transition-opacity font-header hover:bg-gallery/80 {% if url_name == item %} text-black {% else %} text-gull {% endif %}"
                        href="{% url item %}"
-                       hx-boost="false"
-                       hx-indicator="#page-load-spinner"
                        hx-swap="innerHTML">
                         <span class="mr-2 material-symbols-outlined size-20 ">{% cycle "home" "rss_feed" %}</span>
                         <span class="hidden lg:block">{{ item }}</span>

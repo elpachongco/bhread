@@ -8,6 +8,7 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <meta name="keywords" content="blog, links, community, social" />
         <meta name="description" content="Bhread is an online community of blogs." />
+        <meta name="htmx-config" content='{"includeIndicatorStyles": false}'>
         <script>
             // Functions for controlling theme
             function theme(t) {
@@ -57,7 +58,10 @@
         {% endif %}
     </head>
     <body class="subpixel-antialiased bg-white dark:bg-slate-900 dark:text-neutral-200"
-          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+          hx-boost="true"
+          hx-indicator="#bar">
+        <div id="bar" class="htmx-indicator">{% loading-bar %}</div>
         {% if debug %}
             <script>
         if (typeof window.htmx !== "undefined") {

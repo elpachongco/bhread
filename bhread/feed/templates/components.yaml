@@ -8,3 +8,4 @@ components:
   post-dummy: "feed/post-dummy.html"
   post-reply: "feed/post-reply.html"
   sidebar: "feed/sidebar.html"
+  loading-bar: "feed/loading-bar.html"
