@@ -13,7 +13,7 @@
              class="flex items-center dark:color-white"
              x-data="{ mode: localStorage.theme || 'system', modes: ['system', 'dark', 'light'], toggleMode() { this.mode=this.modes[(this.modes.indexOf(this.mode) + 1) % this.modes.length] } }"
              @click="toggleMode();theme(mode)">
-            <a class="hover:no-underline" href="javascript:void(0)">
+            <button class="p-0 hover:bg-transparent">
                 <div class="flex items-center" x-transition>
                     <div>
                         {% with "dark_mode light_mode computer" as icon_names %}
@@ -26,7 +26,7 @@
                         {% endwith %}
                     </div>
                 </div>
-            </a>
+            </button>
         </div>
         <span class="material-symbols-outlined">notifications</span>
         <span class="material-symbols-outlined">settings</span>
