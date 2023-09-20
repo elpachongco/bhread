@@ -104,7 +104,7 @@ services:
       volumes:
         # - .:/code
         - static_volume:/code/bhread/staticfiles
-        - media_volume:/code/bhread/mediafiles
+        - ./bhread/mediafiles/:/code/bhread/mediafiles
       environment:
         - POSTGRES_DB=bhread
         - POSTGRES_USER=postgres
@@ -141,7 +141,7 @@ services:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
       - static_volume:/code/bhread/staticfiles
-      - media_volume:/code/bhread/mediafiles
+      - ./bhread/mediafiles/:/code/bhread/mediafiles
     restart: unless-stopped
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     ports:
@@ -178,4 +178,3 @@ secrets:
 volumes:
   postgres_data:
   static_volume:
-  media_volume:
