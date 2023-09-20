@@ -63,9 +63,6 @@ MIDDLEWARE += [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
-MEDIA_ROOT = BASE_DIR / "media"
-MEDIA_URL = "/media/"
-
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 
 INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + [

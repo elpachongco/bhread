@@ -29,9 +29,6 @@ CACHES = {
     }
 }
 
-MEDIA_ROOT = BASE_DIR / "mediafiles"
-MEDIA_URL = "/media/"
-
 INTERNAL_IPS = []
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 SESSION_COOKIE_SECURE = True
