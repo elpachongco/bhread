@@ -46,6 +46,7 @@ def feeds(request):
                 f_form.save()
                 ser.feed_update(f_form.instance)
                 messages.success(request, "Feed created")
+                redirect("feeds")
             else:
                 context["feed_form"] = f_form
         elif "verification_post" in request.POST:
@@ -55,6 +56,7 @@ def feeds(request):
                 feed = v_form.cleaned_data.get("feed")
                 ser.feed_verify_url(feed, url)
                 messages.success(request, "Verification post added")
+                redirect("feeds")
             else:
                 context["verification_form"] = v_form
                 messages.error(request, "Failed to register verification post")
