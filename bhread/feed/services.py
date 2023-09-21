@@ -134,6 +134,8 @@ def feed_verify(feed, text_content: str) -> bool:
         content = text_content
 
     if search in content or search.removesuffix("/") in content:
+        if verification_post:
+            feed.verification.save()
         verified = True
         feed.is_verified = True
         feed.save()
