@@ -36,7 +36,6 @@ def feeds(request):
     verification_form = VerificationForm(user=request.user)
     context["feed_form"] = feed_form
     context["verification_form"] = verification_form
-    context["all_feeds"] = sel.feeds()
 
     if request.method == "POST":
         if "feed_submit" in request.POST:

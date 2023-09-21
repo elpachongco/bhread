@@ -49,6 +49,9 @@
             </ul>
         </div>
         <p>Paste the link of the post containing the verification url to the input below and submit.</p>
+        {% if not user_feeds %}
+            <h4 class="font-header font-medium text-red-400 my-4">No feeds found. Have you submitted one?</h4>
+        {% endif %}
         <form class="my-6 w-full" action="{% url 'feeds' %}" method="post">
             {% csrf_token %}
             {{ verification_form.non_field_errors }}
