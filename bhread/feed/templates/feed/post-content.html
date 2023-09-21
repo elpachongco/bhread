@@ -1,5 +1,5 @@
 {% var content %}
-{% var trunc_html=100000 %}
+{% var trunc_html=trunc_html|default:350 %}
 <div hx-disable x-ignore class="post-content text-base">
     {% autoescape off %}
         {{ content|truncatechars_html:trunc_html }}

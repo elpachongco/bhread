@@ -6,7 +6,7 @@
             {% for post, replies, feed_image in posts %}
                 <li>
                     <article>{% #post post=post user=user replies=replies %}
-                        {% post-content content=post.content %}
+                        {% post-content content=post.content trunc_html=350 %}
                         {% /post %}
                     </article>
                 </li>
