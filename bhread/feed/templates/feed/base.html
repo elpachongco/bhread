@@ -8,7 +8,6 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <meta name="keywords" content="blog, links, community, social" />
         <meta name="description" content="Bhread is an online community of blogs." />
-        <meta name="htmx-config" content='{"includeIndicatorStyles": false}'>
         <script>
             // Functions for controlling theme
             function theme(t) {
@@ -58,6 +57,12 @@
         {% else %}
             <title>Bhread: Blog Threads</title>
         {% endif %}
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/stackoverflow-light.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/go.min.js"></script>
+        <script>hljs.highlightAll();</script>
     </head>
     <body class="subpixel-antialiased bg-white dark:bg-slate-900 dark:text-neutral-200"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'

@@ -48,11 +48,7 @@
             {% if post.content|striptags|length > 300 and post.title %}
                 <span class="font-header font-medium mb-2">{{ post.title }}</span>
             {% endif %}
-            <div hx-disable x-ignore class="text-base">
-                {% autoescape off %}
-                    {{ post.content|truncatechars_html:500 }}
-                {% endautoescape %}
-            </div>
+            {{ children }}
             <div>
                 <a class="text-sm" href="{% url 'detail' post.url %}">See ({{ replies }} repl{{ replies|pluralize:"y,ies" }})</a>
             </div>

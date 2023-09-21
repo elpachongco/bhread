@@ -36,7 +36,7 @@
 /* HTMX */
 .htmx-indicator {
   opacity: 0;
-  /* transition: opacity 500ms ease-in; */
+  transition: opacity 500ms ease-in;
 }
 .htmx-request .htmx-indicator {
   opacity: 1;
@@ -61,7 +61,7 @@ li {
 
 .htmx-indicator-remove {
   display: none;
-  /* transition: scale 500ms ease-in; */
+  transition: scale 500ms ease-in;
 }
 
 .htmx-request .htmx-indicator-remove {

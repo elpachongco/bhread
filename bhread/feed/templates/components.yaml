@@ -7,5 +7,6 @@ components:
   post-contentless: "feed/post-contentless.html"
   post-dummy: "feed/post-dummy.html"
   post-reply: "feed/post-reply.html"
+  post-content: "feed/post-content.html"
   sidebar: "feed/sidebar.html"
   loading-bar: "feed/loading-bar.html"

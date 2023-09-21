@@ -5,7 +5,10 @@
         <ol class="list-none">
             {% for post, replies, feed_image in posts %}
                 <li>
-                    <article>{% #post post=post user=user replies=replies %}{% /post %}</article>
+                    <article>{% #post post=post user=user replies=replies %}
+                        {% post-content content=post.content %}
+                        {% /post %}
+                    </article>
                 </li>
             {% empty %}
                 <h2>No posts found</h2>
