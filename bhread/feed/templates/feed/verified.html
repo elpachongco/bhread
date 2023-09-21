@@ -1,0 +1,27 @@
+{% extends "feed/base.html" %}
+{% load static %}
+{% block content %}
+    {% if not user %}
+        <h1>User '{{ username }}' is not a member of Bhread.</h1>
+    {% else %}
+        <p>
+            Verified feeds for user
+            <img class="inline"
+                 alt="display picture of user"
+                 width="25px"
+                 height="auto"
+                 src="{{ user.profile.image.url }}">
+        </img>
+        {{ username }} :
+    </p>
+    <ul class="list-disc list-inside">
+        {% for feed in verified_feeds %}
+            <li>
+                <a href="{{ feed.url }}">{{ feed }}</a>
+            </li>
+        {% empty %}
+            <h3>No verified feeds found.</h3>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% endblock content %}

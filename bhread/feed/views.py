@@ -8,6 +8,7 @@ from django.views.decorators.http import require_http_methods
 from feed import selectors as sel
 from feed import services as ser
 from feed import tasks
+from user.models import User
 
 from .forms import FeedRegisterForm, FeedUpdateForm, PageCreateForm, VerificationForm
 from .models import Feed, Post
@@ -86,9 +87,17 @@ def feed_posts(request):
 
 
 def feed_verify(request, user=""):
+    user_object = None
+    if User.objects.filter(username=user).exists():
+        user_object = User.objects.get(username=user)
+
+    context = {"user": user_object, "username": user}
+
     feed = Feed.objects.filter(owner__username=user, is_verified=True)
-    url = urlparse(feed[0].url)
-    return redirect("https://" + url.netloc)
+    if feed:
+        context["verified_feeds"] = feed.all()
+
+    return render(request, "feed/verified.html", context)
 
 
 @login_required
