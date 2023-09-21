@@ -65,6 +65,7 @@ def feed_make_posts(*, feed: Feed, parsed_feed) -> Iterator[Post]:
 
     for entry in parsed_feed.entries:
         content = content_to_html(entry.content) if "content" in entry else None
+        content = html_clean(content) if content else None
         title = entry.title if "title" in entry else None
         if Post.objects.filter(url=entry.link, feed=feed).exists():
             post = Post.objects.get(url=entry.link, feed=feed)
@@ -127,7 +128,7 @@ def feed_verify(feed, text_content: str) -> bool:
     content = ""
     verification_post = feed.verification
 
-    if verification_post:
+    if verification_post:  # Always use verification post if available
         content = verification_post.content
 
     if not content:
@@ -147,7 +148,7 @@ def feed_make_verification_string(name):
     return "bhread.com" + reverse("proof", args=[name])
 
 
-def feed_verify_url(feed, url):
+def feed_verify_url(feed, url) -> bool:
     """Verify feed using a url
     - If feed is already verified, return
     - If url exists in one of user's feeds, use that
@@ -165,7 +166,7 @@ def feed_verify_url(feed, url):
         a = post.content
     else:
         a = requests.get(url).text
-        post.content = a
+        post.content = html_clean(a)
     feed.verification = post
     verified = feed_verify(feed, a)
     if verified:

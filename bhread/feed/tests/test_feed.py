@@ -173,3 +173,6 @@ class PrototypeTest(TestCase):
         ser.feed_verify_url(feed_to_verify, "https://bhread.com/post/1")
         self.assertEqual(feed_to_verify.is_verified, True)
         self.assertEqual(len(Post.objects.filter(url="https://bhread.com/post/1")), 1)
+
+    def test_verification_from_url(self):
+        pass
