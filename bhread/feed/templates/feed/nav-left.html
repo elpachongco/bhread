@@ -44,14 +44,14 @@
     </div>
     <div class="h-24">
         {% url 'account_logout' as logout_url %}
-        {% url 'account_signup' as signup_url %}
-        <a href="{% if user.is_authenticated %} {{ logout_url }} {% else %} {{ signup_url }} {% endif %}"
+        {% url 'account_login' as login_url %}
+        <a href="{% if user.is_authenticated %} {{ logout_url }} {% else %} {{ login_url }} {% endif %}"
            class="hover:text-white hover:no-underline">
             <div class="flex items-center justify-center text-lochmara border border-lochmara rounded text-sm px-2 py-1 hover:bg-lochmara hover:border-gull hover:text-white font-header  transition-all duration-75 active:translate-y-0.5">
                 {% if user.is_authenticated %}
                     Log out
                 {% else %}
-                    Sign up
+                    Log in
                 {% endif %}
             </div>
         </a>

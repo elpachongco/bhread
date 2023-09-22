@@ -2,13 +2,13 @@
 {% load i18n %}
 {% load account socialaccount %}
 {% block head_title %}
-    {% trans "Sign In" %}
+    {% trans "Log In" %}
 {% endblock head_title %}
 {% block content %}
     <div class="flex flex-col items-center justify-center">
-        <h1 class="font-header text-lg mb-2">{% trans "Sign In" %}</h1>
+        <h1 class="font-header text-lg mb-2">{% trans "Log In" %}</h1>
         {% get_providers as socialaccount_providers %}
-        <p>Please sign in with your bhread.com account</p>
+        <p>Please log in with your bhread.com account</p>
         <form class="login" method="post" action="{% url 'account_login' %}">
             {% csrf_token %}
             {{ form.as_p }}
@@ -19,28 +19,30 @@
             {% endif %}
             <a class="button secondaryAction"
                href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
-            <button type="submit"
-                    class="primaryAction bg-lochmara text-white font-header font-medium">{% trans "Sign In" %}</button>
+            <p class="items-center justify-center flex">
+                <button type="submit"
+                        class="primaryAction my-2 bg-lochmara text-white font-header font-medium">
+                    {% trans "Log in" %}
+                </button>
+            </p>
         </form>
         {% if socialaccount_providers %}
             <p>
                 {% blocktrans with site.name as site_name %}
-You may also sign in with{% endblocktrans %}
+                or Log in with{% endblocktrans %}
             </p>
-            <div class="socialaccount_ballot ">
-                <ul class="socialaccount_providers flex flex-row list-disk list-outside space-between w-full">
+            <div class="socialaccount_ballot w-full">
+                <ul class="socialaccount_providers flex flex-row list-disk list-outside space-between w-full justify-center gap-x-4 pb-4">
                     {% include "socialaccount/snippets/provider_list.html" with process="login" %}
                 </ul>
             </div>
             {% include "socialaccount/snippets/login_extra.html" %}
-            <p>
-                Or <a href="{{ signup_url }}">sign up</a> for a bhread.com account.
-            </p>
-        {% else %}
-            <p>
-                {% blocktrans %}If you have not created an account yet, then please
-<a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}
-            </p>
         {% endif %}
+        <p class="m-2 border-t pt-6">
+            {% blocktrans %}
+                    Don't have an account?
+                    <a href="{{ signup_url }}" class="ml-2 p-2 rounded-md border border-lochmara">sign up</a>
+                {% endblocktrans %}
+        </p>
     </div>
 {% endblock content %}
