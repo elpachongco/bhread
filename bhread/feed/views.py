@@ -24,6 +24,7 @@ def home(request):
     }
     if "HX-Request" in request.headers:
         context["htmx"] = True
+        return render(request, "feed/home.html", context)
 
     for post in Post.objects.filter(
         content__isnull=False, feed__is_verified=True
