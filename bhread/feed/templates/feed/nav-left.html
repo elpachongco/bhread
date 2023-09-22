@@ -16,6 +16,8 @@
                 {% for item in route_names.split %}
                     <a text-lochmara
                        class="flex items-center p-3 text-lg rounded-lg duration-100 hover:text-black hover:no-underline hover:transition-opacity font-header hover:bg-gallery/80 {% if url_name == item %} text-black {% else %} text-gull {% endif %}"
+                       hx-target="body"
+                       hx-get="{% url item %}"
                        href="{% url item %}"
                        hx-swap="innerHTML"
                        preload="mouseover">
@@ -46,6 +48,7 @@
         {% url 'account_logout' as logout_url %}
         {% url 'account_login' as login_url %}
         <a href="{% if user.is_authenticated %} {{ logout_url }} {% else %} {{ login_url }} {% endif %}"
+           preload="mouseover"
            class="hover:text-white hover:no-underline">
             <div class="flex items-center justify-center text-lochmara border border-lochmara rounded text-sm px-2 py-1 hover:bg-lochmara hover:border-gull hover:text-white font-header  transition-all duration-75 active:translate-y-0.5">
                 {% if user.is_authenticated %}
