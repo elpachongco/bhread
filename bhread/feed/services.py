@@ -215,7 +215,7 @@ def get_favicon_path(url: str) -> str:
 
 def html_clean(s: str):
     soup = BeautifulSoup(s)
-    removes = soup(["style", "script", "meta", "link"])
+    removes = soup(["style", "script", "meta", "link", "head"])
     for r in removes:
         r.decompose()
     return str(soup)
