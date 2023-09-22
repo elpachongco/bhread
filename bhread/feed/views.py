@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_http_methods
 from feed import selectors as sel
 from feed import services as ser
@@ -14,6 +15,7 @@ from .forms import FeedRegisterForm, FeedUpdateForm, PageCreateForm, Verificatio
 from .models import Feed, Post
 
 
+@cache_page(15 * 60)
 def home(request):
     context = {
         "posts": [],
