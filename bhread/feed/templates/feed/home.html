@@ -1,23 +1,34 @@
 {% extends base_template %}
 {% block content %}
     {% load static %}
+    <div id="no-indicator"></div>
     <div class="mt-2 min-h-screen">
-        <ol class="list-none">
-            {% for post, replies, feed_image in posts %}
-                <li>
-                    <article>{% #post post=post user=user replies=replies %}
-                        {% post-content content=post.content truncate=True trunc_html=350 %}
-                        {% /post %}
-                    </article>
-                </li>
-            {% empty %}
-                <h2>No posts found</h2>
-                <p>
-                    If your feed is configured, you may add a post by publishing a blog post
-                    starting with: 'replying to [link here]'
-                </p>
-            {% endfor %}
-            <li class="text-center justify-center">This is the end of the feed.</li>
+        <ol id="posts"
+            class="list-none"
+            hx-trigger="load"
+            hx-get="{% url 'hx-home' %}"
+            hx-indicator="#no-indicator">
+            {% if htmx %}
+                {% for a in "aaaa" %}
+                    <li>{% post-dummy %}</li>
+                {% endfor %}
+            {% else %}
+                {% for post, replies, feed_image in posts %}
+                    <li>
+                        <article>{% #post post=post user=user replies=replies %}
+                            {% post-content content=post.content truncate=True trunc_html=350 %}
+                            {% /post %}
+                        </article>
+                    </li>
+                {% empty %}
+                    <h2>No posts found</h2>
+                    <p>
+                        If your feed is configured, you may add a post by publishing a blog post
+                        starting with: 'replying to [link here]'
+                    </p>
+                {% endfor %}
+                <li class="text-center justify-center">This is the end of the feed.</li>
+            {% endif %}
         </ol>
     </div>
 {% endblock content %}

@@ -15,11 +15,29 @@ from .forms import FeedRegisterForm, FeedUpdateForm, PageCreateForm, Verificatio
 from .models import Feed, Post
 
 
-@cache_page(15 * 60)
 def home(request):
     context = {
         "posts": [],
         "base_template": "feed/base.html",
+        "url_name": "home",
+        "htmx": False,
+    }
+    if "HX-Request" in request.headers:
+        context["htmx"] = True
+
+    for post in Post.objects.filter(
+        content__isnull=False, feed__is_verified=True
+    ).order_by("-date_added", "-date_modified"):
+        replies = sel.descendants_count(post)
+        favicon = ""
+        context["posts"].append((post, replies, favicon))
+    return render(request, "feed/home.html", context)
+
+
+# @cache_page(1 * 60)
+def htmx_home(request):
+    context = {
+        "posts": [],
         "url_name": "home",
     }
     for post in Post.objects.filter(
@@ -28,7 +46,7 @@ def home(request):
         replies = sel.descendants_count(post)
         favicon = ""
         context["posts"].append((post, replies, favicon))
-    return render(request, "feed/home.html", context)
+    return render(request, "feed/htmx-home.html", context)
 
 
 @login_required
