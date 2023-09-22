@@ -14,9 +14,7 @@
                 <p class="text-xs text-gray-500">{{ post.date_added | timesince }} ago</p>
             </div>
             {% if title %}<h3 class="font-medium font-header my-2">{{ post.title }}</h3>{% endif %}
-            <div hx-disable x-ignore>
-                <p>{{ post.content | safe }}</p>
-            </div>
+            {% post-content content=post.content truncate=False %}
             {% if not is_parent %}
                 <a class="text-sm mt-2" href="{% url 'detail' post.url %}">See post (0 Replies)</a>
             {% endif %}

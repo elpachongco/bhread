@@ -1,8 +1,13 @@
 {% var content %}
+{% var truncate=truncate|default:False %}
 {% var trunc_html=trunc_html|default:350 %}
 <div hx-disable x-ignore class="post-content text-base">
     {% autoescape off %}
-        {{ content|truncatechars_html:trunc_html }}
+        {% if truncate %}
+            {{ content|truncatechars_html:trunc_html }}
+        {% else %}
+            {{ content }}
+        {% endif %}
     {% endautoescape %}
     <style>
     /* Styling for post content because tailwind + django can't do that :/ */
