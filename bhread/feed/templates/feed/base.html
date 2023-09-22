@@ -63,8 +63,10 @@
         <!-- and it's easy to individually load additional languages -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/go.min.js"></script>
         <script>hljs.highlightAll();</script>
+        <div id="no-indicator"></div>
     </head>
     <body class="subpixel-antialiased bg-white dark:bg-slate-900 dark:text-neutral-200"
+          hx-ext="preload"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
           hx-boost="true"
           hx-indicator="#bar">
