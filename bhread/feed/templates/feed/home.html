@@ -5,19 +5,12 @@
     <div class="mt-2 min-h-screen">
         <ol id="posts" class="list-none">
             {% for post in posts %}
-                <li>
-                    <article>
-                        {% #post post=post %}
-                        {% post-content content=post.content truncate=True trunc_html=350 %}
-                        {% /post %}
-                    </article>
-                </li>
+                {% #post post=post %}
+                {% post-content content=post.content truncate=True trunc_html=350 %}
+                {% /post %}
             {% empty %}
                 <h2>No posts found</h2>
-                <p>
-                    If your feed is configured, you may add a post by publishing a blog post
-                    starting with: 'replying to [link here]'
-                </p>
+                <p>Whoops, the developer probably broke something... sorry about that.</p>
             {% endfor %}
             <style>
     /* Styling for post content because tailwind + django can't do that :/ */
@@ -53,7 +46,7 @@
             font-weight: 300;
         }
         .post-content code, .post-content pre {
-            overflow: scroll;
+            overflow: auto;
             font-size: 14px;
         }
         .post-content p code {

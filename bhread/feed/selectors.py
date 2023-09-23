@@ -115,5 +115,5 @@ def posts(post_qset):
 def home():
     a = Post.objects.filter(
         content__isnull=False, feed__is_verified=True
-    ).select_related("parent", "feed", "feed__owner", "feed__owner__profile")
+    ).select_related("parent", "feed__owner", "feed__owner__profile")
     return posts(a)
