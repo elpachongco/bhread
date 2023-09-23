@@ -74,3 +74,7 @@ class PageCreateForm(forms.ModelForm):
     class Meta:
         model = Page
         fields = ["name", "description"]
+
+
+class SearchForm(forms.Form):
+    search = forms.CharField()

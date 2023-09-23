@@ -1,0 +1,10 @@
+{% extends base_template %}
+{% block content %}
+    <p class="flex justify-center">
+        {% for result in results %}
+            {{ result }}
+        {% empty %}
+            No results found for "{{ search }}"
+        {% endfor %}
+    </p>
+{% endblock content %}

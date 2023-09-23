@@ -172,3 +172,10 @@ def pages(request):
     context["page_form"] = PageCreateForm()
     context["user_pages"] = sel.user_pages(request.user)  # Use selector
     return render(request, "feed/pages.html", context)
+
+
+def search(request, url):
+    context = {"base_template": "feed/base.html"}
+    context["results"] = Post.objects.filter(url=url)
+    context["search"] = url
+    return render(request, "feed/search.html", context)

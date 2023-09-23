@@ -26,6 +26,7 @@ from user import views as user_views
 urlpatterns = [
     path("", feed_views.home, name="home"),
     path("pages/", feed_views.pages, name="pages"),
+    path("search/<path:url>", feed_views.search, name="search"),
     path("accounts/", include("allauth.urls")),
     path("feed-edit/<int:pk>/", feed_views.feed_edit, name="feed-edit"),
     path("feed-delete/<int:pk>/", feed_views.feed_delete, name="feed-delete"),

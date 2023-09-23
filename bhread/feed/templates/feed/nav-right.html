@@ -3,8 +3,10 @@
 <div class="flex-col justify-between w-2/5 hidden lg:flex">
     <div class="flex items-center rounded-md border focus-within:text-black focus-within:ring border-alto ring-lochmara w-full">
         <span class="ml-2 material-symbols-outlined size-20">search</span>
-        <input class="w-full rounded-r-md border-none focus:ring-0"
-               placeholder="search">
+        <form action="{% url 'search' 'laskjdf' %}">
+            <input class="w-full rounded-r-md border-none focus:ring-0"
+                   placeholder="search">
+        </form>
     </input>
 </div>
 <div>
