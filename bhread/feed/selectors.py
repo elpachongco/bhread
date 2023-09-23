@@ -6,6 +6,7 @@ import feedparser
 import requests
 import requests_cache
 from bs4 import BeautifulSoup
+from django.db.models import Count, F, OuterRef, Q, Subquery
 from django.utils import timezone
 from feed import services as ser
 
@@ -98,3 +99,21 @@ def user_pages(user):
 
 def user_has_verified(user):
     return Feed.objects.filter(owner=user, is_verified=True).exists()
+
+
+def posts(post_qset):
+    """
+    title, content, date, author, author_img, reply_count
+    """
+    return post_qset.annotate(
+        author_name=F("feed__owner__username"),
+        author_img=F("feed__owner__profile__image"),
+        reply_count=Count("parent_post"),
+    )
+
+
+def home():
+    a = Post.objects.filter(
+        content__isnull=False, feed__is_verified=True
+    ).select_related("parent", "feed", "feed__owner", "feed__owner__profile")
+    return posts(a)

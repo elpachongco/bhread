@@ -15,6 +15,7 @@ from .forms import FeedRegisterForm, FeedUpdateForm, PageCreateForm, Verificatio
 from .models import Feed, Post
 
 
+# @cache_page(1 * 60)
 def home(request):
     context = {
         "posts": [],
@@ -26,12 +27,13 @@ def home(request):
         context["htmx"] = True
         return render(request, "feed/home.html", context)
 
-    for post in Post.objects.filter(
-        content__isnull=False, feed__is_verified=True
-    ).order_by("-date_added", "-date_modified"):
-        replies = sel.descendants_count(post)
-        favicon = ""
-        context["posts"].append((post, replies, favicon))
+    # for post in Post.objects.filter(
+    #     content__isnull=False, feed__is_verified=True
+    # ).order_by("-date_added", "-date_modified"):
+    #     replies = sel.descendants_count(post)
+    #     favicon = ""
+    #     context["posts"].append((post, replies, favicon))
+    context["posts"] = sel.home()
     return render(request, "feed/home.html", context)
 
 

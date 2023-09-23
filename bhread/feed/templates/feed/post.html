@@ -5,7 +5,8 @@
                 <div class="h-auto w-6 mr-2">
                     <img class="w-full h-auto rounded-full"
                          src="https://www.google.com/s2/favicons?domain={{ post.parent.url }}&sz=24"
-                         alt="site favicon">
+                         alt="site favicon"
+                         loading="lazy">
                 </div>
                 <div class="flex justify-between w-full">
                     <a class="font-header text-sm text-lochmara font-medium overflow-hidden"
@@ -51,7 +52,7 @@
             {% endif %}
             {{ children }}
             <div>
-                <a class="text-sm" href="{% url 'detail' post.url %}">See ({{ replies }} repl{{ replies|pluralize:"y,ies" }})</a>
+                <a class="text-sm" href="{% url 'detail' post.url %}">See ({{ post.reply_count }} repl{{ post.reply_count|pluralize:"y,ies" }})</a>
             </div>
         </div>
     </article>

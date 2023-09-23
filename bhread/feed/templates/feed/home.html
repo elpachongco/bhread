@@ -3,32 +3,68 @@
     {% load static %}
     <div id="no-indicator"></div>
     <div class="mt-2 min-h-screen">
-        <ol id="posts"
-            class="list-none"
-            hx-trigger="load"
-            hx-get="{% url 'hx-home' %}"
-            hx-indicator="#no-indicator">
-            {% if htmx %}
-                {% for a in "aaaa" %}
-                    <li>{% post-dummy %}</li>
-                {% endfor %}
-            {% else %}
-                {% for post, replies, feed_image in posts %}
-                    <li>
-                        <article>{% #post post=post user=user replies=replies %}
-                            {% post-content content=post.content truncate=True trunc_html=350 %}
-                            {% /post %}
-                        </article>
-                    </li>
-                {% empty %}
-                    <h2>No posts found</h2>
-                    <p>
-                        If your feed is configured, you may add a post by publishing a blog post
-                        starting with: 'replying to [link here]'
-                    </p>
-                {% endfor %}
-                <li class="text-center justify-center">This is the end of the feed.</li>
-            {% endif %}
+        <ol id="posts" class="list-none">
+            {% for post in posts %}
+                <li>
+                    <article>
+                        {% #post post=post %}
+                        {% post-content content=post.content truncate=True trunc_html=350 %}
+                        {% /post %}
+                    </article>
+                </li>
+            {% empty %}
+                <h2>No posts found</h2>
+                <p>
+                    If your feed is configured, you may add a post by publishing a blog post
+                    starting with: 'replying to [link here]'
+                </p>
+            {% endfor %}
+            <style>
+    /* Styling for post content because tailwind + django can't do that :/ */
+    /* !! WARNING !!  Do not put styling that will affect elements outside this component. */
+        .post-content img {
+            max-width: 80%;
+        }
+        .post-content h1, .post-content h2, .post-content h3, .post-content h4, .post-content h5, .post-content h6, .post-content pre, .post-content img {
+            margin-top: .4em;
+            margin-bottom: .4em;
+        }
+        .post-content p {
+            margin-top: .4em;
+            margin-bottom:.4em;
+        }
+
+        .post-content h1 {
+            font-weight: 700;
+        }
+        .post-content h2 {
+            font-weight: 600;
+        }
+        .post-content h3 {
+            font-weight: 500;
+        }
+        .post-content h4 {
+            font-weight: 400;
+        }
+        .post-content h5 {
+            font-weight: 300;
+        }
+        .post-content h6 {
+            font-weight: 300;
+        }
+        .post-content code, .post-content pre {
+            overflow: scroll;
+            font-size: 14px;
+        }
+        .post-content p code {
+            background: #f2f2f2;
+            padding: .3em;
+            padding-left: .2em;
+            padding-right: .2em;
+            border-radius: .5em;
+        }
+            </style>
+            <li class="text-center justify-center">This is the end of the feed.</li>
         </ol>
     </div>
 {% endblock content %}
