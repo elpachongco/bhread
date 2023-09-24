@@ -5,7 +5,7 @@
             {% if parent.parent %}
                 <a href="{% url 'detail' parent.parent.url %}">Parent post</a>
             {% else %}
-                <a href="{% url 'home' %}">Back</a>
+                <a href="javascript: history.go(-1)">Back</a>
             {% endif %}
         </div>
         {% if parent.parent %}
