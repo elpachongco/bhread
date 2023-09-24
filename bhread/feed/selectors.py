@@ -112,8 +112,17 @@ def posts(post_qset):
     )
 
 
-def home():
-    a = Post.objects.filter(
-        content__isnull=False, feed__is_verified=True
-    ).select_related("parent", "feed__owner", "feed__owner__profile")
+def home(id=None):
+    """Retrieve homepage posts."""
+
+    a = (
+        Post.objects.filter(
+            content__isnull=False,
+            feed__is_verified=True,
+        )
+        .select_related("parent", "feed__owner", "feed__owner__profile")
+        .order_by("-date_added", "-date_modified")
+    )
+    if id is not None:
+        a = a.filter(id__lt=id)
     return posts(a)

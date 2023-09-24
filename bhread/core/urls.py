@@ -24,6 +24,8 @@ from feed import views as feed_views
 from user import views as user_views
 
 urlpatterns = [
+    path("<int:pk>", feed_views.home, name="homenext"),
+    path("<int:pk>", feed_views.home, name="homeprevious"),
     path("", feed_views.home, name="home"),
     path("pages/", feed_views.pages, name="pages"),
     path("search/<path:url>", feed_views.search, name="search"),
@@ -31,7 +33,7 @@ urlpatterns = [
     path("feed-edit/<int:pk>/", feed_views.feed_edit, name="feed-edit"),
     path("feed-delete/<int:pk>/", feed_views.feed_delete, name="feed-delete"),
     path("feeds/", feed_views.feeds, name="feeds"),
-    path("hx-home/", feed_views.htmx_home, name="hx-home"),
+    path("hx-home/<int:pk>", feed_views.htmx_home, name="hx-home"),
     path("feeds/<str:user>/verification", feed_views.feed_verify, name="proof"),
     path("verify/", feed_views.feed_verify, name="feed-verify"),
     path("login/", all_auth_views.LoginView.as_view(), name="login"),

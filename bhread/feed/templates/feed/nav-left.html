@@ -18,8 +18,10 @@
                        class="flex items-center p-3 text-lg rounded-lg duration-100 hover:text-black hover:no-underline hover:transition-opacity font-header hover:bg-gallery/80 {% if url_name == item %} text-black {% else %} text-gull {% endif %}"
                        hx-target="body"
                        hx-get="{% url item %}"
+                       hx-push-url="true"
                        href="{% url item %}"
                        hx-swap="innerHTML"
+                       hx-indicator="#no-indicator"
                        preload="mouseover">
                         <span class="mr-2 material-symbols-outlined size-20 ">{% cycle "home" "rss_feed" %}</span>
                         <span class="hidden lg:block">{{ item }}</span>

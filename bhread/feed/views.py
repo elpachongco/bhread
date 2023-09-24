@@ -3,6 +3,7 @@ from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_http_methods
@@ -16,39 +17,28 @@ from .models import Feed, Post
 
 
 # @cache_page(1 * 60)
-def home(request):
+def home(request, pk=None):
     context = {
         "posts": [],
         "base_template": "feed/base.html",
         "url_name": "home",
         "htmx": False,
+        "js": True,
     }
     if "HX-Request" in request.headers:
         context["htmx"] = True
-        return render(request, "feed/home.html", context)
+    if pk:
+        context["js"] = False
 
-    # for post in Post.objects.filter(
-    #     content__isnull=False, feed__is_verified=True
-    # ).order_by("-date_added", "-date_modified"):
-    #     replies = sel.descendants_count(post)
-    #     favicon = ""
-    #     context["posts"].append((post, replies, favicon))
-    context["posts"] = sel.home()
+    context["posts"] = sel.home(pk)[:6]
     return render(request, "feed/home.html", context)
 
 
 # @cache_page(1 * 60)
-def htmx_home(request):
+def htmx_home(request, pk):
     context = {
-        "posts": [],
-        "url_name": "home",
+        "posts": sel.home(pk)[:8],
     }
-    for post in Post.objects.filter(
-        content__isnull=False, feed__is_verified=True
-    ).order_by("-date_added", "-date_modified"):
-        replies = sel.descendants_count(post)
-        favicon = ""
-        context["posts"].append((post, replies, favicon))
     return render(request, "feed/htmx-home.html", context)
 
 

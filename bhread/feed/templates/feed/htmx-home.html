@@ -1,20 +1,16 @@
 {% load static %}
-<div class="mt-2 min-h-screen">
-    <ol class="list-none">
-        {% for post, replies, feed_image in posts %}
-            <li>
-                <article>{% #post post=post user=user replies=replies %}
-                    {% post-content content=post.content truncate=True trunc_html=350 %}
-                    {% /post %}
-                </article>
-            </li>
-        {% empty %}
-            <h2>No posts found</h2>
-            <p>
-                If your feed is configured, you may add a post by publishing a blog post
-                starting with: 'replying to [link here]'
-            </p>
-        {% endfor %}
-        <li class="text-center justify-center">This is the end of the feed.</li>
-    </ol>
-</div>
+{% for post in posts %}
+    {% #post post=post %}
+    {% post-content content=post.content truncate=True trunc_html=350 %}
+    {% /post %}
+    {% if forloop.last %}
+        <div hx-get="{% url 'hx-home' post.id %}"
+             hx-trigger="intersect once"
+             hx-swap="outerHTML"
+             hx-indicator="#dummy">
+            <div id="dummy">{% post-dummy %}</div>
+        </div>
+    {% endif %}
+{% empty %}
+    <li class="text-center justify-center">This is the end of the feed.</li>
+{% endfor %}

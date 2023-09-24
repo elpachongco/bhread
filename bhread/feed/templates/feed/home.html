@@ -8,9 +8,23 @@
                 {% #post post=post %}
                 {% post-content content=post.content truncate=True trunc_html=350 %}
                 {% /post %}
+                {% if forloop.last %}
+                    {% if js %}
+                        <div hx-get="{% url 'hx-home' post.id %}"
+                             hx-trigger="intersect once"
+                             hx-swap="outerHTML"
+                             hx-indicator="#dummy">
+                            <div id="dummy">{% post-dummy %}</div>
+                        </div>
+                    {% endif %}
+                    <noscript>
+                        <a href="{% url 'homenext' post.id %}">
+                            <div class="w-full flex justify-center items-center">Next page</div>
+                        </a>
+                    </noscript>
+                {% endif %}
             {% empty %}
                 <h2>No posts found</h2>
-                <p>Whoops, the developer probably broke something... sorry about that.</p>
             {% endfor %}
             <style>
     /* Styling for post content because tailwind + django can't do that :/ */
@@ -57,7 +71,6 @@
             border-radius: .5em;
         }
             </style>
-            <li class="text-center justify-center">This is the end of the feed.</li>
         </ol>
     </div>
 {% endblock content %}
