@@ -16,7 +16,7 @@ from .forms import FeedRegisterForm, FeedUpdateForm, PageCreateForm, Verificatio
 from .models import Feed, Post
 
 
-# @cache_page(1 * 60)
+# @cache_page(5 * 60)
 def home(request, pk=None):
     context = {
         "posts": [],
@@ -34,7 +34,7 @@ def home(request, pk=None):
     return render(request, "feed/home.html", context)
 
 
-# @cache_page(1 * 60)
+@cache_page(5 * 60)
 def htmx_home(request, pk):
     context = {
         "posts": sel.home(pk)[:8],

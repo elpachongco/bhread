@@ -1,6 +1,8 @@
 {% extends base_template %}
 {% block content %}
     {% load static %}
+    {% load cache %}
+    {% cache 500 home %}
     <div id="no-indicator"></div>
     <div class="mt-2 min-h-screen">
         <ol id="posts" class="list-none">
@@ -73,4 +75,5 @@
             </style>
         </ol>
     </div>
+{% endcache %}
 {% endblock content %}
