@@ -46,11 +46,11 @@
               rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
               rel="stylesheet" />
-        <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}">
-        <link rel="icon" type="image/png" href="{% static 'favicon.png' %}">
-        <script defer src="https://unpkg.com/htmx.org@1.9.4"></script>
-        <script defer
-                src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}" />
+        <link rel="icon" type="image/png" href="{% static 'favicon.png' %}" />
+        <script src="https://unpkg.com/htmx.org@1.9.4"></script>
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script src="https://unpkg.com/htmx.org/dist/ext/preload.js"></script>
         {% if title %}
             <title>{{ title }}</title>
         {% else %}
@@ -62,8 +62,6 @@
         <!-- and it's easy to individually load additional languages -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/go.min.js"></script>
         <script>hljs.highlightAll();</script>
-        <div id="no-indicator"></div>
-        <script src="https://unpkg.com/htmx.org/dist/ext/preload.js"></script>
     </head>
     <body class="subpixel-antialiased bg-white dark:bg-slate-900 dark:text-neutral-200"
           hx-ext="preload"
@@ -71,6 +69,7 @@
           hx-boost="true"
           hx-indicator="#bar">
         <div id="bar" class="htmx-indicator">{% loading-bar %}</div>
+        <div id="no-indicator"></div>
         {% if debug %}
             <script>
         if (typeof window.htmx !== "undefined") {
