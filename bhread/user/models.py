@@ -1,12 +1,14 @@
 from django.contrib.auth.models import User
 from django.db import models
-from feed.models import Feed
+from feed.models import Feed, Post
 from PIL import Image
 
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default="default.png", upload_to="profile_pics")
+    subscriptions = models.ManyToManyField(Feed, related_name="subscribers")
+    groups = models.ManyToManyField(Post, related_name="members")
 
     def __str__(self):
         return f"{self.user.username} Profile"

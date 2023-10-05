@@ -151,3 +151,4 @@ Simply fork this repo, and make a pull request.
 - https://github.com/PyHAT-stack/awesome-python-htmx
 - elk.zone - UI inspiration
 - bellybells.net - Crochet photo
+- Diff.blog
