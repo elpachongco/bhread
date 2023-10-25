@@ -7,26 +7,30 @@ from .base import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("POSTGRES_DB"),
-        "USER": os.environ.get("POSTGRES_USER"),
-        "PASSWORD": (Path(os.environ.get("POSTGRES_PASSWORD_FILE")))
-        .read_text()
-        .strip("\n"),
-        "HOST": "0.0.0.0",
-        "PORT": 5432,
-        "TEST": {
-            "NAME": "POSTGRES_TESTING",
-            "USER": "POSTGRES",
-            "PASSWORD": "POSTGRES",
-        },
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "./app.db",
     },
+    # "default": {
+    #     "ENGINE": "django.db.backends.postgresql",
+    #     "NAME": os.environ.get("POSTGRES_DB"),
+    #     "USER": os.environ.get("POSTGRES_USER"),
+    #     "PASSWORD": (Path(os.environ.get("POSTGRES_PASSWORD_FILE")))
+    #     .read_text()
+    #     .strip("\n"),
+    #     "HOST": "0.0.0.0",
+    #     "PORT": 5432,
+    #     "TEST": {
+    #         "NAME": "POSTGRES_TESTING",
+    #         "USER": "POSTGRES",
+    #         "PASSWORD": "POSTGRES",
+    #     },
+    # },
 }
 
 """Djangoq settings"""
@@ -47,12 +51,12 @@ Q_CLUSTER = {
     },
 }
 
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://0.0.0.0:6379",
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.redis.RedisCache",
+#         "LOCATION": "redis://0.0.0.0:6379",
+#     }
+# }
 
 # CACHES = {
 #     "default": {
@@ -76,3 +80,6 @@ INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + [
     "127.0.0.1",
     "10.0.2.2",
 ]
+
+
+DEBUG_TOOLBAR_CONFIG = {"ROOT_TAG_EXTRA_ATTRS": "hx-preserve"}

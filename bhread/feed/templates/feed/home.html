@@ -1,23 +1,31 @@
 {% extends base_template %}
 {% block content %}
     {% load static %}
-    {% load cache %}
-    {% cache 500 home %}
     <div id="no-indicator"></div>
     <div class="mt-2 min-h-screen">
         <ol id="posts" class="list-none">
             {% for post in posts %}
-                {% #post post=post %}
-                {% post-content content=post.content truncate=True trunc_html=350 %}
-                {% /post %}
-                {% if forloop.last %}
-                    {% if js %}
-                        <div hx-get="{% url 'hx-home' post.id %}"
-                             hx-trigger="intersect once"
-                             hx-swap="outerHTML"
-                             hx-indicator="#dummy">
-                            <div id="dummy">{% post-dummy %}</div>
-                        </div>
+                <!-- Only render posts that belong to feed. -->
+                {% if post.feed %}
+                    <!-- If user has voted the post -->
+                    {% if post.id in voted_posts %}
+                        {% #post post=post csrf_token=csrf_token voted=True show_date=True %}
+                        {% post-content content=post.content truncate=True trunc_html=350 %}
+                        {% /post %}
+                    {% else %}
+                        {% #post post=post csrf_token=csrf_token voted=False show_date=True %}
+                        {% post-content content=post.content truncate=True trunc_html=350 %}
+                        {% /post %}
+                    {% endif %}
+                    {% if forloop.last %}
+                        {% if js %}
+                            <div hx-get="{% url 'hx-home' post.id %}"
+                                 hx-trigger="intersect once"
+                                 hx-swap="outerHTML"
+                                 hx-indicator="#dummy">
+                                <div id="dummy">{% post-dummy %}</div>
+                            </div>
+                        {% endif %}
                     {% endif %}
                     <noscript>
                         <a href="{% url 'homenext' post.id %}">
@@ -28,52 +36,6 @@
             {% empty %}
                 <h2>No posts found</h2>
             {% endfor %}
-            <style>
-    /* Styling for post content because tailwind + django can't do that :/ */
-    /* !! WARNING !!  Do not put styling that will affect elements outside this component. */
-        .post-content img {
-            max-width: 80%;
-        }
-        .post-content h1, .post-content h2, .post-content h3, .post-content h4, .post-content h5, .post-content h6, .post-content pre, .post-content img {
-            margin-top: .4em;
-            margin-bottom: .4em;
-        }
-        .post-content p {
-            margin-top: .4em;
-            margin-bottom:.4em;
-        }
-
-        .post-content h1 {
-            font-weight: 700;
-        }
-        .post-content h2 {
-            font-weight: 600;
-        }
-        .post-content h3 {
-            font-weight: 500;
-        }
-        .post-content h4 {
-            font-weight: 400;
-        }
-        .post-content h5 {
-            font-weight: 300;
-        }
-        .post-content h6 {
-            font-weight: 300;
-        }
-        .post-content code, .post-content pre {
-            overflow: auto;
-            font-size: 14px;
-        }
-        .post-content p code {
-            background: #f2f2f2;
-            padding: .3em;
-            padding-left: .2em;
-            padding-right: .2em;
-            border-radius: .5em;
-        }
-            </style>
         </ol>
     </div>
-{% endcache %}
 {% endblock content %}

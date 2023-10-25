@@ -4,7 +4,8 @@ from django.dispatch import receiver
 from django.utils import timezone
 
 from .models import Feed
-from .services import get_favicon_path
+
+# from .services import get_favicon_path
 
 # @receiver(post_save, sender=Feed)
 # def signal_update_feed(sender, instance, **kwargs):

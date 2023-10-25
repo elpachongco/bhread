@@ -1,7 +1,8 @@
 {% extends base_template %}
 {% block content %}
-    <div>
-        <h2 class="font-header text-black text-lg mt-6 mb-5 font-medium">Feed Submission</h2>
+    <div class="p-2">
+        {% all-feeds %}
+        <h2 class="font-header text-black dark:text-white text-lg mt-6 mb-5 font-medium">Feed Submission</h2>
         <p>Ready to participate? Here are the (2) steps to verify on bhread.com</p>
         <h3 class="font-header font-medium my-10">Step 1: Submit your blog's RSS/Atom Feed URL.</h3>
         <form class="my-6 w-full" action="{% url 'feeds' %}" method="post">
@@ -21,16 +22,20 @@
         </form>
         <h3 class="font-header font-medium my-10">Step 2: Verify ownership of blog by saying hello.</h3>
         <p>Publish a post in your blog containing the url:</p>
-        <pre class="my-4">https://bhread.com/feeds/{{ user.username }}/verification</pre>
+        {% if user.is_authenticated %}
+            <pre class="my-4">https://bhread.com/feeds/{{ user.username }}/verification</pre>
+        {% else %}
+            <pre class="my-4">https://bhread.com/feeds/username/verification</pre>
+        {% endif %}
         <p>(as a link or plain text)</p>
         <p class="my-4">Example:</p>
         <pre class="my-4">
-    Hello World! I'm joining bhread.com as
-    &lt;a href="https://bhread.com/feeds/{{ user.username }}/verification"&gt;
-        {{ user.username }}
-    &lt;/a&gt;!
-</pre>
-        <h2 class="my-4 font-medium font-header border border-green-400 bg-green-50 p-2 rounded-md text-green-600">
+        Hello World! I'm joining bhread.com as
+        &lt;a href="https://bhread.com/feeds/{{ user.username }}/verification"&gt;
+          {{ user.username }}
+        &lt;/a&gt;!
+        </pre>
+        <h2 class="my-4 font-medium font-header border border-green-400 bg-green-50 dark:bg-green-800 dark:text-white p-2 rounded-md text-green-600">
             That's it!
         </h2>
         <ul class="list-disc list-inside mb-14">

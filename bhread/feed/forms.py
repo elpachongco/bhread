@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from feed import services as ser
 
-from .models import Feed, Page, Post
+from .models import Feed, Post
 
 
 class FeedForm(forms.ModelForm):
@@ -68,12 +68,6 @@ class FeedUpdateForm(FeedForm):
             "is_public": "Feed is public",
             "image": "image",
         }
-
-
-class PageCreateForm(forms.ModelForm):
-    class Meta:
-        model = Page
-        fields = ["name", "description"]
 
 
 class SearchForm(forms.Form):

@@ -136,6 +136,11 @@ Renewals are handled by the certbot image in docker.
 
 python3 manage.py makeschedules -> adds a schedule for updating feeds every minute
 
+## Custom filters and tags
+
+Filters:
+
+- url_domain: Get domain name of a url
 
 ## Contribute
 

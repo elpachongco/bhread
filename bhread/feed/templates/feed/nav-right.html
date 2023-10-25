@@ -1,50 +1,54 @@
 {% load static %}
-{% #sidebar %}
-<div class="flex-col justify-between w-2/5 hidden lg:flex">
-    <div class="flex items-center rounded-md border focus-within:text-black focus-within:ring border-alto ring-lochmara w-full">
-        <span class="ml-2 material-symbols-outlined size-20">search</span>
-        <form action="{% url 'search' 'laskjdf' %}">
-            <input class="w-full rounded-r-md border-none focus:ring-0"
-                   placeholder="search">
+<div class="xl:flex top-0 left-0 bottom-0 justify-end grow hidden overflow-y-auto xl:pr-4 xl:pr-8 max-w-xs text-gull"
+     hx-boost="true">
+    <div class="flex flex-col justify-between h-screen fixed grow">
+        <!-- Search -->
+        <div class="hidden lg:flex items-center rounded-md border focus-within:text-black dark:focus-within:text-white focus-within:ring border-alto dark:border-slate-700 ring-lochmara max-w-full mt-2">
+            <span class="ml-2 material-symbols-outlined size-20">search</span>
+            <form action="{% url 'search' 'laskjdf' %}">
+                <input class="w-full rounded-r-md border-none focus:ring-0 dark:bg-slate-900"
+                       placeholder="search">
+            </input>
         </form>
-    </input>
-</div>
-<div>
-    <div class="flex justify-between">
-        <div id="theming"
-             class="flex items-center dark:color-white"
-             x-data="{ mode: localStorage.theme || 'system', modes: ['system', 'dark', 'light'], toggleMode() { this.mode=this.modes[(this.modes.indexOf(this.mode) + 1) % this.modes.length] } }"
-             @click="toggleMode();theme(mode)">
-            <button class="p-0 hover:bg-transparent">
-                <div class="flex items-center" x-transition>
-                    <div>
-                        {% with "dark_mode light_mode computer" as icon_names %}
-                            {% for icon_name in icon_names.split %}
-                                {% cycle 'dark' 'light' 'system' as mode silent %}
-                                <span x-cloak
-                                      class="dark:text-white material-symbols-outlined"
-                                      x-show="mode=='{{ mode }}'">{{ icon_name }}</span>
-                            {% endfor %}
-                        {% endwith %}
+    </div>
+    <!-- END Search -->
+    <!-- Footer -->
+    <div class="mt-auto bottom-0">
+        <div class="flex justify-between w-40">
+            <div id="theming"
+                 class="flex items-center dark:color-white"
+                 x-data="{ mode: localStorage.theme || 'system', modes: ['system', 'dark', 'light'], toggleMode() { this.mode=this.modes[(this.modes.indexOf(this.mode) + 1) % this.modes.length] } }"
+                 @click="toggleMode();theme(mode)">
+                <button class="p-0 hover:bg-transparent">
+                    <div class="flex items-center" x-transition>
+                        <div>
+                            {% with "dark_mode light_mode computer" as icon_names %}
+                                {% for icon_name in icon_names.split %}
+                                    {% cycle 'dark' 'light' 'system' as mode silent %}
+                                    <span x-cloak
+                                          class="dark:text-white material-symbols-outlined"
+                                          x-show="mode=='{{ mode }}'">{{ icon_name }}</span>
+                                {% endfor %}
+                            {% endwith %}
+                        </div>
                     </div>
-                </div>
-            </button>
+                </button>
+            </div>
+            <span class="material-symbols-outlined">notifications</span>
+            <span class="material-symbols-outlined">settings</span>
         </div>
-        <span class="material-symbols-outlined">notifications</span>
-        <span class="material-symbols-outlined">settings</span>
-    </div>
-    <div class="mb-4 text-sm">
-        <div class="mt-8">bhread v0.0.0</div>
-        <div class="mt-1">
-            <a class="pr-2 dark:text-white text-alto"
-               href="https://blog.bhread.com/posts/about-bhread/"
-               target="_blank">about</a>
-            <a class="pr-2 dark:text-white text-alto"
-               href="https://github.com/elpachongco/bhread"
-               target="_blank">source</a>
-            <a class="pr-2 dark:text-white text-alto" href="#" target="_blank">privacy</a>
+        <div class="mb-4 text-sm">
+            <div class="mt-8">bhread v0.0.0</div>
+            <div class="mt-1">
+                <a class="pr-2 dark:text-white text-alto"
+                   href="https://blog.bhread.com/posts/about-bhread/"
+                   target="_blank">about</a>
+                <a class="pr-2 dark:text-white text-alto"
+                   href="https://github.com/elpachongco/bhread"
+                   target="_blank">source</a>
+                <a class="pr-2 dark:text-white text-alto" href="#" target="_blank">privacy</a>
+            </div>
         </div>
     </div>
 </div>
 </div>
-{% /sidebar %}

@@ -10,7 +10,7 @@ from django.db.models import Count, F, OuterRef, Q, Subquery
 from django.utils import timezone
 from feed import services as ser
 
-from .models import Feed, Page, Post, User, Vote
+from .models import Feed, Post, User, Vote
 
 """selectors.py is a collection of functions that retrieve data.
 1. selectors pull data
@@ -91,10 +91,6 @@ def favicon(post):
 
 def user_feeds(user) -> Iterator[Feed]:
     return Feed.objects.filter(owner=user)
-
-
-def user_pages(user):
-    return Page.objects.filter(user=user)
 
 
 def user_has_verified(user):

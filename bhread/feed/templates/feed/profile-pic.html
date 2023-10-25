@@ -1,0 +1,18 @@
+{% var user=user %}
+{% var feed_url=feed_url %}
+{% load feed_extras %}
+<div class="w-10 h-10 relative">
+    <img src="https://www.google.com/s2/favicons?domain={{ feed_url }}&sz=10"
+         class="right-0 bottom-0 z-10 absolute rounded-full"
+         loading="lazy">
+    <div class="inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-stone-200 rounded-full dark:bg-gray-600">
+        {% if user %}
+            <img class="w-full"
+                 loading="lazy"
+                 src="{{ user.profile.image.url }}"
+                 alt="display picture of user." />
+        {% else %}
+            <span class="font-medium text-gray-600 dark:text-gray-300">{{ feed_url|url_domain|slice:2|upper }}</span>
+        {% endif %}
+    </div>
+</div>

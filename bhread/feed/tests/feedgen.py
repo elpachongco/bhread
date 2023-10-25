@@ -19,8 +19,7 @@ def make_item(title="test_title_1", link="http://testing.com", content="test con
 
 
 def make_feed(items=[], link="", home_link="", title="test_feed"):
-    start = f"""
-    <?xml version="1.0" encoding="utf-8"?>
+    start = f"""<?xml version="1.0" encoding="utf-8"?>
     <feed
     xmlns="http://www.w3.org/2005/Atom" >
     <generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator>
@@ -34,4 +33,4 @@ def make_feed(items=[], link="", home_link="", title="test_feed"):
     end = """
     </feed>
     """
-    return start + "\n".join(items) + end
+    return start + "".join(items) + end

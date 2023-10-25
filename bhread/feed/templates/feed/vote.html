@@ -1,0 +1,47 @@
+{% var voted=voted %}
+{% var id=id %}
+{% var votes=votes|default:0 %}
+{% var csrf_token=csrf_token %}
+{% comment %}
+
+Vote component
+
+---
+
+NOTE: Csrf_token must be supplied here. If the component is used in a view
+as a return, pass the request context as well:
+
+  ```py
+  return render(request, "feed/vote.html", context)
+  ```
+
+If the component is used with a parent component, the parent component has
+to pass the csrf_token to this component:
+
+  ```py
+  {% vote csrf_token=csrf_token %}
+  ```
+
+{% endcomment %}
+<form id="vote-{{ id }}"
+      method="POST"
+      hx-post="{% url 'vote' id %}"
+      hx-swap="outerHTML"
+      novalidate
+      action="{% url 'vote' id %}"
+      class="text-base">
+    {% csrf_token %}
+    <button type="submit" class="p-0 hover:bg-inherit flex items-center">
+        {% if voted %}
+            <span class="material-symbols-outlined"
+                  style="font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+                         font-size: inherit">favorite</span>
+        {% else %}
+            <span class="material-symbols-outlined"
+                  style="font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+                         font-size: inherit">favorite</span>
+        {% endif %}
+        <span class="ml-1">
+            {{ votes }}
+        </button>
+    </form>

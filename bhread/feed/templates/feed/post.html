@@ -1,4 +1,20 @@
-<li class="px-2 sm:px-4 mt-2 mb-4 border-b border-b-gallery">
+{% var show_date=show_date|default:False %}
+{% var post=post %}
+{% var voted=voted %}
+{% var csrf_token=csrf_token %}
+{% load static %}
+{% load feed_extras %}
+{% comment %}
+
+Post
+
+---
+
+
+
+{% endcomment %}
+<li id="post-{{ post.id }}"
+    class="px-2 sm:px-4 mt-2 mb-2 border-b border-b-gallery dark:border-b-slate-700">
     {% if post.parent %}
         <div id="reply" class="w-full mb-3">
             <div class="flex w-full">
@@ -26,34 +42,69 @@
     {% endif %}
     <article class="flex">
         <div class="flex flex-col mr-4">
-            <div class="flex align-center items-center w-10 h-10 overflow-hidden rounded-full">
-                <img class="w-full"
-                     loading="lazy"
-                     src="{{ post.feed.owner.profile.image.url }}"
-                     alt="display picture of user." />
-            </div>
+            <div class="flex align-center items-center">{% profile-pic user=post.feed.owner feed_url=post.feed.url %}</div>
         </div>
-        <div class="mb-4 w-full">
+        <div class="mb-2 w-full">
             <div class="mb-1">
                 <div class="flex w-full justify-between items-center">
                     <div class="flex flex-1 items-center">
-                        <h3 class="mr-2 text-lg font-medium text-lochmara font-header">{{ post.feed.owner.username }}</h3>
-                        <a href="{{ post.url }}"
-                           target="_blank"
-                           class="flex items-center hover:no-underline">
-                            <span class="material-symbols-outlined text-lochmara hover:text-gull">link</span>
+                        <!-- Username / Domain name -->
+                        <h3 class="mr-2 text-lg font-medium text-lochmara font-header">
+                            {% if post.feed.url %}
+                                <a href="{% url 'feed' post.feed.url %}">
+                                    {% with post.feed as feed %}
+                                        {% if feed.owner %}
+                                            {{ post.feed.owner.username }}
+                                        {% else %}
+                                            {{ post.feed.url|url_domain }}
+                                        {% endif %}
+                                    {% endwith %}
+                                </a>
+                            </h3>
+                            <!-- END Username / Domain name -->
+                            <!-- Open in new tab -->
+                            <a href="{{ post.url }}"
+                               target="_blank"
+                               class="flex items-center hover:no-underline ml-auto ">
+                            {% endif %}
+                            <span class="material-symbols-outlined text-gull"
+                                  style="font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+                                         font-size: inherit">open_in_new</span>
                         </a>
+                        <!-- END Open in new tab -->
                     </div>
-                    <p class="text-xs text-gray-500">{{ post.date_added | timesince }} ago</p>
                 </div>
             </div>
             {% if post.content|striptags|length > 300 and post.title %}
                 <span class="font-header font-medium mb-2">{{ post.title }}</span>
             {% endif %}
+            <!-- Render children of post -->
             {{ children }}
-            <div>
-                <a class="text-sm" href="{% url 'detail' post.url %}">See ({{ post.reply_count }} repl{{ post.reply_count|pluralize:"y,ies" }})</a>
+            <!-- Buttons on the bottom -->
+            <div class="m-0 flex text-sm mt-4">
+                <!-- Votes -->
+                <div class="text-xl text-gull">
+                    {% vote voted=voted id=post.id votes=post.votes_total.count csrf_token=csrf_token %}
+                </div>
+                <!-- endvotes -->
+                <!-- Replies -->
+                <a href="{% url 'detail' post.url %}"
+                   class="m-0 mx-auto text-gull text-base flex items-center hover:no-underline">
+                    <span style="font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+                                 font-size: inherit"
+                          class="material-symbols-outlined mr-1">chat_bubble</span>
+                    {{ post.reply_count|default:0 }}
+                </a>
+                <!-- Endreplies -->
+                <!-- Date -->
+                {% if show_date %}
+                    <p class="text-xs text-gray-500">
+                        {% with date_added=post.date_added %}{{ date_added | date:"d M Y" }}{% endwith %}
+                    </p>
+                {% endif %}
+                <!-- END Date -->
             </div>
+            <!-- END Buttons on the bottom -->
         </div>
     </article>
 </li>

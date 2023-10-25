@@ -90,3 +90,4 @@ db.sqlite3
 http_cache.sqlite
 data/**
 bhread/mediafiles/profile_pics/
+*.db

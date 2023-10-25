@@ -1,0 +1,5 @@
+{% extends base_template %}
+{% block content %}
+    {% load static %}
+    {% for group in groups %}{{ group.group_config.name }}{% endfor %}
+{% endblock content %}

@@ -1,10 +1,9 @@
-from urllib.parse import urlparse
-
-from bs4 import BeautifulSoup
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.shortcuts import redirect, render
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render, reverse
+from django.template.loader import render_to_string
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_http_methods
 from feed import selectors as sel
@@ -12,12 +11,13 @@ from feed import services as ser
 from feed import tasks
 from user.models import User
 
-from .forms import FeedRegisterForm, FeedUpdateForm, PageCreateForm, VerificationForm
-from .models import Feed, Post
+from .forms import FeedRegisterForm, FeedUpdateForm, VerificationForm
+from .models import Feed, Post, Vote
 
 
 # @cache_page(5 * 60)
 def home(request, pk=None):
+    """lakjsfd"""
     context = {
         "posts": [],
         "base_template": "feed/base.html",
@@ -30,49 +30,48 @@ def home(request, pk=None):
     if pk:
         context["js"] = False
 
-    context["posts"] = sel.home(pk)[:6]
+    posts_qs = Post.objects.all().order_by("date_added")
+    context["posts"] = sel.posts(posts_qs)
+    if request.user.is_authenticated:
+        context["voted_posts"] = list(
+            Vote.objects.filter(voter=request.user, post__isnull=False).values_list(
+                "post", flat=True
+            )
+        )
+    ser.feed_update_all()
     return render(request, "feed/home.html", context)
 
 
-@cache_page(5 * 60)
+# @cache_page(5 * 60)
 def htmx_home(request, pk):
-    context = {
-        "posts": sel.home(pk)[:8],
-    }
+    # context = {
+    #     "posts": sel.home(pk)[:8],
+    # }
+    context = {"posts": []}
+
     return render(request, "feed/htmx-home.html", context)
 
 
-@login_required
 def feeds(request):
     context = {"base_template": "feed/base.html", "url_name": "feeds"}
-    context["user_feeds"] = sel.user_feeds(request.user)
+    # context["user_feeds"] = sel.user_feeds(request.user)
     feed_form = FeedRegisterForm
-    verification_form = VerificationForm(user=request.user)
     context["feed_form"] = feed_form
-    context["verification_form"] = verification_form
+    # context["verification_form"] = VerificationForm
 
     if request.method == "POST":
-        if "feed_submit" in request.POST:
-            f_form = FeedRegisterForm(request.POST)
-            f_form.instance.owner = request.user
-            if f_form.is_valid():
-                f_form.save()
-                ser.feed_update(f_form.instance)
-                messages.success(request, "Feed created")
-                redirect("feeds")
-            else:
-                context["feed_form"] = f_form
-        elif "verification_post" in request.POST:
-            v_form = VerificationForm(request.POST, user=request.user)
-            if v_form.is_valid():
-                url = v_form.cleaned_data.get("url")
-                feed = v_form.cleaned_data.get("feed")
-                ser.feed_verify_url(feed, url)
-                messages.success(request, "Verification post added")
-                redirect("feeds")
-            else:
-                context["verification_form"] = v_form
-                messages.error(request, "Failed to register verification post")
+        try:
+            created = ser.RegisterFeed().execute(request.POST)
+        except ser.InvalidInputsError:
+            messages.error(request, "That's not a valid feed!")
+            return redirect("feeds")
+
+        if created:
+            messages.success(request, "Feed created")
+        else:
+            messages.info(request, "Feed already exists")
+
+        return redirect("feeds")
 
     return render(request, "feed/feeds.html", context)
 
@@ -87,7 +86,7 @@ def feed_edit(request, pk):
             f_form.save()
             messages.success(request, "Feed Updated")
         else:
-            messages.error(request, "FAILED to update feed")
+            messages.warning(request, "FAILED to update feed")
 
     context["feed_form"] = FeedUpdateForm(instance=feed)
     return render(request, "feed/feed-edit.html", context)
@@ -147,25 +146,67 @@ def post_detail(request, url=None):
     return render(request, "feed/detail.html", context)
 
 
-def pages(request):
-    context = {"base_template": "feed/base.html"}
-    if request.method == "POST":
-        p_form = PageCreateForm(request.POST)
-        p_form.instance.user = request.user
-        if p_form.is_valid():
-            p_form.save()
-    if request.method == "PUT":
-        pass
-    if request.method == "DELETE":
-        pass
-
-    context["page_form"] = PageCreateForm()
-    context["user_pages"] = sel.user_pages(request.user)  # Use selector
-    return render(request, "feed/pages.html", context)
-
-
 def search(request, url):
     context = {"base_template": "feed/base.html"}
     context["results"] = Post.objects.filter(url=url)
     context["search"] = url
     return render(request, "feed/search.html", context)
+
+
+def groups(request):
+    context = {"base_template": "feed/base.html"}
+    context["url_name"] = "groups"
+    context["groups"] = Post.objects.filter(group_config__isnull=False)
+    return render(request, "feed/groups.html", context)
+
+
+def browse(request, pk=None):
+    """lakjsfd"""
+    context = {
+        "posts": [],
+        "base_template": "feed/base.html",
+        "url_name": "browse",
+        "htmx": False,
+        "js": True,
+    }
+    return render(request, "feed/home.html", context)
+
+
+def feed(request, url):
+    """Allow user to subscribe"""
+    context = {
+        "base_template": "feed/base.html",
+        "url": url,
+        "subscriptions": None,
+        "posts": Post.objects.filter(feed__url=url),
+    }
+
+    return render(request, "feed/feed.html", context)
+
+
+# @login_required(login_url="/accounts/login")
+@require_http_methods(["POST"])
+def vote(request, id):
+    """Allow user to vote a post"""
+    context = {"id": id}
+    if request.user.is_authenticated and request.method == "POST":
+        post = get_object_or_404(Post, id=id)
+        voted = ser.VotePost().execute({"user": request.user, "post": post})
+        context["voted"] = voted
+        context["votes"] = post.votes_total.count()
+        if "HX-Request" in request.headers:
+            return render(request, "feed/vote.html", context)
+        else:
+            # Redirect with anchor to the voted post
+            return redirect(reverse("home") + f"#post-{id}")
+
+    response = redirect(reverse("login") + "?next=" + reverse("home"))
+    messages.info(request, "You need an account to vote")
+    if not request.user.is_authenticated and "HX-Request" in request.headers:
+        response = HttpResponse(401)
+        response["HX-Redirect"] = reverse("login")
+        # response["HX-Reswap"] = f"body"
+
+    # NOTE: This should redirect back to post anchor after logging in.
+    # NOTE: This doesn't work.
+    return response

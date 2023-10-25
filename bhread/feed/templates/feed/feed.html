@@ -1,0 +1,33 @@
+{% extends base_template %}
+{% block content %}
+    {% comment %}
+Page for looking at a single feed.
+    {% endcomment %}
+    <div class="flex flex-col items-start mt-2 p-2 border-slate-700">
+        <h1 class="text-lg font-medium font-header">Feed</h1>
+        <!-- Feed subscribe -->
+        <div class="flex w-5/6 mx-auto my-8 border border-inherit rounded-md">
+            <!-- Favicon -->
+            <div class="w-11 h-11 bg-stone-200 rounded-md flex items-center justify-center">
+                <img src="https://www.google.com/s2/favicons?domain={{ url }}&sz=24"
+                     class="right-0 bottom-0 z-10 rounded-full"
+                     loading="lazy">
+            </div>
+            <!-- Feed url  -->
+            <a href="{{ url }}" class="font-header font-medium my-auto ml-4">{{ url }}</a>
+            <!-- Button -->
+            <button class="bg-lochmara text-white ml-auto ">Subscribe</button>
+        </div>
+        <h2 class="mt-2 font-header font-medium">Posts</h2>
+        <ul class="p-2">
+            {% for post in posts %}
+                <li class="my-4 border  border-slate-700 p-2 rounded-md">
+                    <a class="block font-header font-medium" href="{{ post.url }}">{{ post.title }}</a>
+                    <div class="">{% post-content content=post.content truncate=True %}</div>
+                </li>
+            {% empty %}
+                <li>No posts found</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock content %}

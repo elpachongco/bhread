@@ -1,7 +1,30 @@
 {% load static %}
-<div class="flex flex-row justify-between items-center fixed min-h-[65px] bottom-0 left-0 right-0 sm:hidden border-t border-t-gallery bg-gray-50">
-    <a href="{% url 'home' %}"
-       class="px-6 h-full w-auto {% if url_name == 'home' %} text-black {% else %} text-gull {% endif %}"> <span class="mr-2 material-symbols-outlined">home</span> </a>
-    <a href="{% url 'home' %}"
-       class="px-6 min-h-full w-auto {% if url_name == 'more' %} text-black {% else %} text-gull {% endif %}"> <span class="mr-2 material-symbols-outlined">more_horiz</span> </a>
+<div class="flex md:hidden" x-data="{open: false}">
+    <div class="flex flex-row justify-between items-center fixed h-14 bottom-0 left-0 right-0 border-t border-t-gallery bg-gray-50 z-30">
+        <a href="{% url 'home' %}"
+           class="px-6 h-full my-auto w-auto {% if url_name == 'more' %} text-black {% else %} text-gull {% endif %}">
+            <div class="w-full h-full flex justify-center items-center">
+                <span class="material-symbols-outlined  block my-auto">more_horiz</span>
+            </div>
+        </a>
+        <a href="{% url 'home' %}"
+           class="px-6 h-full w-auto {% if url_name == 'home' %} text-black {% else %} text-gull {% endif %}">
+            <div class="w-full h-full flex justify-center items-center">
+                <span class="material-symbols-outlined block m-auto ">home</span>
+            </div>
+        </a>
+        <a class="px-6 h-full my-auto w-auto {% if url_name == 'more' %} text-black {% else %} text-gull {% endif %}"
+           @click="open = !open">
+            <div class="w-full h-full flex justify-center items-center">
+                <span class="material-symbols-outlined  block my-auto" x-show="!open">more_horiz</span>
+                <span class="material-symbols-outlined  block my-auto text-lochmara"
+                      x-show="open">close</span>
+            </div>
+        </a>
+    </div>
+    <div class="h-fit" x-show="open">
+        <!-- Warning: This contains @click.outside which should be declared here, in the -->
+        <!-- parent. Slippers doesn't support it yet. -->
+        {% nav-bottom-menu %}
+    </div>
 </div>

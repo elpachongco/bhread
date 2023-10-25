@@ -580,6 +580,24 @@ sentry = ["django-q-sentry (>=0.1)"]
 testing = ["boto3 (>=1.14.12,<2.0.0)", "croniter (>=0.3.34,<0.4.0)", "django-redis (>=4.12.1,<5.0.0)", "hiredis (>=1.0.1,<2.0.0)", "iron-mq (>=0.9,<0.10)", "psutil (>=5.7.0,<6.0.0)", "pymongo (>=3.10.1,<4.0.0)"]
 
 [[package]]
+name = "django-service-objects"
+version = "0.7.1"
+description = "Service objects for Django"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-service-objects-0.7.1.tar.gz", hash = "sha256:9c14c383149f7369c2306439a8b1fec3d6c85c129e8e22479c131efab1530eb1"},
+    {file = "django_service_objects-0.7.1-py3-none-any.whl", hash = "sha256:c13961062f35c68d8f59a98f75e970636aa8d4fc7e9dad85d222a39c13151449"},
+]
+
+[package.dependencies]
+Django = ">=1.11"
+six = "*"
+
+[package.extras]
+celery = ["celery"]
+
+[[package]]
 name = "django-stubs"
 version = "4.2.4"
 description = "Mypy stubs for Django"
@@ -649,6 +667,17 @@ files = [
 
 [package.extras]
 dev = ["nox", "pre-commit"]
+
+[[package]]
+name = "docutils"
+version = "0.20.1"
+description = "Docutils -- Python Documentation Utilities"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "docutils-0.20.1-py3-none-any.whl", hash = "sha256:96f387a2c5562db4476f09f13bbab2192e764cac08ebbf3a34a95d9b1e4a59d6"},
+    {file = "docutils-0.20.1.tar.gz", hash = "sha256:f08a4e276c3a1583a86dce3e34aba3fe04d02bba2dd51ed16106244e8a923e3b"},
+]
 
 [[package]]
 name = "feedparser"
@@ -1783,4 +1812,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "b29b999df04571ea97124225cb350e8eb0d509b31fa7172e3a410348403b7dca"
+content-hash = "24d84959ca941c2983110212513c8dfa99f130eed79ae27d6973271e88c0794e"

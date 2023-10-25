@@ -9,6 +9,8 @@ from django.db.models import CheckConstraint, Q, UniqueConstraint
 
 
 class Feed(models.Model):
+    """Test"""
+
     name = models.CharField(max_length=80, default="", blank=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     verification = models.ForeignKey(
@@ -27,7 +29,7 @@ class Feed(models.Model):
     is_verified = models.BooleanField(default=False)
     is_public = models.BooleanField(default=False)
     is_bozo = models.BooleanField(default=False)
-    categories = models.ManyToManyField("Category", through="FeedCategory")
+    categories = models.ManyToManyField("Category")
 
     def __str__(self):
         return f"Feed: {self.url}"
@@ -37,6 +39,11 @@ class Feed(models.Model):
 
 
 class Post(models.Model):
+    """
+    A post must have at least a URL.
+    A post without a feed is a parent post that doesn't exist in the database.
+    """
+
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE, null=True)
     url = models.URLField(max_length=200, unique=True)
     parent = models.ForeignKey(
@@ -55,7 +62,9 @@ class Post(models.Model):
     content = models.TextField(null=True)
     date_added = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
-    categories = models.ManyToManyField("Category", through="PostCategory")
+    categories = models.ManyToManyField("Category")
+    votes_total = models.ManyToManyField("Vote", related_name="post")
+    # Language
 
     def __str__(self):
         return f"Post {self.pk} - \
@@ -63,26 +72,18 @@ class Post(models.Model):
 
 
 class Vote(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    # post = models.ForeignKey(Post, on_delete=models.CASCADE)
     voter = models.ForeignKey(User, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
-    is_voted = models.BooleanField(default=True)
+    # is_voted = models.BooleanField(default=True)
 
 
 class GroupConfig(models.Model):
     name = models.CharField(max_length=100, default="")
-    description = models.TextField(default="")
 
 
 class Category(models.Model):
     name = models.CharField(max_length=80)
 
-
-class PostCategory(models.Model):
-    category = models.ForeignKey("Category", on_delete=models.CASCADE)
-    post = models.ForeignKey("Post", on_delete=models.CASCADE)
-
-
-class FeedCategory(models.Model):
-    category = models.ForeignKey("Category", on_delete=models.CASCADE)
-    feed = models.ForeignKey("Feed", on_delete=models.CASCADE)
+    def __str__(self):
+        return f"{self.name}"

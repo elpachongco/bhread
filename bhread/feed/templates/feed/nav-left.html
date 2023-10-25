@@ -1,30 +1,28 @@
 {% load static %}
-{% #sidebar %}
-<div class="flex flex-col flex-initial overflow-y-auto justify-between"
+<div class="sm:flex top-0 left-0 bottom-0 justify-end grow hidden overflow-y-auto xl:pr-4 xl:pr-8 max-w-xs"
      hx-boost="true">
-    <div>
+    <div class="fixed bottom-0 top-0 flex grow flex-col max-h-2xl min-w-min max-w-lg">
         <a id="logo"
            class="font-semibold text-black dark:text-alto"
            href="{% url "home" %}">
-            <div class="flex items-center pl-2 mt-8 mb-5">
-                <img class="mr-2 w-9 h-auto" src="{% static "feed/logo.svg" %}" alt="logo of bhread.com" />
-                <span class="hidden lg:block">bhread</span>
+            <div class="flex items-center mt-8 mb-5  p-3">
+                <img class="w-9 h-auto ml-auto" src="{% static "feed/logo.svg" %}" alt="logo of bhread.com" />
+                <span class="hidden md:block pl-2">bhread</span>
             </div>
         </a>
         <nav class="flex flex-col">
-            {% with "home feeds" as route_names %}
+            {% with "home browse feeds groups" as route_names %}
                 {% for item in route_names.split %}
                     <a text-lochmara
-                       class="flex items-center p-3 text-lg rounded-lg duration-100 hover:text-black hover:no-underline hover:transition-opacity font-header hover:bg-gallery/80 {% if url_name == item %} text-black {% else %} text-gull {% endif %}"
+                       class="flex items-center p-3 text-lg rounded-sm duration-100 hover:text-black hover:no-underline hover:transition-opacity font-header hover:bg-gallery/80 {% if url_name == item %} text-black dark:text-white {% else %} text-gull {% endif %}"
                        hx-target="body"
                        hx-get="{% url item %}"
                        hx-push-url="true"
                        href="{% url item %}"
                        hx-swap="innerHTML"
-                       hx-indicator="#no-indicator"
-                       preload="mouseover">
-                        <span class="mr-2 material-symbols-outlined size-20 ">{% cycle "home" "rss_feed" %}</span>
-                        <span class="hidden lg:block">{{ item }}</span>
+                       preload="mousedown">
+                        <span class="material-symbols-outlined size-20">{% cycle "home" "public" "rss_feed" "group" %}</span>
+                        <span class="hidden md:block pl-2">{{ item }}</span>
                     </a>
                 {% endfor %}
             {% endwith %}
@@ -33,33 +31,35 @@
                     {% for button_name in button_names.split %}
                         {% cycle "profile" as route silent %}
                         {% cycle "face" as icon_name silent %}
-                        <a class="flex items-center p-3 text-lg text-gull hover:text-black hover:no-underline hover:bg-gallery"
+                        <a text-lochmara
+                           class="flex items-center p-3 text-lg rounded-sm duration-100 hover:text-black hover:no-underline hover:transition-opacity font-header hover:bg-gallery/80 {% if url_name == item %} text-black dark:text-white {% else %} text-gull {% endif %}"
+                           hx-target="body"
+                           hx-get="{% url route %}"
+                           hx-push-url="true"
                            href="{% url route %}"
-                           hx-boost="true"
-                           hx-indicator="#page-load-spinner"
-                           hx-swap="innerHTML">
-                            <span class="mr-2 material-symbols-outlined size-20">{{ icon_name }}</span>
-                            <span class="hidden lg:block">{{ button_name }}</span>
+                           hx-swap="innerHTML"
+                           preload="mousedown">
+                            <span class="material-symbols-outlined size-20">{{ icon_name }}</span>
+                            <span class="hidden md:block pl-2">{{ button_name }}</span>
                         </a>
                     {% endfor %}
                 {% endwith %}
             {% endif %}
         </nav>
-    </div>
-    <div class="h-24">
-        {% url 'account_logout' as logout_url %}
-        {% url 'account_login' as login_url %}
-        <a href="{% if user.is_authenticated %} {{ logout_url }} {% else %} {{ login_url }} {% endif %}"
-           preload="mouseover"
-           class="hover:text-white hover:no-underline">
-            <div class="flex items-center justify-center text-lochmara border border-lochmara rounded text-sm px-2 py-1 hover:bg-lochmara hover:border-gull hover:text-white font-header  transition-all duration-75 active:translate-y-0.5">
-                {% if user.is_authenticated %}
-                    Log out
-                {% else %}
-                    Log in
-                {% endif %}
-            </div>
-        </a>
+        <div class="max-h-24 mb-2 mt-auto">
+            {% url 'account_logout' as logout_url %}
+            {% url 'account_login' as login_url %}
+            <a href="{% if user.is_authenticated %} {{ logout_url }} {% else %} {{ login_url }} {% endif %}"
+               preload="mouseover"
+               class="hover:text-white hover:no-underline">
+                <div class="flex items-center justify-center text-lochmara border border-lochmara rounded text-sm px-2 py-1 hover:bg-lochmara hover:border-gull hover:text-white font-header  transition-all duration-75 active:translate-y-0.5">
+                    {% if user.is_authenticated %}
+                        Log out
+                    {% else %}
+                        Log in
+                    {% endif %}
+                </div>
+            </a>
+        </div>
     </div>
 </div>
-{% /sidebar %}

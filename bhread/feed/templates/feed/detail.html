@@ -12,12 +12,17 @@
             {% post-reply post=parent is_parent=True %}
         {% else %}
             {% if parent.content %}
-                {% post-reply post=parent is_parent=True %}
+                {% post-reply post=parent is_parent=True title=parent.title %}
             {% else %}
                 {% post-contentless url=parent.url %}
             {% endif %}
         {% endif %}
-        <h3 class="font-medium font-header my-4">{{ parent_replies }} Repl{{ parent_replies | pluralize:"y,ies" }}</h3>
+        <!-- Categories -->
+        {% categories categories=parent.categories.all %}
+        <!-- Replies -->
+        <h3 id="replies" class="font-medium font-header my-4">
+            {{ parent_replies }} Repl{{ parent_replies | pluralize:"y,ies" }}
+        </h3>
         {% for child in children %}
             {% post-reply post=child %}
         {% endfor %}

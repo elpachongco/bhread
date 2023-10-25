@@ -1,6 +1,7 @@
 {% var content %}
 {% var truncate=truncate|default:False %}
 {% var trunc_html=trunc_html|default:350 %}
+<!-- NOTE: The styling for this exists in feed/templates/feed/base.html -->
 <div hx-disable x-ignore class="post-content text-base">
     {% autoescape off %}
         {% if truncate %}

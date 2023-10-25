@@ -34,10 +34,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
+    "django.contrib.admindocs",
     "django_q",
     "slippers",
     "tailwind",
     "theme",
+    "service_objects",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -242,3 +244,5 @@ LOGGING = {
         },
     },
 }
+
+FEED_SCAN_INTERVAL_MINUTES = 2

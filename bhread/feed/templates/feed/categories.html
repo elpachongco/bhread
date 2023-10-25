@@ -1,0 +1,7 @@
+{% var categories=categories %}
+<div class="w-full flex flex-wrap">
+    {% for category in categories %}
+        <span class="text-sm p-2 border border-gallery m-px my-1 rounded-lg ">{{ category }}</span>
+    {% empty %}
+    {% endfor %}
+</div>

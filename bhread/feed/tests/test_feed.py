@@ -1,8 +1,11 @@
+from unittest.mock import patch
+
 import feedparser
+import requests
 from django.test import TestCase
 from feed import selectors as sel
 from feed import services as ser
-from feed.models import Feed, Post
+from feed.models import Category, Feed, GroupConfig, Post
 from user.models import User
 
 from .feedgen import make_feed, make_item
@@ -40,8 +43,57 @@ class PrototypeTest(TestCase):
         # self.assertEqual(1, 2)
         pass
 
-    def test_verification_post_is_updated(self):
+    def test_scan_of_new_feed(self):
+        """Test if a newly added valid feed is scanned"""
+        ser.RegisterFeed().execute({"url": "http://localhost:4000/feed.xml"})
+        ser.UpdateFeed().execute(
+            {"feed": Feed.objects.get(url="http://localhost:4000/feed.xml")}
+        )
+        self.assertEqual(len(Post.objects.all()), 1)
+
+    def test_find_repost_link(self):
+        Post.objects.create(url="https://bhread.com")
+        a = ser.html_find_repost_link(
+            """
+            <html>
+            <a href="https://bhread.com"></a>
+            <a href="https://google.com"></a>
+            </html>
+            """,
+            self_url="https://google.com",
+        )
+        self.assertEqual(a, "https://bhread.com")
+
+    def test_find_group_name(self):
+        a = ser.html_find_group_name(
+            """
+            <html>
+                bhread.com/makegroup/crochet
+            </html>
+            """
+        )
+        self.assertEqual(a, "crochet")
+
+        a = ser.html_find_group_name("""<html>bhread.com/makegroup/crochet</html>""")
+        self.assertEqual(a, "crochet")
+
+        a = ser.html_find_group_name(
+            """<html>bhread.com/makegroup/crochet bhread.com/makegroup/crochet
+            </html>
+            """
+        )
+        self.assertEqual(a, "crochet")
+
+        a = ser.html_find_group_name(
+            """bhread.com/makegroup/crochet/fun#
+            """
+        )
+        self.assertEqual(a, "crochet/fun")
+
+    @patch("feed.services.feedparser.http.get")
+    def test_verification_post_is_updated(self, mock_get):
         """Test if the verification post is duplicated or update"""
+
         self.feed.is_verified = False
         self.feed.save()
         items = [
@@ -91,33 +143,48 @@ class PrototypeTest(TestCase):
         a = Post.objects.filter(feed=self.feed)
         self.assertEqual(len(a), 5)
 
-    def test_verification_from_new_feed_post(self):
+    @patch("feed.services.feedparser.http.get")
+    @patch("feed.services.requests.get")
+    def test_verification_from_new_feed_post(self, mock_get, mock_feedparser_get):
+        """If a feed publishes a post with the verification string, it should
+        be detected and verified"""
         self.feed.is_verified = False
         self.feed.verification = None
         self.feed.save()
 
+        # Simulate feed publishing posts
         items = [
             make_item(title="test item 1", link="https://bhread.com/post/1"),
             make_item(title="test item 2", link="https://bhread.com/post/2"),
-            make_item(title="test item 3", link="https://bhread.com/post/3"),
-            make_item(title="test item 4", link="https://bhread.com/post/4"),
-            make_item(title="test item 5", link="https://bhread.com/post/5"),
         ]
 
-        def customcustomParser(url):
-            return self.customParser(items)
+        new_feed = bytes(make_feed(items, link=self.feed.url), "utf-8")
 
-        ser.feed_update(feed=self.feed, parser=customcustomParser)
+        # Mock feed parser's get() function and feed.services' requests.get
+        mock_feedparser_get.return_value = new_feed
+        mock_get.text.return_value = new_feed
+
+        ser.UpdateFeed().execute({"feed": self.feed})
         self.assertEqual(self.feed.is_verified, False)
 
+        # Simulate feed publishing a verification post
         items += [
             make_item(
                 title="test item 6",
                 link="https://bhread.com/post/6",
-                content=f"https://bhread.com/feeds/{self.user.username}/verification",
+                content=f"<html>https://bhread.com/feeds/{self.user.username}/verification</html>",
             ),
         ]
-        ser.feed_update(feed=self.feed, parser=customcustomParser)
+
+        new_feed = bytes(make_feed(items, link=self.feed.url), "utf-8")
+
+        # Mock feed parser's get() function and feed.services' requests.get
+        mock_feedparser_get.return_value = new_feed
+        mock_get.return_value = str(new_feed)
+
+        # mock_get.text.return_value = new_feed
+
+        ser.UpdateFeed().execute({"feed": self.feed})
         self.assertEqual(self.feed.is_verified, True)
 
     def test_verification_post_is_created(self):
@@ -174,5 +241,19 @@ class PrototypeTest(TestCase):
         self.assertEqual(feed_to_verify.is_verified, True)
         self.assertEqual(len(Post.objects.filter(url="https://bhread.com/post/1")), 1)
 
-    def test_verification_from_url(self):
-        pass
+    @patch("feed.services.feedparser.http.get")
+    def test_new_group(self, mock_get):
+        """Group must be created when a post creates one"""
+        items = [
+            make_item(
+                title="test item 1",
+                link="https://bhread.com/post/1",
+                content="bhread.com/makegroup/crochet",
+            )
+        ]
+        new_feed = bytes(make_feed(items, link=self.feed.url), "utf-8")
+        mock_get.return_value = new_feed
+
+        # mock_parser.return_value = feedparser.parse(text)
+        ser.UpdateFeed().execute({"feed": self.feed})
+        self.assertEqual(bool(Post.objects.all()[0].group_config), True)

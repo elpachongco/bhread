@@ -33,6 +33,8 @@ services:
       build: .
       profiles: ["dev"]
       network_mode: "host"
+      stdin_open: true
+      tty: true
       # Allow access of ports in the host machine (for Test feeds):
       volumes:
         - .:/code

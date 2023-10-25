@@ -44,13 +44,17 @@
               rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,600;0,700;1,300&family=Ubuntu&display=swap"
               rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+        <!-- <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+       -->
+        <!--       rel="stylesheet" /> -->
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
               rel="stylesheet" />
         <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}" />
         <link rel="icon" type="image/png" href="{% static 'favicon.png' %}" />
         <script src="https://unpkg.com/htmx.org@1.9.4"></script>
-        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-        <script src="https://unpkg.com/htmx.org/dist/ext/preload.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+                defer></script>
+        <script src="https://unpkg.com/htmx.org/dist/ext/preload.js" defer></script>
         {% if title %}
             <title>{{ title }}</title>
         {% else %}
@@ -60,8 +64,8 @@
               href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/stackoverflow-light.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         <!-- and it's easy to individually load additional languages -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/go.min.js"></script>
-        <script>hljs.highlightAll();</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/go.min.js"
+                defer></script>
     </head>
     <body class="subpixel-antialiased bg-white dark:bg-slate-900 dark:text-neutral-200"
           hx-ext="preload"
@@ -70,6 +74,7 @@
           hx-indicator="#bar">
         <div id="bar" class="htmx-indicator">{% loading-bar %}</div>
         <div id="no-indicator"></div>
+        <script defer>hljs.highlightAll();</script>
         {% if debug %}
             <script>
         if (typeof window.htmx !== "undefined") {
@@ -86,8 +91,7 @@
         {% endif %}
         <div class="flex justify-center">
             {% nav-left user=user url_name=url_name %}
-            {# <main class="flex flex-col justify-center min-h-screen lg:max-w-3xl border-x border-gallery px-2 sm:px-4 sm:max-w-2xl shrink"> #}
-            <main class="flex flex-col justify-center min-h-[calc(100vh-65px)] pb-[65px] md:pb-4 md:min-h-screen  border-x border-gallery shrink w-full lg:max-w-3xl sm:max-w-2xl">
+            <main class="flex flex-col justify-center min-h-[calc(100vh-65px)] pb-[65px] md:pb-4 md:min-h-screen  border-x border-gallery dark:border-slate-700 shrink w-full lg:max-w-3xl sm:max-w-2xl">
                 {% if messages %}
                     {% for message in messages %}
                         <div class="p-2 rounded-md {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} bg-red-300 {% else %} bg-orange-200 dark:bg-slate-700 {% endif %}">
@@ -101,5 +105,51 @@
             </main>
             {% nav-right %}
         </div>
+        <style>
+        /* Styling for post content because tailwind + django can't do that :/ */
+        /* !! WARNING !!  Do not put styling that will affect elements outside this component. */
+        .post-content img {
+            max-width: 80%;
+        }
+        .post-content h1, .post-content h2, .post-content h3, .post-content h4, .post-content h5, .post-content h6, .post-content pre, .post-content img {
+            margin-top: .4em;
+            margin-bottom: .4em;
+        }
+        .post-content p {
+            margin-top: .4em;
+            margin-bottom:.4em;
+        }
+
+        .post-content h1 {
+            font-weight: 700;
+        }
+        .post-content h2 {
+            font-weight: 600;
+        }
+        .post-content h3 {
+            font-weight: 500;
+        }
+        .post-content h4 {
+            font-weight: 400;
+        }
+        .post-content h5 {
+            font-weight: 300;
+        }
+        .post-content h6 {
+            font-weight: 300;
+        }
+        .post-content code, .post-content pre {
+            overflow: auto;
+            font-size: 14px;
+            max-width: 80ch;
+        }
+        .post-content p code {
+            background: #f2f2f2;
+            padding: .3em;
+            padding-left: .2em;
+            padding-right: .2em;
+            border-radius: .5em;
+        }
+        </style>
     </body>
 </html>
