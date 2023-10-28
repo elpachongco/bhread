@@ -100,11 +100,12 @@ def user_has_verified(user):
 def posts(post_qset):
     """
     title, content, date, author, author_img, reply_count
+    returns a query set
     """
     return post_qset.annotate(
         author_name=F("feed__owner__username"),
         author_img=F("feed__owner__profile__image"),
-        reply_count=Count("parent_post"),
+        reply_count=Count("child"),
     )
 
 

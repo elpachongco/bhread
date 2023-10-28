@@ -270,6 +270,8 @@ class ProcessFeedEntry(Service):
                     {
                         "url": entry["link"],
                         "feed": feed,
+                        "html_title": entry.title,
+                        "html_content": entry.content,
                     }
                 )
             except User.DoesNotExist:

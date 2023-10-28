@@ -3,6 +3,7 @@
 
 from datetime import datetime
 
+import pytz
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import CheckConstraint, Q, UniqueConstraint
@@ -22,7 +23,7 @@ class Feed(models.Model):
     url = models.URLField(max_length=200, unique=True)
     etag = models.CharField(max_length=256, null=True)
     last_modified = models.CharField(max_length=256, null=True)
-    last_scan = models.DateTimeField(default=datetime.min)
+    last_scan = models.DateTimeField(default=(datetime.min.replace(tzinfo=pytz.UTC)))
     image = models.URLField(max_length=200, unique=False, default="", blank=True)
     reply_format = models.CharField(max_length=256, default="replying to")
 
@@ -47,16 +48,13 @@ class Post(models.Model):
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE, null=True)
     url = models.URLField(max_length=200, unique=True)
     parent = models.ForeignKey(
-        "self", on_delete=models.CASCADE, null=True, related_name="parent_post"
+        "self", on_delete=models.CASCADE, null=True, related_name="child"
     )
     refer = models.ForeignKey(
         "self", on_delete=models.SET_NULL, null=True, related_name="refer_post"
     )
     group_config = models.OneToOneField(
         "GroupConfig", null=True, on_delete=models.SET_NULL
-    )
-    ancestor = models.ForeignKey(
-        "self", on_delete=models.CASCADE, null=True, related_name="ancestor_post"
     )
     title = models.CharField(max_length=100, null=True)
     content = models.TextField(null=True)

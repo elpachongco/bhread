@@ -1,0 +1,21 @@
+{% var message=message %}
+
+<div
+  class="flex w-full max-w-screen z-50 fixed pb-16 sm:pb-4 bottom-0 "
+  x-data="{ open: true }"
+  x-show="open"
+>
+  <div class="mx-auto max-w-screen-xl p-3 rounded-lg {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} bg-red-300 {% else %} bg-orange-200 dark:bg-slate-700 {% endif %}" x-show="open">
+    <!-- Message -->
+    {{ children }}
+    <!-- END Message -->
+
+    <!-- Close -->
+    <a @click="open=false" class="bg-slate-800/20 p-2 text-white rounded-full h-full w-auto">
+      <span class="material-symbols-outlined my-auto"
+      style="font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: inherit">close</span>
+    </a>
+    <!-- END Close -->
+  </div>
+</div>

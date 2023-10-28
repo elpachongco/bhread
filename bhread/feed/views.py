@@ -140,7 +140,7 @@ def post_detail(request, url=None):
     parent = Post.objects.get(url=url)
 
     context["parent"] = parent
-    context["parent_replies"] = sel.descendants_count(parent)
+    context["parent_replies"] = 0
     context["children"] = Post.objects.filter(parent=parent)
 
     return render(request, "feed/detail.html", context)
