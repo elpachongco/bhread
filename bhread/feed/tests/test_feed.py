@@ -201,3 +201,34 @@ class PrototypeTest(TestCase):
         reply = Post.objects.filter(url="https://bhread.com/post/1")
         reply = sel.posts(reply)
         self.assertEqual(reply[0].reply_count, 2)
+
+    @patch("feed.services.feedparser.http.get")
+    def test_new_group_post(self, mock_get):
+        """Create new group and reply to it"""
+        items = [
+            make_item(
+                title="test item 1",
+                link="https://bhread.com/post/1",
+                content="<html>bhread.com/makegroup/crochet</html>",
+            )
+        ]
+        new_feed = bytes(make_feed(items, link=self.feed.url), "utf-8")
+        mock_get.return_value = new_feed
+
+        # mock_parser.return_value = feedparser.parse(text)
+        ser.UpdateFeed().execute({"feed": self.feed})
+        self.assertEqual(bool(Post.objects.all()[0].group_config), True)
+
+        items += [
+            make_item(
+                title="test item 2",
+                link="https://bhread.com/post/2",
+                content="<html>replying to <a href='https://bhread.com/post/1'>the crochet group</a></html>",
+            )
+        ]
+        new_feed = bytes(make_feed(items, link=self.feed.url), "utf-8")
+        mock_get.return_value = new_feed
+
+        # mock_parser.return_value = feedparser.parse(text)
+        ser.UpdateFeed().execute({"feed": self.feed})
+        self.assertEqual(bool(Post.objects.all()[0].content), True)

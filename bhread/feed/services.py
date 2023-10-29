@@ -226,16 +226,19 @@ class CreatePost(Service):
         title = self.cleaned_data["title"]
         content = self.cleaned_data["content"]
 
+        # If post already exists and has content, don't override it
+        # in case create is called with url only
+        defaults = {}
+        if feed is not None:
+            defaults["feed"] = feed
+        if content:
+            defaults["content"] = content
+        if title:
+            defaults["title"] = title
+
         post = None
-        # if (feed, title, content) == (None, None, None):
-        #     post = Post.objects.get_or_create(url=url)
-        # else:
         post, created = Post.objects.update_or_create(
-            defaults={
-                "feed": feed,
-                "content": content,
-                "title": title,
-            },
+            defaults=defaults,
             url=url,
         )
 
