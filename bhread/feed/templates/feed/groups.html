@@ -1,5 +1,20 @@
 {% extends base_template %}
+
+{% var group_posts=group_posts %}
+
+{% load static %}
+{% load feed_extras %}
 {% block content %}
-    {% load static %}
-    {% for group in groups %}{{ group.group_config.name }}{% endfor %}
+<div class="h-full">
+    <ol>
+      {% for group_post in group_posts %}
+        <li>
+          <a href="{% url 'detail' group_post.url %}"
+            class="">
+          {{ group_post.feed.url | url_domain }}/{{ group_post.group_config.name }}
+          </a>
+        </li>
+      {% endfor %}
+    </ol>
+</div>
 {% endblock content %}

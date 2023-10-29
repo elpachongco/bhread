@@ -30,7 +30,7 @@ def home(request, pk=None):
     if pk:
         context["js"] = False
 
-    posts_qs = Post.objects.all().order_by("date_added")
+    posts_qs = Post.objects.all().order_by("-date_added")
     context["posts"] = sel.posts(posts_qs)
     if request.user.is_authenticated:
         context["voted_posts"] = list(
@@ -38,7 +38,7 @@ def home(request, pk=None):
                 "post", flat=True
             )
         )
-    ser.feed_update_all()
+    # ser.feed_update_all()
     return render(request, "feed/home.html", context)
 
 
@@ -156,7 +156,7 @@ def search(request, url):
 def groups(request):
     context = {"base_template": "feed/base.html"}
     context["url_name"] = "groups"
-    context["groups"] = Post.objects.filter(group_config__isnull=False)
+    context["group_posts"] = Post.objects.filter(group_config__isnull=False)
     return render(request, "feed/groups.html", context)
 
 
