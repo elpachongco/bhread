@@ -5,14 +5,15 @@
 {% load static %}
 {% load feed_extras %}
 {% block content %}
-<div class="h-full">
+<div class="h-full px-4 pt-2">
     <ol>
       {% for group_post in group_posts %}
-        <li>
+        <li class="border-b border-1 border-gull">
           <a href="{% url 'detail' group_post.url %}"
-            class="">
+            class="font-header font-medium">
           {{ group_post.feed.url | url_domain }}/{{ group_post.group_config.name }}
           </a>
+          {% post-content content=group_post.content truncate=True %}
         </li>
       {% endfor %}
     </ol>
