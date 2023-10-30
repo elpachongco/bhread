@@ -267,14 +267,17 @@ class ProcessFeedEntry(Service):
         entry = self.cleaned_data["entry"]
         feed = self.cleaned_data["feed"]
 
+        title = entry.title
+        content = content_to_html(entry.content)
+
         if not feed.is_verified:
             try:
                 VerifyFeed().execute(
                     {
                         "url": entry["link"],
                         "feed": feed,
-                        "html_title": entry.title,
-                        "html_content": entry.content,
+                        "html_title": title,
+                        "html_content": content,
                     }
                 )
             except User.DoesNotExist:
@@ -290,8 +293,8 @@ class ProcessFeedEntry(Service):
             {
                 "feed": feed,
                 "url": entry["link"],
-                "title": entry["title"],
-                "content": content_to_html(entry["content"]),
+                "title": title,
+                "content": content,
             }
         )
 
@@ -331,7 +334,7 @@ class ProcessPost(Service):
             post.repost = repost_link
 
         # TODO Check if repost treats group registration link as repost link.
-        if group_name:
+        if group_name and not post.group_config:
             group = CreateGroup().execute({"name": group_name})
             post.group_config = group
 
