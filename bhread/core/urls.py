@@ -24,6 +24,7 @@ from feed import views as feed_views
 from user import views as user_views
 
 urlpatterns = [
+    path("welcome/", TemplateView.as_view(template_name="feed/welcome.html"), name="landing"),
     path("<int:pk>", feed_views.home, name="homenext"),
     path("<int:pk>", feed_views.home, name="homeprevious"),
     path("", feed_views.home, name="home"),

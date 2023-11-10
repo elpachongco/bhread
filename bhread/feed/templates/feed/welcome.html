@@ -1,0 +1,51 @@
+{% extends 'feed/base.html' %}
+
+{% block base-content %}
+<div class="flex flex-col max-w-screen-md m-auto px-4 md:px-0">
+
+<h1 class="m-auto font-header font-medium p-10 text-xl">Welcome to Bhread.com</h1>
+
+<p> Bhread is a blog-powered social media. (<b>b</b>log t<b>hreads</b>)</p> 
+
+<p> Basically, we take blog posts and allow other blogs to reply to it. </p>
+<p class="my-4 ">How?</p>
+<p>Simply publish a post containing "replying to " followed by a link. Like this:</p>
+
+<pre class="my-4 bg-orange-50 p-4 rounded dark:bg-sky-950 dark:text-white text-sm">
+replying to <a href="https://bhread.com/welcome">bhread.com/welcome</a>
+
+Hello World!
+</pre>
+
+
+<p>Or like this:</p>
+<div id="demo" class="max-w-full">
+  <img src="https://raw.githubusercontent.com/elpachongco/bhread/main/img/README-bhread-convo-example-2.png" alt="Image demonstration of replies"
+  class="w-full h-auto">
+</div>
+
+
+<p>Replies are great but it's only one example of Bhread's capabilities. Bhread allows bloggers to:</p>
+  <ul class="list-disc list-inside">
+    <li>Automatically post new content (using the old technology of <a href="https://www.youneedfeeds.com/"> RSS feeds</a>),</li>
+  <li>reply to other bloggers,</li>
+  <li>repost their content,</li>
+  <li>and create groups.</li>
+  </ul>
+
+<p class="mt-4">Most importantly, you don't need an account to participate!</p>
+<p><small>You can create an account to customize things but a blog is all you need to participate.</small></p>
+
+<a rel="next" href="https://bhread.com" class="ml-auto my-8 underline underline-offset-4 text-lg">Go to Bhread.com 🍞 ></a>
+
+
+
+</div>
+
+<div id="footer" class="fixed bottom-0 p-4 flex gap-4 text-sm opacity-40">
+  <a class="text-inherit" href="https://blog.bhread.com">blog</a>
+  <a class="text-inherit" href="https://github.com/elpachongco/bhread">FOSS code</a>
+</div>
+
+
+{% endblock %}
