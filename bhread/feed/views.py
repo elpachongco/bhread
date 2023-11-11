@@ -17,10 +17,9 @@ from .models import Feed, Post, Vote
 
 # @cache_page(5 * 60)
 def home(request, pk=None):
-    """lakjsfd"""
     context = {
         "posts": [],
-        "base_template": "feed/base.html",
+        "base_template": "feed/tri-column.html",
         "url_name": "home",
         "htmx": False,
         "js": True,
@@ -38,7 +37,7 @@ def home(request, pk=None):
                 "post", flat=True
             )
         )
-    # ser.feed_update_all()
+    ser.feed_update_all()
     return render(request, "feed/home.html", context)
 
 
@@ -53,11 +52,12 @@ def htmx_home(request, pk):
 
 
 def feeds(request):
-    context = {"base_template": "feed/base.html", "url_name": "feeds"}
+    context = {"base_template": "feed/tri-column.html", "url_name": "feeds"}
     # context["user_feeds"] = sel.user_feeds(request.user)
     feed_form = FeedRegisterForm
     context["feed_form"] = feed_form
     # context["verification_form"] = VerificationForm
+    context["feeds"] = Feed.objects.filter(is_bozo=False)
 
     if request.method == "POST":
         try:

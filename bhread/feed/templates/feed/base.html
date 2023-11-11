@@ -106,17 +106,8 @@
             {% endfor %}
         {% endif %}
         <!-- END Messages -->
-
-        <div class="flex justify-center">
-            {% nav-left user=user url_name=url_name %}
-            <main class="flex flex-col justify-center min-h-[calc(100vh-65px)] pb-[65px] md:pb-4 md:min-h-screen  border-x border-gallery dark:border-slate-700 shrink w-full lg:max-w-3xl sm:max-w-2xl">
-
-                {% block content %}
-                {% endblock content %}
-                {% nav-bottom url_name=url_name %}
-            </main>
-            {% nav-right %}
-        </div>
+          {% block base-content %}
+          {% endblock base-content %}
         <style>
         /* Styling for post content because tailwind + django can't do that :/ */
         /* !! WARNING !!  Do not put styling that will affect elements outside this component. */
