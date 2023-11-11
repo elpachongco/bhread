@@ -1,7 +1,6 @@
-{% extends 'feed/base.html' %}
+{% extends 'feed/site-content.html' %}
 
-{% block base-content %}
-<div class="flex flex-col max-w-screen-md m-auto px-4 md:px-0">
+{% block content %}
 
 <h1 class="m-auto font-header font-medium p-10 text-xl">Welcome to Bhread.com</h1>
 
@@ -17,17 +16,20 @@ replying to <a href="https://bhread.com/welcome">bhread.com/welcome</a>
 Hello World!
 </pre>
 
+<p>
+This tells bhread to create a <i>threaded</i> post containing your post as a reply.
+</p>
 
-<p>Or like this:</p>
+<p class="mt-6">Here's an example thread:</p>
 <div id="demo" class="max-w-full">
   <img src="https://raw.githubusercontent.com/elpachongco/bhread/main/img/README-bhread-convo-example-2.png" alt="Image demonstration of replies"
   class="w-full h-auto">
 </div>
 
 
-<p>Replies are great but it's only one example of Bhread's capabilities. Bhread allows bloggers to:</p>
+<p>Replies are great but it's only one example of Bhread's capabilities. Bhread allows any blogger to:</p>
   <ul class="list-disc list-inside">
-    <li>Automatically post new content (using the old technology of <a href="https://www.youneedfeeds.com/"> RSS feeds</a>),</li>
+    <li>Automatically post new content (using <a href="https://www.youneedfeeds.com/">feeds</a>),</li>
   <li>reply to other bloggers,</li>
   <li>repost their content,</li>
   <li>and create groups.</li>
@@ -36,16 +38,27 @@ Hello World!
 <p class="mt-4">Most importantly, you don't need an account to participate!</p>
 <p><small>You can create an account to customize things but a blog is all you need to participate.</small></p>
 
-<a rel="next" href="https://bhread.com" class="ml-auto my-8 underline underline-offset-4 text-lg">Go to Bhread.com 🍞 ></a>
+<a rel="next" href="https://bhread.com" class="ml-auto my-8 underline underline-offset-4 text-lg">Shut up and take <s>my money</s> me to Bhread</a>
 
 
+<details>
+  <summary class="list-none">
+    <small>
+    Want to know more?
+    </small>
+  </summary>
+  Read more about Bhread:
+  <ul class="list-disc list-inside">
+    <li>
+      <a href="https://blog.bhread.com/posts/about-bhread/">Why Bhread?</a>
+    </li>
+  </ul>
+</details>
 
-</div>
+{% endblock content %}
 
-<div id="footer" class="fixed bottom-0 p-4 flex gap-4 text-sm opacity-40">
-  <a class="text-inherit" href="https://blog.bhread.com">blog</a>
-  <a class="text-inherit" href="https://github.com/elpachongco/bhread">FOSS code</a>
-</div>
-
-
+{% block landing-classes %}
+  {{ block.super }}
+  before:content-['>']
+  after:content-['<']
 {% endblock %}
