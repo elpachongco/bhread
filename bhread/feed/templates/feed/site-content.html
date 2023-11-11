@@ -1,0 +1,19 @@
+{% extends 'feed/base.html' %}
+{% block base-content %}
+<div class="{%block container-classes%}
+             flex flex-col max-w-screen-md m-auto px-6 md:px-0 pb-12 min-h-screen
+             {%endblock%}">
+  {% block content%}
+  {% endblock content%}
+</div>
+
+{% block footer %}
+<div id="footer" class="fixed bottom-0 right-0 p-4 flex gap-x-4 text-sm opacity-40 flex-wrap">
+  <a class="{% block blog-classes %} text-inherit {% endblock %}" href="https://blog.bhread.com">blog</a>
+  <a class="{% block museum-classes %} text-inherit {% endblock %}" href="{% url 'museum' %}">museum</a>
+  <a class="{% block landing-classes %} text-inherit {% endblock %}" href="{% url 'landing' %}">welcome</a>
+  <a class="{% block code-classes %} text-inherit {% endblock %}" href="https://github.com/elpachongco/bhread">FOSS code</a>
+</div>
+{% endblock footer %}
+
+{% endblock base-content %}
