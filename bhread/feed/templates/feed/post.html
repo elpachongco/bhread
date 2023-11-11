@@ -15,7 +15,7 @@ Post
 {% endcomment %}
 <li id="post-{{ post.id }}"
     class="px-2 sm:px-4 mt-2 mb-2 border-b border-b-gallery dark:border-b-slate-700">
-    {% if post.parent %}
+    {% if post.parent and not post.parent.group_config %}
         <div id="reply" class="w-full mb-3">
             <div class="flex w-full">
                 <div class="h-auto w-6 mr-2">
@@ -55,6 +55,8 @@ Post
                                     {% with post.feed as feed %}
                                         {% if feed.owner %}
                                             {{ post.feed.owner.username }}
+                                        {% elif post.group_config %}
+                                        {{ post.feed.url|url_domain }}/{{ post.group_config.name }}
                                         {% else %}
                                             {{ post.feed.url|url_domain }}
                                         {% endif %}
