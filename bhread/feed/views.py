@@ -30,14 +30,14 @@ def home(request, pk=None):
         context["js"] = False
 
     posts_qs = Post.objects.all().order_by("-date_added")
-    context["posts"] = sel.posts(posts_qs)
+    context["posts"] = sel.posts(posts_qs)[:5]
     if request.user.is_authenticated:
         context["voted_posts"] = list(
             Vote.objects.filter(voter=request.user, post__isnull=False).values_list(
                 "post", flat=True
             )
         )
-    ser.feed_update_all()
+    # ser.feed_update_all()
     return render(request, "feed/home.html", context)
 
 
@@ -136,7 +136,7 @@ def post_children(request, pk):
 
 
 def post_detail(request, url=None):
-    context = {"replies": [], "base_template": "feed/base.html"}
+    context = {"replies": [], "base_template": "feed/tri-column.html"}
     parent = Post.objects.get(url=url)
 
     context["parent"] = parent
@@ -154,7 +154,7 @@ def search(request, url):
 
 
 def groups(request):
-    context = {"base_template": "feed/base.html"}
+    context = {"base_template": "feed/tri-column.html"}
     context["url_name"] = "groups"
     context["group_posts"] = Post.objects.filter(group_config__isnull=False)
     return render(request, "feed/groups.html", context)

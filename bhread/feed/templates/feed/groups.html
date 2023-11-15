@@ -8,13 +8,18 @@
 <div class="h-full px-4 pt-2">
     <ol>
       {% for group_post in group_posts %}
-        <li class="border-b border-1 border-gull">
+        <li class="border-b border-1 border-gallery">
           <a href="{% url 'detail' group_post.url %}"
             class="font-header font-medium">
           {{ group_post.feed.url | url_domain }}/{{ group_post.group_config.name }}
           </a>
           {% post-content content=group_post.content truncate=True %}
         </li>
+        {% if forloop.last %}
+        <div class="w-full flex">
+          <p class="mx-auto mt-4">No more groups to show</p>
+        </div>
+        {% endif %}
       {% endfor %}
     </ol>
 </div>
