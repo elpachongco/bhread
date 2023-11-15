@@ -1,10 +1,9 @@
 {% extends base_template %}
 {% block content %}
-    <div class="p-2">
+    <div class="px-2 min-h-screen">
         {% all-feeds %}
         <h2 class="font-header text-black dark:text-white text-lg mt-6 mb-5 font-medium">Feed Submission</h2>
-        <p>Ready to participate? Here are the (2) steps to verify on bhread.com</p>
-        <h3 class="font-header font-medium my-10">Step 1: Submit your blog's RSS/Atom Feed URL.</h3>
+        <p>Ready to participate? Paste your feed below and press the button:</p>
         <form class="my-6 w-full" action="{% url 'feeds' %}" method="post">
             {% csrf_token %}
             {% for field in feed_form %}
@@ -20,60 +19,19 @@
                     name="feed_submit"
                     type="submit">Submit</button>
         </form>
-        <h3 class="font-header font-medium my-10">Step 2: Verify ownership of blog by saying hello.</h3>
-        <p>Publish a post in your blog containing the url:</p>
-        {% if user.is_authenticated %}
-            <pre class="my-4">https://bhread.com/feeds/{{ user.username }}/verification</pre>
-        {% else %}
-            <pre class="my-4">https://bhread.com/feeds/username/verification</pre>
-        {% endif %}
-        <p>(as a link or plain text)</p>
-        <p class="my-4">Example:</p>
-        <pre class="my-4">
-        Hello World! I'm joining bhread.com as
-        &lt;a href="https://bhread.com/feeds/{{ user.username }}/verification"&gt;
-          {{ user.username }}
-        &lt;/a&gt;!
-        </pre>
-        <h2 class="my-4 font-medium font-header border border-green-400 bg-green-50 dark:bg-green-800 dark:text-white p-2 rounded-md text-green-600">
-            That's it!
-        </h2>
+        <!-- <h3 class="font-header font-medium my-10">Step 2: Verify ownership of blog by saying hello.</h3> -->
+        <h3 class="font-header font-medium my-4">Things you may want to know:</h3>
         <ul class="list-disc list-inside mb-14">
-            <li>It may take bhread some time to verify. Please wait a few minutes or proceed to step 3 if verification fails.</li>
-            <li>If the verification post was published before the submission of feed, you may proceed to step 3.</li>
-            <li>You may track the status of the submitted feeds in the table below.</li>
+            <li>If your feed is valid, bhread will politely* scan your feed every 2 minutes for new posts.</li>
+            <li>It may take bhread some time to show your posts</li>
+            <li>Bhread can only show posts in your feed and future posts. If your feed doesn't contain every post you have, we can't show those posts.</li>
         </ul>
-        <h3 class="font-header font-medium my-4">(Optional) Step 3: Custom verification post.</h3>
-        <div class="mt-2">
-            <p>You may use this feature if:</p>
-            <ul class="list-disc list-inside">
-                <li class="mb-2">bhread fails to find the verification post (10 minutes).</li>
-                <li class="mb-2">the verification post was published before the submission of a feed.</li>
-                <li class="mb-2">You want to register a feed that belongs to the same site.</li>
-                <li class="mb-2">You want to explicitly set the verification post.</li>
-            </ul>
-        </div>
-        <p>Paste the link of the post containing the verification url to the input below and submit.</p>
-        {% if not user_feeds %}
-            <h4 class="font-header font-medium text-red-400 my-4">No feeds found. Have you submitted one?</h4>
+        <p>*We respect your cache headers (Last modified, and Etag)</p>
+        {% if user.is_authenticated %}
+          {% if not user_feeds %}
+              <h4 class="font-header font-medium text-red-400 my-4">No feeds found. Have you submitted one?</h4>
+          {% endif %}
         {% endif %}
-        <form class="my-6 w-full" action="{% url 'feeds' %}" method="post">
-            {% csrf_token %}
-            {{ verification_form.non_field_errors }}
-            {% for field in verification_form %}
-                <div class="fieldWrapper">
-                    {{ field.error }}
-                    <p>
-                        {# {{ field.label_tag }} #}
-                        {% cycle 'Post Url' 'Feed' %}
-                        : {{ field }}
-                        {{ field.help_text|safe }}
-                    </p>
-                </div>
-            {% endfor %}
-            <button name="verification_post"
-                    class="bg-lochmara text-white font-header font-medium px-6">Submit</button>
-        </form>
         <table class="table-auto border-collapse my-4 w-full my-8">
             <thead class="border-b-2">
                 <tr>
