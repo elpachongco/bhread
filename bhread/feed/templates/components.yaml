@@ -15,4 +15,3 @@ components:
   vote: "feed/vote.html"
   categories: "feed/categories.html"
   all-feeds: "feed/all-feeds.html"
-  message: "feed/message.html"

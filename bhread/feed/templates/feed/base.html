@@ -102,7 +102,7 @@
         <!-- Messages -->
         {% if messages %}
             {% for message in messages %}
-              {% #message %} {{ message }} {% /message %}
+              {% include "feed/message.html" with content=message level=message.level %}
             {% endfor %}
         {% endif %}
         <!-- END Messages -->

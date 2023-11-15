@@ -1,13 +1,24 @@
-{% var message=message %}
-
+{# params: level, content #}
 <div
   class="flex w-full max-w-screen z-50 fixed pb-16 sm:pb-4 bottom-0 dark:text-slate-800"
   x-data="{ open: true }"
   x-show="open"
 >
-  <div class="mx-auto max-w-screen-xl p-3 rounded-lg {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} bg-red-300 {% else %} bg-orange-200 dark:bg-slate-700 {% endif %}" x-show="open">
+  <div class="mx-auto max-w-screen-xl p-3 rounded-lg
+    {% if level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+      bg-red-300
+    {% elif level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+      bg-amber-100
+    {% elif level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+      bg-green-200
+    {% elif level == DEFAULT_MESSAGE_LEVELS.INFO %}
+      bg-sky-100
+    {% elif level == DEFAULT_MESSAGE_LEVELS.DEBUG %}
+      bg-pink-50
+    {% endif %}"
+    x-show="open">
     <!-- Message -->
-    {{ children }}
+    {{ content }}
     <!-- END Message -->
 
     <!-- Close -->
