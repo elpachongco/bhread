@@ -11,7 +11,7 @@
             </div>
         </a>
         <nav class="flex flex-col">
-            {% with "home browse feeds groups" as route_names %}
+            {% with "home feeds groups" as route_names %}
                 {% for item in route_names.split %}
                     <a text-lochmara
                        class="flex items-center p-3 text-lg rounded-sm duration-100 hover:text-black hover:no-underline hover:transition-opacity font-header hover:bg-gallery/80 {% if url_name == item %} text-black dark:text-white {% else %} text-gull {% endif %}"
@@ -21,7 +21,7 @@
                        href="{% url item %}"
                        hx-swap="innerHTML"
                        preload="mousedown">
-                        <span class="material-symbols-outlined size-20">{% cycle "home" "public" "rss_feed" "group" %}</span>
+                        <span class="material-symbols-outlined size-20">{% cycle "home" "rss_feed" "group" %}</span>
                         <span class="hidden md:block pl-2">{{ item }}</span>
                     </a>
                 {% endfor %}
