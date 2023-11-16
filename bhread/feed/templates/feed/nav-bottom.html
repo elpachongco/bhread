@@ -1,6 +1,6 @@
 {% load static %}
-<div class="flex md:hidden" x-data="{open: false}">
-    <div class="flex flex-row justify-between items-center fixed h-14 bottom-0 left-0 right-0 border-t border-t-gallery bg-gray-50 z-30">
+<div class="flex sm:hidden" x-data="{open: false}">
+    <div class="flex flex-row justify-between items-center fixed h-14 bottom-0 left-0 right-0 border-t border-t-gallery bg-gray-50 dark:bg-slate-900 dark:text-neutral-200 z-30">
         <a href="{% url 'home' %}"
            class="px-6 h-full my-auto w-auto {% if url_name == 'more' %} text-black {% else %} text-gull {% endif %}">
             <div class="w-full h-full flex justify-center items-center">
@@ -8,9 +8,9 @@
             </div>
         </a>
         <a href="{% url 'home' %}"
-           class="px-6 h-full w-auto {% if url_name == 'home' %} text-black {% else %} text-gull {% endif %}">
+           class="px-6 h-full w-auto {% if url_name == 'home' %} text-black dark:text-neutral-200 {% else %} text-gull text-neutral-500 {% endif %}">
             <div class="w-full h-full flex justify-center items-center">
-                <span class="material-symbols-outlined block m-auto ">home</span>
+                <span class="material-symbols-outlined block m-auto">home</span>
             </div>
         </a>
         <a class="px-6 h-full my-auto w-auto {% if url_name == 'more' %} text-black {% else %} text-gull {% endif %}"
