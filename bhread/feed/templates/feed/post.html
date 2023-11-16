@@ -13,7 +13,7 @@ Post
 
 
 {% endcomment %}
-<li id="post-{{ post.id }}"
+<div id="post-{{ post.id }}"
     class="px-2 sm:px-4 mt-2 mb-2 border-b border-b-gallery dark:border-b-slate-700">
     {% if post.parent and not post.parent.group_config %}
         <div id="reply" class="w-full mb-3">
@@ -109,4 +109,4 @@ Post
             <!-- END Buttons on the bottom -->
         </div>
     </article>
-</li>
+</div>

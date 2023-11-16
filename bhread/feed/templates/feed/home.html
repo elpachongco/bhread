@@ -5,6 +5,7 @@
     <div class="mt-2 min-h-screen">
         <ol id="posts" class="list-none">
             {% for post in posts %}
+            <li>
                 <!-- Only render posts that belong to feed. -->
                 {% if post.feed %}
                     <!-- If user has voted the post -->
@@ -35,6 +36,7 @@
                 {% endif %}
             {% empty %}
                 <h2>No posts found</h2>
+            </li>
             {% endfor %}
         </ol>
     </div>

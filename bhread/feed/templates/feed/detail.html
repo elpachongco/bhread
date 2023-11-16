@@ -9,10 +9,27 @@
             {% endif %}
         </div>
         {% if parent.parent %}
-            {% post-reply post=parent is_parent=True %}
+          {% if parent.id in voted_posts %}
+            {% #post post=parent csrf_token=csrf_token voted=True show_date=True %}
+            {% post-content content=parent.content truncate=False trunc_html=350 %}
+            {% /post %}
+          {% else %}
+            {% #post post=parent csrf_token=csrf_token voted=False show_date=True %}
+            {% post-content content=parent.content truncate=False trunc_html=350 %}
+            {% /post %}
+          {% endif %}
+
         {% else %}
             {% if parent.content %}
-                {% post-reply post=parent is_parent=True title=parent.title %}
+              {% if parent.id in voted_posts %}
+                {% #post post=parent csrf_token=csrf_token voted=True show_date=True %}
+                {% post-content content=parent.content truncate=False trunc_html=350 %}
+                {% /post %}
+              {% else %}
+                {% #post post=parent csrf_token=csrf_token voted=False show_date=True %}
+                {% post-content content=parent.content truncate=False trunc_html=350 %}
+                {% /post %}
+              {% endif %}
             {% else %}
                 {% post-contentless url=parent.url %}
             {% endif %}
@@ -20,9 +37,11 @@
         <!-- Categories -->
         {% categories categories=parent.categories.all %}
         <!-- Replies -->
+        {% comment %}
         <h3 id="replies" class="font-medium font-header my-4">
             {{ parent_replies }} Repl{{ parent_replies | pluralize:"y,ies" }}
         </h3>
+        {% endcomment %}
         {% for child in children %}
             {% post-reply post=child %}
         {% endfor %}

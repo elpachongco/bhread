@@ -123,3 +123,11 @@ def home(id=None):
     if id is not None:
         a = a.filter(id__lt=id)
     return posts(a)
+
+
+def voted_posts(voter):
+    return list(
+        Vote.objects.filter(voter=voter, post__isnull=False).values_list(
+            "post", flat=True
+        )
+    )

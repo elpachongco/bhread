@@ -24,20 +24,15 @@ def home(request, pk=None):
         "htmx": False,
         "js": True,
     }
-    if "HX-Request" in request.headers:
-        context["htmx"] = True
-    if pk:
-        context["js"] = False
+    # if "HX-Request" in request.headers:
+    #     context["htmx"] = True
+    # if pk:
+    #     context["js"] = False
 
     posts_qs = Post.objects.all().order_by("-date_added")
-    context["posts"] = sel.posts(posts_qs)[:5]
+    context["posts"] = sel.posts(posts_qs)
     if request.user.is_authenticated:
-        context["voted_posts"] = list(
-            Vote.objects.filter(voter=request.user, post__isnull=False).values_list(
-                "post", flat=True
-            )
-        )
-    # ser.feed_update_all()
+        context["voted_posts"] = sel.voted_posts(request.user)  # ser.feed_update_all()
     return render(request, "feed/home.html", context)
 
 
@@ -142,6 +137,8 @@ def post_detail(request, url=None):
     context["parent"] = parent
     context["parent_replies"] = 0
     context["children"] = Post.objects.filter(parent=parent)
+    if request.user.is_authenticated:
+        context["voted_posts"] = sel.voted_posts(request.user)
 
     return render(request, "feed/detail.html", context)
 
