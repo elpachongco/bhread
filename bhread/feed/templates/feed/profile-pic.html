@@ -1,18 +1,29 @@
 {% var user=user %}
 {% var feed_url=feed_url %}
+{% var group_name=group_name %}
+
 {% load feed_extras %}
 <div class="w-10 h-10 relative">
-    <img src="https://www.google.com/s2/favicons?domain={{ feed_url }}&sz=10"
-         class="right-0 bottom-0 z-10 absolute rounded-full"
-         loading="lazy">
-    <div class="inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-stone-200 rounded-full dark:bg-gray-600">
+    <!-- User favicon -->
+    <div   class="w-full h-full absolute ">
+      <img  id="aa" src="https://icons.duckduckgo.com/ip3/{{ feed_url | url_domain }}.ico" class="top-0 bottom-0 left-0 right-0 mx-auto my-auto z-10 absolute rounded-full bg-gray-600 w-20" loading="lazy" onerror="this.onerror=null;this.style.display='none'">
+      <span class="absolute left-0 right-0 mx-auto top-0 bottom-0 my-auto w-fit h-fit">
+        {{ feed_url|url_domain|slice:2|upper }}
+      </span>
+    </div>
+    <!-- Profile pic -->
+    <div class="inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-stone-200 rounded-xl dark:bg-gray-600">
         {% if user %}
             <img class="w-full"
                  loading="lazy"
                  src="{{ user.profile.image.url }}"
                  alt="display picture of user." />
         {% else %}
-            <span class="font-medium text-gray-600 dark:text-gray-300">{{ feed_url|url_domain|slice:2|upper }}</span>
+
+          {% if group_name %}
+          <span class="font-medium text-gray-600 dark:text-gray-300">{{ feed_url|url_domain|slice:2|upper }}</span>
+          {% endif %}
+
         {% endif %}
     </div>
 </div>
