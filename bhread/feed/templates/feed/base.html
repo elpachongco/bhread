@@ -70,7 +70,7 @@
         <!-- END Scripting -->
 
         <link rel="stylesheet"
-              href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/stackoverflow-light.min.css">
+              href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/monokai.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         <!-- and it's easy to individually load additional languages -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/go.min.js"
@@ -119,8 +119,10 @@
             margin-bottom: .4em;
         }
         .post-content p {
-            margin-top: .4em;
-            margin-bottom:.4em;
+            margin-top: .9em;
+            margin-bottom: .9em;
+            /*line-height: 1.3em;*/
+            line-height: 1.4em;
         }
 
         .post-content h1 {
@@ -145,14 +147,22 @@
             overflow: auto;
             font-size: 14px;
             max-width: 80ch;
+            border-radius: 13px;
         }
         .post-content p code {
-            background: #f2f2f2;
+            background: #fffbc7;
+            color: black;
             padding: .3em;
             padding-left: .2em;
             padding-right: .2em;
             border-radius: .5em;
         }
+        .dark .post-content p code {
+            background: #1f2942;
+            color: white;
+        }
+
+
         </style>
     </body>
 </html>
