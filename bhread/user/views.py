@@ -47,7 +47,7 @@ def profile(request):
         "p_form": p_form,
         "f_form": "",  # TODO: remove
         "verified": sel.user_has_verified(request.user),
-        "base_template": "feed/base.html",
+        "base_template": "feed/tri-column.html",
     }
 
     return render(request, "user/profile.html", context)
