@@ -51,17 +51,21 @@ class Post(models.Model):
         "self", on_delete=models.CASCADE, null=True, related_name="child"
     )
     refer = models.ForeignKey(
-        "self", on_delete=models.SET_NULL, null=True, related_name="refer_post"
+        "self",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="refer_post",
     )
     group_config = models.OneToOneField(
-        "GroupConfig", null=True, on_delete=models.SET_NULL
+        "GroupConfig", null=True, blank=True, on_delete=models.SET_NULL
     )
     title = models.CharField(max_length=100, null=True)
     content = models.TextField(null=True)
     date_added = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
-    categories = models.ManyToManyField("Category")
-    votes_total = models.ManyToManyField("Vote", related_name="post")
+    categories = models.ManyToManyField("Category", blank=True)
+    votes_total = models.ManyToManyField("Vote", related_name="post", blank=True)
     # Language
 
     def __str__(self):
