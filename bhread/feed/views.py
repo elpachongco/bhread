@@ -32,7 +32,7 @@ def home(request, pk=None):
     posts_qs = Post.objects.all().order_by("-date_added")
     context["posts"] = sel.posts(posts_qs)
     if request.user.is_authenticated:
-        context["voted_posts"] = sel.voted_posts(request.user)  # ser.feed_update_all()
+        context["voted_posts"] = sel.voted_posts(request.user)
     return render(request, "feed/home.html", context)
 
 

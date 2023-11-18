@@ -20,6 +20,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils import timezone
+from feed import tasks
 from service_objects.errors import InvalidInputsError
 
 # from feed import selectors as sel
@@ -63,8 +64,7 @@ def feed_update_all():
         last_scan__lte=timezone.now()
         - timedelta(minutes=settings.FEED_SCAN_INTERVAL_MINUTES)
     ):
-        UpdateFeed.execute({"feed": feed})
-    # tasks.feed_update(feed)
+        tasks.feed_update(feed)
 
 
 def feed_make_verification_string(name):

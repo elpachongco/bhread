@@ -24,4 +24,4 @@ def schedule_update_feeds():
 
 
 def feed_update(feed):
-    async_task("feed.services.feed_update", feed)
+    async_task("feed.services.UpdateFeed.execute", {"feed": feed})
