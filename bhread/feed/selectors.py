@@ -1,3 +1,4 @@
+from collections import deque
 from datetime import datetime, timedelta
 from typing import Iterator, List, Optional, Set
 from urllib.parse import urlparse
@@ -45,9 +46,9 @@ def children(post):
 def descendants(post) -> Iterator[Post]:
     """Find descendants of post. Useful for getting replies of post"""
 
-    if not post.parent:
-        if Post.objects.filter(ancestor=post).exists():
-            return Post.objects.filter(ancestor=post).all()
+    # if not post.parent:
+    #     if Post.objects.filter(ancestor=post).exists():
+    #         return Post.objects.filter(ancestor=post).all()
 
     stack: List[Post] = []
     stack.append(post)
@@ -131,3 +132,51 @@ def voted_posts(voter):
             "post", flat=True
         )
     )
+
+
+def post_replies(post):
+    """Get all replies of post
+
+    Store all replies, as a single-dimension list of dictionaries
+    containining level info. Level information will be used as indentation
+    [
+        { "level": 0, "post": <Post object> },
+        { "level": 1, "post": <Post object> },
+        { "level": 2, "post": <Post object> },
+        { "level": 0, "post": <Post object> },
+        { "level": 1, "post": <Post object> },
+    ]
+    This is intended to be used for displaying replies in the templates
+    by doing complex logic here, not in the template
+    """
+    # Do a depth-first search.
+    post_stack = [post]
+    head_stack = [post]
+    current_head = []
+    while head_stack:
+        head = head_stack.pop()
+        c = list(children(head))
+        if not c:
+            new_current_head = False
+            while post_stack:
+                i = post_stack.pop()
+                if i == head:
+                    yield {"level": len(current_head), "post": head}
+                    if post_stack[-1] == current_head[-1]:
+                        post_stack.pop()
+                        current_head.pop()
+                    break
+                elif i == current_head[-1]:  # Impossible to happen?
+                    current_head.pop()
+                    new_current_head = True
+                    break
+                else:
+                    breakpoint()
+            if not new_current_head:
+                continue
+
+        current_head.append(head)
+        yield {"level": len(current_head), "post": head}
+        for child in c:
+            post_stack.append(child)
+            head_stack.append(child)
