@@ -1,6 +1,6 @@
 from collections import deque
 from datetime import datetime, timedelta
-from typing import Iterator, List, Optional, Set
+from typing import Dict, Iterator, List, Optional, Set
 from urllib.parse import urlparse
 
 import feedparser
@@ -134,11 +134,11 @@ def voted_posts(voter):
     )
 
 
-def post_replies(post):
+def post_replies(post: Post) -> Dict:
     """Get all replies of post
 
-    Store all replies, as a single-dimension list of dictionaries
-    containining level info. Level information will be used as indentation
+    Store all replies, as a single-dimension list of dictionaries.
+    containining level info. Level information will be used as indentation.
     [
         { "level": 0, "post": <Post object> },
         { "level": 1, "post": <Post object> },
@@ -149,34 +149,34 @@ def post_replies(post):
     This is intended to be used for displaying replies in the templates
     by doing complex logic here, not in the template
     """
-    # Do a depth-first search.
     post_stack = [post]
-    head_stack = [post]
-    current_head = []
+    head_stack = [post]  # Possible branching points
+    current_head = []  # Current branching level/point
     while head_stack:
         head = head_stack.pop()
         c = list(children(head))
-        if not c:
-            new_current_head = False
+        if not c:  # The branch will no longer branch
             while post_stack:
                 i = post_stack.pop()
-                if i == head:
-                    yield {"level": len(current_head), "post": head}
-                    if post_stack[-1] == current_head[-1]:
-                        post_stack.pop()
-                        current_head.pop()
-                    break
-                elif i == current_head[-1]:  # Impossible to happen?
+                if i != head:  # Find current head in stack
+                    continue
+                yield {"level": len(current_head), "post": head}
+                # If head is found and the item before it is equal to current
+                # head, then it's the last child of the current head.
+                # The head has now been fully scanned, remove it.
+                if post_stack[-1] == current_head[-1]:
+                    post_stack.pop()
+                    # Delete branching point as it has now been fully scanned.
                     current_head.pop()
-                    new_current_head = True
-                    break
-                else:
-                    breakpoint()
-            if not new_current_head:
-                continue
-
-        current_head.append(head)
+                # Proceed to start of main loop and get the next head_stack
+                # item which is the sibling of removed current_head item
+                break
+            continue
         yield {"level": len(current_head), "post": head}
+        # If you have a child, you're a branching point
+        current_head.append(head)
         for child in c:
+            # Track history of items for finding out if item is a branch
             post_stack.append(child)
+            # All of the branch child is a possible branching point
             head_stack.append(child)
