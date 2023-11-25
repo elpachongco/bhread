@@ -132,13 +132,17 @@ def post_children(request, pk):
 
 def post_detail(request, url=None):
     context = {"replies": [], "base_template": "feed/tri-column.html"}
-    parent = Post.objects.get(url=url)
+    post = Post.objects.get(url=url)
 
-    context["parent"] = parent
-    context["parent_replies"] = 0
-    context["children"] = Post.objects.filter(parent=parent)
+    context["post"] = post
+    context["post_replies"] = 0
+    context["replies"] = Post.objects.filter(parent=post)
+    context["is_voted"] = False
     if request.user.is_authenticated:
-        context["voted_posts"] = sel.voted_posts(request.user)
+        voted_posts = sel.voted_posts(request.user)
+        context["voted_posts"] = voted_posts
+        if post.id in voted_posts:
+            context["is_voted"] = True
 
     return render(request, "feed/detail.html", context)
 

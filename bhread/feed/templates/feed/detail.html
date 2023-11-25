@@ -2,48 +2,36 @@
 {% block content %}
     <div class="h-full px-4">
         <div class="my-4">
-            {% if parent.parent %}
-                <a href="{% url 'detail' parent.parent.url %}">Parent post</a>
+            {% if post.parent %}
+                <a href="{% url 'detail' post.parent.url %}">Parent post</a>
             {% else %}
                 <a href="javascript: history.go(-1)">Back</a>
             {% endif %}
         </div>
-        {% if parent.parent %}
-          {% if parent.id in voted_posts %}
-            {% #post post=parent csrf_token=csrf_token voted=True show_date=True %}
-            {% post-content content=parent.content truncate=False trunc_html=350 %}
+        {% if post.parent %}
+            {% #post post=post csrf_token=csrf_token voted=is_voted show_date=True %}
+            {% post-content content=post.content truncate=False trunc_html=350 %}
             {% /post %}
-          {% else %}
-            {% #post post=parent csrf_token=csrf_token voted=False show_date=True %}
-            {% post-content content=parent.content truncate=False trunc_html=350 %}
-            {% /post %}
-          {% endif %}
 
         {% else %}
-            {% if parent.content %}
-              {% if parent.id in voted_posts %}
-                {% #post post=parent csrf_token=csrf_token voted=True show_date=True %}
-                {% post-content content=parent.content truncate=False trunc_html=350 %}
+            {% if post.content %}
+                {% #post post=post csrf_token=csrf_token voted=is_voted show_date=True %}
+                {% post-content content=post.content truncate=False trunc_html=350 %}
                 {% /post %}
-              {% else %}
-                {% #post post=parent csrf_token=csrf_token voted=False show_date=True %}
-                {% post-content content=parent.content truncate=False trunc_html=350 %}
-                {% /post %}
-              {% endif %}
             {% else %}
-                {% post-contentless url=parent.url %}
+                {% post-contentless url=post.url %}
             {% endif %}
         {% endif %}
         <!-- Categories -->
-        {% categories categories=parent.categories.all %}
+        {% categories categories=post.categories.all %}
         <!-- Replies -->
         {% comment %}
         <h3 id="replies" class="font-medium font-header my-4">
             {{ parent_replies }} Repl{{ parent_replies | pluralize:"y,ies" }}
         </h3>
         {% endcomment %}
-        {% for child in children %}
-            {% post-reply post=child %}
+        {% for reply in replies %}
+            {% post-reply post=reply %}
         {% endfor %}
     </div>
 {% endblock content %}
