@@ -136,7 +136,7 @@ def post_detail(request, url=None):
 
     context["post"] = post
     context["post_replies"] = 0
-    context["replies"] = Post.objects.filter(parent=post)
+    context["replies"] = sel.post_replies(post)
     context["is_voted"] = False
     if request.user.is_authenticated:
         voted_posts = sel.voted_posts(request.user)

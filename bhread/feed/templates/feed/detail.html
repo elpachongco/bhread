@@ -30,8 +30,12 @@
             {{ parent_replies }} Repl{{ parent_replies | pluralize:"y,ies" }}
         </h3>
         {% endcomment %}
-        {% for reply in replies %}
-            {% post-reply post=reply %}
-        {% endfor %}
+        <ol class="mt-4 px-1">
+          {% for reply in replies %}
+            {% if not forloop.first %}
+            {% post-reply post=reply.post level=reply.level|add:"-1" %}
+            {% endif %}
+          {% endfor %}
+        </ol>
     </div>
 {% endblock content %}
