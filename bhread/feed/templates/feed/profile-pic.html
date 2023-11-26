@@ -3,16 +3,16 @@
 {% var group_name=group_name %}
 
 {% load feed_extras %}
-<div class="w-10 h-10 relative">
+<div class="w-full h-full relative">
     <!-- User favicon -->
-    <div   class="w-full h-full absolute ">
-      <img  id="aa" src="https://icons.duckduckgo.com/ip3/{{ feed_url | url_domain }}.ico" class="top-0 bottom-0 left-0 right-0 mx-auto my-auto z-10 absolute rounded-full bg-gray-600 w-20" loading="lazy" onerror="this.onerror=null;this.style.display='none'">
+    <div class="w-full h-full absolute ">
+      <img id="aa" src="https://icons.duckduckgo.com/ip3/{{ feed_url | url_domain }}.ico" class="top-0 bottom-0 left-0 right-0 mx-auto my-auto z-10 absolute rounded-full bg-gray-600 w-full" loading="lazy" onerror="this.onerror=null;this.style.display='none'">
       <span class="absolute left-0 right-0 mx-auto top-0 bottom-0 my-auto w-fit h-fit">
         {{ feed_url|url_domain|slice:2|upper }}
       </span>
     </div>
     <!-- Profile pic -->
-    <div class="inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-stone-200 rounded-xl dark:bg-gray-600">
+    <div class="inline-flex items-center justify-center w-full h-full overflow-hidden bg-stone-200 rounded-[30%] dark:bg-gray-600">
         {% if user %}
             <img class="w-full"
                  loading="lazy"
