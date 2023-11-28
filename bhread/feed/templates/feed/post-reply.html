@@ -2,14 +2,16 @@
 {% var title=title|default:False %}
 {% var is_parent=is_parent|default:False %}
 {% var level=level|default:0 %}
+{% var show_date=show_data|default:True %}
+{% var voted=voted %}
 
 {% load feed_extras %}
-<li class="flex flex-col pb-2 mb-2 " style="padding-left: {% widthratio 20 1 level %}px;">
+<li class="flex flex-col mt-4 {%if level%} dark:border-l-slate-700 border-l-4 {%endif%}" style="padding-left: {% widthratio 20 1 level %}px;">
     <div class="flex flex-row">
         <div class="flex flex-col w-full">
             <div class="flex justify-between mb-1">
               <div class="flex">
-                <div class="mr-2 w-8 h-8">{% profile-pic user=post.feed.owner feed_url=post.feed.url %}</div>
+                <div class="mr-2 w-6 h-6">{% profile-pic user=post.feed.owner feed_url=post.feed.url %}</div>
                 <h3 class="text-lochmara font-header font-medium">
                     {% with post.feed as feed %}
                         {% if feed.owner %}
@@ -20,12 +22,36 @@
                     {% endwith %}
                 </h3>
               </div>
-                <p class="text-xs text-gray-500">{{ post.date_added | timesince }} ago</p>
+                <p class="text-xs text-gray-500">[ - ]</p>
             </div>
             {% if title %}<h3 class="font-medium font-header my-2">{{ post.title }}</h3>{% endif %}
             {% post-content content=post.content truncate=True %}
             {% if not is_parent %}
-                <a class="text-sm mt-2" href="{% url 'detail' post.url %}">See post (0 Replies)</a>
+            <!-- Buttons on the bottom -->
+              <div class="m-0 flex text-sm mt-2">
+                  <!-- Votes -->
+                  <div class="text-xl text-gull">
+                      {% vote voted=voted id=post.id votes=post.votes_total.count csrf_token=csrf_token %}
+                  </div>
+                  <!-- endvotes -->
+                  <!-- Replies -->
+                  <a href="{% url 'detail' post.url %}"
+                     class="m-0 mx-auto text-gull text-base flex items-center hover:no-underline">
+                      <span style="font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+                                   font-size: inherit"
+                            class="material-symbols-outlined mr-1">chat_bubble</span>
+                      {{ post.reply_count|default:0 }}
+                  </a>
+                  <!-- Endreplies -->
+                  <!-- Date -->
+                  {% if show_date %}
+                    <a class="text-xs text-gray-500" href={{ post.url }}>
+                      {% with date_added=post.date_added %}{{ date_added | date:"d M Y" }}{% endwith %}
+                    </a>
+                  {% endif %}
+                  <!-- END Date -->
+              </div>
+              <!-- END Buttons on the bottom -->
             {% endif %}
         </div>
     </div>

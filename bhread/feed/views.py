@@ -144,6 +144,12 @@ def post_detail(request, url=None):
         if post.id in voted_posts:
             context["is_voted"] = True
 
+        replies = []
+        for reply in context["replies"]:
+            reply["is_voted"] = reply["post"].id in voted_posts
+            replies.append(reply)
+        context["replies"] = replies
+
     return render(request, "feed/detail.html", context)
 
 

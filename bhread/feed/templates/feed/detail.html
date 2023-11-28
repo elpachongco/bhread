@@ -33,7 +33,7 @@
         <ol class="mt-4 px-1">
           {% for reply in replies %}
             {% if not forloop.first %}
-            {% post-reply post=reply.post level=reply.level|add:"-1" %}
+              {% post-reply post=reply.post level=reply.level|add:"-1" voted=reply.is_voted  %}
             {% endif %}
           {% endfor %}
         </ol>
