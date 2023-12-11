@@ -39,12 +39,14 @@
                     <th class="text-left">Feed URL</th>
                     <th class="text-left">Verification Post</th>
                     <th class="text-left">Status</th>
+                    <th class="text-left">Last Scanned</th>
                 </tr>
             </thead>
             <tbody>
                 {% for feed in feeds %}
                     {% with feed.is_verified as verified %}
                         <tr class="border-b dark:border-blue-950 {% if verified %}bg-green-200{% endif %} ">
+                    {% endwith %}
                             <td>{{ feed.url }}</td>
                             {% if feed.verification %}
                                 <td>{{ feed.verification.url }}</td>
@@ -56,8 +58,8 @@
                             {% else %}
                                 <td>Unverified</td>
                             {% endif %}
+                            <td>{{ feed.last_scan | timesince }}</td>
                         </tr>
-                    {% endwith %}
                 {% endfor %}
             </tbody>
         </table>
