@@ -1,4 +1,4 @@
-# The Blog Threads protocol version 0.1
+# The Blog Threads protocol version 0.1.1
 
 The Blog Threads (BHread) protocol defines methods that allow any website to be
 used to participate in a decentralized social network.
@@ -230,3 +230,18 @@ Section for important questions. Feel free to add (better than filing an issue).
 ## Credits
 
 - [diff.blog](https://diff.blog/FAQ/)
+
+## To do
+
+[ ] Define delimiter for make group
+[ ] Define handling of a post/feed's language
+[ ] Should specify that a post can repost a group creation post
+[ ] Decide if group can be created if post is a reply. (True for now)
+[ ] Mention that a post with same url but different feed must be treated differently
+[ ] Repost will scan for any links in the DB. But protocol should mention handling
+of reposting a URL of the same post that's reposting.
+[ ] If two or more `replying to <link>` phrases exists, use the last one to appear in the text.
+[ ] If two or more repostable links exists, use the first one
+[ ] Allow commenting to urls with anchor e.g. `bhread.com/article/hello.html#introduction`
+Display replies to this as a comment but add a link to the anchor
+[ ] Define moderation. In essence, we don't want to remove any posts but we want to moderate posts by adding post filters. Use a good default filter (no NSFW, no spam, ) but allow users to toggle these filters.
