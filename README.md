@@ -157,3 +157,18 @@ Simply fork this repo, and make a pull request.
 - elk.zone - UI inspiration
 - bellybells.net - Crochet photo
 - Diff.blog
+
+## Style Guide
+
+1. Do EVERYTHING in the view.
+
+If it's a simple call, you can access it in the template. But anything more than that should be done in the view and passed into the template.
+
+This makes it easy to handle complex logic and keeps the template clean.
+
+2. Database writes should go to services.py, database reads should go to selectors.py
+
+The rest is handled by the views
+
+
+3. No model methods. Use services instead.
