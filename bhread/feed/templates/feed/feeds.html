@@ -45,8 +45,7 @@
             <tbody>
                 {% for feed in feeds %}
                     {% with feed.is_verified as verified %}
-                        <tr class="border-b dark:border-blue-950 {% if verified %}bg-green-200{% endif %} ">
-                    {% endwith %}
+                        <tr class="border-b dark:border-blue-950 {% if verified %}bg-green-200 dark:bg-green-900{% endif %} ">
                             <td>{{ feed.url }}</td>
                             {% if feed.verification %}
                                 <td>{{ feed.verification.url }}</td>
@@ -59,6 +58,7 @@
                                 <td>Unverified</td>
                             {% endif %}
                             <td>{{ feed.last_scan | timesince }}</td>
+                    {% endwith %}
                         </tr>
                 {% endfor %}
             </tbody>
