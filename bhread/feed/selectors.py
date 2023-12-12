@@ -134,10 +134,10 @@ def voted_posts(voter):
     )
 
 
-def post_replies(post: Post) -> Dict:
+def post_replies(post: Post) -> Iterator[Dict]:
     """Get all replies of post
 
-    Store all replies, as a single-dimension list of dictionaries.
+    Store tree of replies, as a single-dimension list of dictionaries.
     containining level info. Level information will be used as indentation.
     [
         { "level": 0, "post": <Post object> },
@@ -147,7 +147,7 @@ def post_replies(post: Post) -> Dict:
         { "level": 1, "post": <Post object> },
     ]
     This is intended to be used for displaying replies in the templates
-    by doing complex logic here, not in the template
+    by doing complex logic (flattening tree) here, not in the template.
     """
     post_stack = [post]
     head_stack = [post]  # Possible branching points
@@ -164,7 +164,7 @@ def post_replies(post: Post) -> Dict:
                 # If head is found and the item before it is equal to current
                 # head, then it's the last child of the current head.
                 # The head has now been fully scanned, remove it.
-                if post_stack[-1] == current_head[-1]:
+                if post_stack and current_head and post_stack[-1] == current_head[-1]:
                     post_stack.pop()
                     # Delete branching point as it has now been fully scanned.
                     current_head.pop()
