@@ -14,7 +14,7 @@
             {% with "home feeds groups" as route_names %}
                 {% for item in route_names.split %}
                     <a text-lochmara
-                       class="flex items-center p-3 text-lg rounded-sm duration-100 hover:text-black hover:no-underline hover:transition-opacity font-header hover:bg-gallery/80 {% if url_name == item %} text-black dark:text-white {% else %} text-gull {% endif %}"
+                       class="flex items-center p-3 text-lg rounded-sm duration-100 hover:text-black hover:no-underline hover:transition-opacity font-header hover:bg-gallery/80 {% if url_name == item %} text-black dark:text-white dark:hover:text-black {% else %} text-gull {% endif %}"
                        hx-target="body"
                        hx-get="{% url item %}"
                        hx-push-url="true"
