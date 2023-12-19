@@ -27,12 +27,13 @@
                                 <div id="dummy">{% post-dummy %}</div>
                             </div>
                         {% endif %}
+                      <noscript>
+                          <a href="{% url 'homenext' post.id %}">
+                              <div class="w-full flex justify-center items-center">Next page</div>
+                          </a>
+                      </noscript>
                     {% endif %}
-                    <noscript>
-                        <a href="{% url 'homenext' post.id %}">
-                            <div class="w-full flex justify-center items-center">Next page</div>
-                        </a>
-                    </noscript>
+
                 {% endif %}
             {% empty %}
                 <h2>No posts found</h2>

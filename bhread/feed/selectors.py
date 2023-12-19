@@ -119,7 +119,7 @@ def home(id=None):
             feed__is_verified=True,
         )
         .select_related("parent", "feed__owner", "feed__owner__profile")
-        .order_by("-date_added", "-date_modified")
+        .order_by("-date_added", "-date_updated")
     )
     if id is not None:
         a = a.filter(id__lt=id)

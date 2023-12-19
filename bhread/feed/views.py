@@ -24,13 +24,12 @@ def home(request, pk=None):
         "htmx": False,
         "js": True,
     }
-    # if "HX-Request" in request.headers:
-    #     context["htmx"] = True
-    # if pk:
-    #     context["js"] = False
+    if "HX-Request" in request.headers:
+        context["htmx"] = True
+    if pk:
+        context["js"] = False
 
-    posts_qs = Post.objects.all().order_by("-date_added")
-    context["posts"] = sel.posts(posts_qs)
+    context["posts"] = sel.home(pk)[:8]
     if request.user.is_authenticated:
         context["voted_posts"] = sel.voted_posts(request.user)
     return render(request, "feed/home.html", context)
@@ -38,10 +37,9 @@ def home(request, pk=None):
 
 # @cache_page(5 * 60)
 def htmx_home(request, pk):
-    # context = {
-    #     "posts": sel.home(pk)[:8],
-    # }
-    context = {"posts": []}
+    context = {
+        "posts": sel.home(pk)[:8],
+    }
 
     return render(request, "feed/htmx-home.html", context)
 
