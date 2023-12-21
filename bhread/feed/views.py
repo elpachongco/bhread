@@ -152,7 +152,7 @@ def post_detail(request, url=None):
 
 
 def search(request, url):
-    context = {"base_template": "feed/base.html"}
+    context = {"base_template": "feed/tri-column.html"}
     context["results"] = Post.objects.filter(url=url)
     context["search"] = url
     return render(request, "feed/search.html", context)
