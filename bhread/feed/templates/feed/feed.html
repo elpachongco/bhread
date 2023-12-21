@@ -8,7 +8,7 @@ Page for looking at a single feed.
         <!-- Feed subscribe -->
         <div class="flex w-5/6 mx-auto my-8 border border-inherit rounded-md">
             <!-- Favicon -->
-            <div class="w-11 h-11 bg-stone-200 rounded-md flex items-center justify-center">
+            <div class="w-11 h-11 bg-stone-200 dark:bg-slate-800 rounded-sm flex items-center justify-center">
                 <img src="https://www.google.com/s2/favicons?domain={{ url }}&sz=24"
                      class="right-0 bottom-0 z-10 rounded-full"
                      loading="lazy">
@@ -22,8 +22,8 @@ Page for looking at a single feed.
         <ul class="p-2">
             {% for post in posts %}
                 <li class="my-4 border  border-slate-700 p-2 rounded-md">
-                    <a class="block font-header font-medium" href="{{ post.url }}">{{ post.title }}</a>
-                    <div class="">{% post-content content=post.content truncate=True %}</div>
+                    <a class="block font-header font-medium" href="{{ post.url }}" target="_blank" rel="noreferrer noopener">{{ post.title }}</a>
+                    <div>{% post-content content=post.content truncate=True %}</div>
                 </li>
             {% empty %}
                 <li>No posts found</li>

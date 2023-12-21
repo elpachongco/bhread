@@ -180,7 +180,7 @@ def browse(request, pk=None):
 def feed(request, url):
     """Allow user to subscribe"""
     context = {
-        "base_template": "feed/base.html",
+        "base_template": "feed/tri-column.html",
         "url": url,
         "subscriptions": None,
         "posts": Post.objects.filter(feed__url=url),
