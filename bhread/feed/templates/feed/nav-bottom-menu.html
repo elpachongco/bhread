@@ -1,16 +1,16 @@
 {% load static %}
 <div class="bg-zinc-950/50 w-screen h-screen top-0 bottom-0 right-0 left-0 fixed z-10"></div>
-<div class="flex flex-col rounded-lg items-center fixed max-h-full h-5/6 bottom-0 left-0 right-0 border-t border-t-gallery bg-gray-100 z-20 p-6"
+<div class="flex flex-col rounded-lg items-center fixed max-h-full bottom-0 left-0 right-0 border-t border-t-gallery dark:border-t-slate-700 bg-gray-100 dark:bg-zinc-900 z-20 px-6 pb-24"
      @click.outside="open=false">
     <!-- Notch -->
     <!-- <span class="rounded-full bg-gray-300 h-1 w-10 my-2"></span> -->
     <!-- Menu items -->
     <div class="overflow-scroll w-full">
         <ol class="my-2">
-            {% with route_names="Profile Logout laskjfd laskjfdl jlaksjfdljsa ljlsadfjla jsdlak jlfdsjf lasks lfsaj" %}
+            {% with route_names="Theme Search Profile" %}
                 {% for item in route_names.split %}
-                    <li class="my-4">
-                        {% cycle "a" "b" %}<a href="#">{{ item }}</a>
+                    <li class="my-4 w-full">
+                        {% cycle " " " " %}<a class="inline-block w-full" href="#">{{ item }}</a>
                     </li>
                 {% endfor %}
             {% endwith %}
