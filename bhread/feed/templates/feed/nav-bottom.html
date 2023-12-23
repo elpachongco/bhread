@@ -23,7 +23,7 @@
                 <span class="text-xs">groups</span>
             </div>
         </a>
-        <button class="px-6 h-full my-auto w-auto {% if url_name == 'more' %} text-black {% else %} text-gull {% endif %} hover:bg-inherit"
+        <button id="menu-more-btn" class="px-6 h-full my-auto w-auto {% if url_name == 'more' %} text-black {% else %} text-gull {% endif %} hover:bg-inherit"
            @click="open = !open">
             <div class="w-full h-full flex flex-col justify-center items-center">
                 <span class="material-symbols-outlined block my-auto" x-show="!open">more_horiz</span>
@@ -34,7 +34,12 @@
             </div>
         </button>
     </div>
-    <div class="h-fit" x-show="open">
+    <div id="bottom-navbar-menu" class="h-fit" x-show="open" hx-preserve>
+      <noscript>
+        <style>
+        #bottom-navbar-menu, #menumore-btn{ display: none; }
+        </style>
+      </noscript>
         <!-- Warning: This contains @click.outside which should be declared here, in the -->
         <!-- parent. Slippers doesn't support it yet. -->
         {% nav-bottom-menu %}
