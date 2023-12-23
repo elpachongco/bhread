@@ -33,35 +33,37 @@
           {% endif %}
         {% endif %}
         <h2 class="mt-8 mb-2 text-lg font-header mx-auto">Bhread's feeds</h2>
-        <table class="table-auto border-collapse w-full">
-            <thead class="border-b-2 dark:border-blue-900">
-                <tr>
-                    <th class="text-left">Feed URL</th>
-                    <th class="text-left">Verification Post</th>
-                    <th class="text-left">Status</th>
-                    <th class="text-left">Last Scanned</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for feed in feeds %}
-                    {% with feed.is_verified as verified %}
-                        <tr class="border-b dark:border-blue-950 {% if verified %}bg-green-200 dark:bg-green-900{% endif %} ">
-                            <td>{{ feed.url }}</td>
-                            {% if feed.verification %}
-                                <td>{{ feed.verification.url }}</td>
-                            {% else %}
-                                <td>None</td>
-                            {% endif %}
-                            {% if verified %}
-                                <td>Successful</td>
-                            {% else %}
-                                <td>Unverified</td>
-                            {% endif %}
-                            <td>{{ feed.last_scan | timesince }}</td>
-                    {% endwith %}
-                        </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="overflow-scroll">
+          <table class="table-auto border-collapse w-full">
+              <thead class="border-b-2 dark:border-blue-900">
+                  <tr>
+                      <th class="text-left">Feed URL</th>
+                      <th class="text-left">Verification Post</th>
+                      <th class="text-left">Status</th>
+                      <th class="text-left">Last Scanned</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for feed in feeds %}
+                      {% with feed.is_verified as verified %}
+                          <tr class="border-b dark:border-blue-950 {% if verified %}bg-green-200 dark:bg-green-900{% endif %} ">
+                              <td>{{ feed.url }}</td>
+                              {% if feed.verification %}
+                                  <td>{{ feed.verification.url }}</td>
+                              {% else %}
+                                  <td>None</td>
+                              {% endif %}
+                              {% if verified %}
+                                  <td>Successful</td>
+                              {% else %}
+                                  <td>Unverified</td>
+                              {% endif %}
+                              <td>{{ feed.last_scan | timesince }}</td>
+                      {% endwith %}
+                          </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+        </div>
     </div>
 {% endblock content %}
