@@ -106,7 +106,7 @@ def posts(post_qset):
     return post_qset.annotate(
         author_name=F("feed__owner__username"),
         author_img=F("feed__owner__profile__image"),
-        reply_count=Count("child"),
+        reply_count=Count("child") + Count("child__child"),
     )
 
 
