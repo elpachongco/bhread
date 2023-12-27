@@ -36,7 +36,7 @@ def ancestors(*, order_by="-date_added", limit=10):
 def children(post):
     posts_url = []
 
-    for post in Post.objects.filter(parent__url=post.url):
+    for post in posts(Post.objects.filter(parent__url=post.url)):
         if post.url not in posts_url:
             yield post
             posts_url.append(post.url)

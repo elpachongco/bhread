@@ -130,7 +130,7 @@ def post_children(request, pk):
 
 def post_detail(request, url=None):
     context = {"replies": [], "base_template": "feed/tri-column.html"}
-    post = Post.objects.get(url=url)
+    post = sel.posts(Post.objects.filter(url=url)).first()
 
     context["post"] = post
     context["post_replies"] = 0
