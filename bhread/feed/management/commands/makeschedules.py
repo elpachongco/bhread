@@ -12,10 +12,11 @@ from feed import tasks
 
 
 class Command(BaseCommand):
-    help = "Creates a schedule to periodically update all feeds."
+    help = "Create all schedules"
 
     def handle(self, *args, **kwargs):
         tasks.schedule_update_feeds()
+        tasks.schedule_feed_archive()
 
 
 # def ensure_schedule_updated():
