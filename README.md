@@ -132,6 +132,18 @@ sudo ./init-letsencrypt.sh
 
 Renewals are handled by the certbot image in docker.
 
+### Debugging
+
+When adding a `breakpoint()`, while docker the compose is running, pdb will not be able to connect to a tty.
+
+To use pdb, in a separate terminal run:
+
+```sh
+sudo docker attach bhread-web_dev-1
+```
+
+This will attach a tty to `bhread-web_dev-1` for pdb
+
 ## management commands
 
 python3 manage.py makeschedules -> adds a schedule for updating feeds every minute
