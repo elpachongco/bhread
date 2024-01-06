@@ -21,7 +21,7 @@
                   localStorage.removeItem("theme");
                   break;
                 default:
-                  localStorage.theme = "system";
+                  localStorage.theme = "dark";
               }
               // On page load or when changing themes, best to add inline in `head` to avoid FOUC
               if (
@@ -34,7 +34,7 @@
                 document.documentElement.classList.remove("dark");
               }
             }
-            theme(localStorage.theme || "system");
+            theme(localStorage.theme || "dark");
         </script>
         {% if title %}
             <title>{{ title }}</title>
