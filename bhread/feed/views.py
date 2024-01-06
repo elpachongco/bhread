@@ -151,10 +151,12 @@ def post_detail(request, url=None):
     return render(request, "feed/detail.html", context)
 
 
-def search(request, url):
+def search(request):
     context = {"base_template": "feed/tri-column.html"}
-    context["results"] = Post.objects.filter(url=url)
-    context["search"] = url
+    query = request.GET.get("query")
+    context["results"] = sel.search(query)
+    context["search"] = query
+    context["count"] = len(context["results"])
     return render(request, "feed/search.html", context)
 
 

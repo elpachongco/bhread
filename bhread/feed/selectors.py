@@ -7,6 +7,7 @@ import feedparser
 import requests
 import requests_cache
 from bs4 import BeautifulSoup
+from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.db.models import Count, F, OuterRef, Q, Subquery
 from django.utils import timezone
 from feed import services as ser
@@ -116,7 +117,7 @@ def home(id=None):
     a = (
         Post.objects.filter(
             content__isnull=False,
-            feed__is_verified=True,
+            # feed__is_verified=True,
         )
         .select_related("parent", "feed__owner", "feed__owner__profile")
         .order_by("-date_added", "-date_updated")
@@ -180,3 +181,12 @@ def post_replies(post: Post) -> Iterator[Dict]:
             post_stack.append(child)
             # All of the branch child is a possible branching point
             head_stack.append(child)
+
+
+def search(query):
+    """Search db for a query, returns queryset of results"""
+    query = SearchQuery(query)
+    posts = Post.objects.annotate(
+        search=SearchVector("title", "content", "url")
+    ).filter(search=query)
+    return posts

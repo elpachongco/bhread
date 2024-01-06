@@ -1,10 +1,27 @@
 {% extends base_template %}
 {% block content %}
     <p class="flex justify-center">
+    {% if results %}
+    <div class="my-4 mx-auto">
+      Found {{ count }} result{{ count|pluralize }} for "<i>{{ search }}</i>"
+    </div>
+    {% endif %}
+        <ol>
         {% for result in results %}
-            {{ result }}
+          <li class="mt-4 border-2 dark:border-slate-800 rounded mx-4 px-4 py-2">
+            <a href="{{ result.url }}" class="hover:no-underline dark:text-white text-black">
+              <h2 class="font-header text-xl text-lochmara"> {{ result.title }} </h2>
+              <p> {{ result.url }} </p>
+              {% post-content content=result.content truncate=True %}
+            </a>
+          </li>
         {% empty %}
-            No results found for "{{ search }}"
+        <div class="w-full flex">
+          <h3 class="mx-auto">
+              No results found for "{{ search }}"
+          </h3>
+        </div>
         {% endfor %}
+        </ol>
     </p>
 {% endblock content %}

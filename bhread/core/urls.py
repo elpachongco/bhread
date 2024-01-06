@@ -24,15 +24,21 @@ from feed import views as feed_views
 from user import views as user_views
 
 urlpatterns = [
-    path("museum/", TemplateView.as_view(template_name="feed/museum.html"), name="museum"),
-    path("welcome/", TemplateView.as_view(template_name="feed/welcome.html"), name="landing"),
+    path(
+        "museum/", TemplateView.as_view(template_name="feed/museum.html"), name="museum"
+    ),
+    path(
+        "welcome/",
+        TemplateView.as_view(template_name="feed/welcome.html"),
+        name="landing",
+    ),
     path("<int:pk>", feed_views.home, name="homenext"),
     path("<int:pk>", feed_views.home, name="homeprevious"),
     path("", feed_views.home, name="home"),
     path("all", feed_views.browse, name="browse"),
     path("groups/", feed_views.groups, name="groups"),
     path("vote/<int:id>", feed_views.vote, name="vote"),
-    path("search/<path:url>", feed_views.search, name="search"),
+    path("search/", feed_views.search, name="search"),
     path("accounts/", include("allauth.urls")),
     path("feed-edit/<int:pk>/", feed_views.feed_edit, name="feed-edit"),
     path("feed-delete/<int:pk>/", feed_views.feed_delete, name="feed-delete"),

@@ -5,9 +5,9 @@
         <!-- Search -->
         <div class="hidden items-center mt-2 max-w-full rounded-md border lg:flex focus-within:text-black focus-within:ring border-alto ring-lochmara dark:focus-within:text-white dark:border-slate-700">
             <span class="ml-2 material-symbols-outlined size-20">search</span>
-            <form action="{% url 'search' 'laskjdf' %}">
-                <input class="w-full rounded-r-md border-none focus:ring-0 dark:bg-slate-900"
-                       placeholder="search">
+            <form action="{% url 'search' %}">
+                <input class="w-full rounded-r-md border-none focus:ring-0 !bg-transparent"
+                       placeholder="search" type="text" name="query">
                 </input>
             </form>
         </div>
