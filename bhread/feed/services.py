@@ -371,8 +371,15 @@ class UpdateFeed(Service):
 
     def process(self):
         feed = self.cleaned_data["feed"]
-        parsed = feedparser.parse(feed.url)  # Add etag and last modified
-        if "entries" not in parsed:
+
+        headers = {}
+        if feed.etag:
+            headers["etag"] = feed.etag
+        if feed.last_modified:
+            headers["modified"] = feed.last_modified
+
+        parsed = feedparser.parse(feed.url, **headers)
+        if "entries" not in parsed or parsed.status == 304:
             return
 
         for entry in parsed.entries:
@@ -380,6 +387,16 @@ class UpdateFeed(Service):
                 ProcessFeedEntry().execute({"entry": entry, "feed": feed})
             except InvalidInputsError:
                 continue
+
+        # Save new cache headers. If not present, delete old
+        if "etag" in parsed:
+            feed.etag = parsed.etag
+        else:
+            feed.etag = None
+        if "modified" in parsed:
+            feed.last_modified = parsed.modified
+        else:
+            feed.last_modified = None
 
         feed.last_scan = timezone.now()
         feed.save()
