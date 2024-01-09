@@ -20,6 +20,10 @@
           <p class="mx-auto mt-4">No more groups to show</p>
         </div>
         {% endif %}
+      {% empty %}
+      <div class="flex">
+        <h1 class="m-auto">No groups found</h1>
+      </div>
       {% endfor %}
     </ol>
 </div>
