@@ -1,44 +1,91 @@
+<!-- HEYY, Thanks for checking out Bhread's source. Please report bugs in the repo. Enjoy this inspectable mess :) -->
 {% extends 'feed/site-content.html' %}
-
+{%load static%}
 {% block content %}
 
-<h1 class="m-auto font-header font-medium p-10 text-xl">Welcome to Bhread.com</h1>
-
-<p> Bhread is a blog-powered social media. (<b>b</b>log t<b>hreads</b>)</p>
-
-<p> Basically, we take blog posts and allow other blogs to reply to it. </p>
-<p class="my-4 ">How?</p>
-<p>Simply publish a post containing "replying to " followed by a link. Like this:</p>
-
-<pre class="my-4 bg-orange-50 p-4 rounded dark:bg-sky-950 dark:text-white text-sm">
-replying to <a href="https://bhread.com/welcome">bhread.com/welcome</a>
-
-Hello World!
-</pre>
-
-<p>
-This tells bhread to create a <i>threaded</i> post containing your post as a reply.
-</p>
-
-<p class="mt-6">Here's an example thread:</p>
-<div id="demo" class="max-w-full">
-  <img src="https://raw.githubusercontent.com/elpachongco/bhread/main/img/README-bhread-convo-example-2.png" alt="Image demonstration of replies"
-  class="w-full h-auto">
+<div class="h-screen my-auto flex flex-col justify-center my-24">
+  <div class="bg-red-900 rounded-full mr-auto mb-4">
+    <img class="mx-auto w-14 h-auto" src="{% static "feed/logo.svg" %}" alt="logo of bhread.com" />
+  </div>
+  <h1 class="mb-10 text-5xl font-semibold font-header leading-tight text-amber-100">
+    <span class="bg-amber-100 text-orange-900 px-2 rounded">Bhread</span>
+    is a feed-powered social media for blogs.
+  </h1>
 </div>
 
+<div class="my-8">
+  <h3 class="sm:text-center mb-4 text-lg font-semibold font-header text-amber-100 rounded">
+  Your blog posts are now a thread 😎
+  </h3>
+  <!-- <img src="https://placehold.co/600x400" alt="Threaded post screenshot" class="w-full"/> -->
+  <img src="https://raw.githubusercontent.com/elpachongco/bhread/main/img/README-bhread-convo-example-2.png" alt="Image demonstration of replies"
+  class="w-full h-auto">
 
-<p>Replies are great but it's only one example of Bhread's capabilities. Bhread allows any blogger to:</p>
-  <ul class="list-disc list-inside">
-    <li>Automatically post new content (using <a href="https://www.youneedfeeds.com/">feeds</a>),</li>
-  <li>reply to other bloggers,</li>
-  <li>repost their content,</li>
-  <li>and create groups.</li>
+  <p class="my-4">Put your blog's feed into Bhread and see people (including you) reply to your posts</p>
+</div>
+
+<div class="mt-8 mb-16">
+  <h3 class="text-4xl font-semibold font-header leading-tight text-amber-100 text-center">Personal websites just got a lot more fun</h3>
+</div>
+
+<div class="flex flex-col w-full">
+  <h2 class="mb-1 text-lg font-semibold font-header bg-amber-100 text-orange-900 rounded p-1 pr-10 w-min">Benefits</h2>
+  <ul class="flex sm:gap-x-10 justify-center mb-8 flex-col sm:flex-row">
+    <li class="sm:grow">
+      <h3 class="mt-4 mb-2 text-lg font-semibold font-header text-amber-100">Communicate with your audience</h3>
+      <p>Blogging is no longer a one-way road. Get feedback from bloggers across the internet.</p>
+    </li>
+    <li class="sm:grow">
+      <h3 class="mt-4 mb-2 text-lg font-semibold font-header text-amber-100">Transform your blog</h3>
+      <p>Every platform has 'shorts' now. Blogs should too! Host short and long-form content in your blog.</p>
+    </li>
+    <li class="sm:grow">
+      <h3 class="mt-4 mb-2 text-lg font-semibold font-header text-amber-100">Get discovered</h3>
+      <p>Get discovered by what actually matters: content.</p>
+    </li>
   </ul>
+</div>
 
-<p class="mt-4">Most importantly, you don't need an account to participate!</p>
-<p><small>You can create an account to customize things but a blog is all you need to participate.</small></p>
+<div class="mt-8 mb-16">
+  <h3 class="text-4xl font-semibold font-header leading-tight text-amber-100 text-center">An Effortlessly Decentralized Social Media</h3>
+</div>
 
-<a rel="next" href="https://bhread.com" class="ml-auto my-8 underline underline-offset-4 text-lg">Shut up and take <s>my money</s> me to Bhread</a>
+<div class="flex flex-col w-full">
+  <h2 class="mb-1 text-lg font-semibold font-header bg-amber-100 text-orange-900 rounded p-1 pr-10 w-min">Features</h2>
+  <ul class="flex sm:gap-x-10 justify-center mb-8 flex-col">
+    <li class="sm:grow">
+      <h3 class="mt-4 mb-2 text-lg font-semibold font-header text-amber-100">Threaded post and comments using your blog</h3>
+      <p>Anyone can reply to your post by also posting anything with the phrase "replying to" followed by the URL to your post.</p>
+    </li>
+    <li class="sm:grow">
+      <h3 class="mt-4 mb-2 text-lg font-semibold font-header text-amber-100">Reposts</h3>
+      <p>Want to share an interesting post? Just paste a link to it! If Bhread recognizes the URL, it will be a repost.</p>
+    </li>
+    <li class="sm:grow">
+      <h3 class="mt-4 mb-2 text-lg font-semibold font-header text-amber-100">Likes</h3>
+      <p>Registered users can like posts</p>
+    </li>
+    <li class="sm:grow">
+      <h3 class="mt-4 mb-2 text-lg font-semibold font-header text-amber-100">(WIP) Groups</h3>
+      <p>Create communities using your blog.</p>
+    </li>
+    <li class="sm:grow">
+      <h3 class="mt-4 mb-2 text-lg font-semibold font-header text-amber-100">Per-post comment section for your blog</h3>
+      <p>Bhread allows use of your posts' own threads as comment section for your blog posts</p>
+    </li>
+    <li class="sm:grow">
+      <h3 class="mt-4 mb-2 text-lg font-semibold font-header text-amber-100">No account needed</h3>
+      <p>Likes and profile picture changes need an account but everything else is open for anyone</p>
+    </li>
+    <li class="sm:grow">
+      <h3 class="mt-4 mb-2 text-lg font-semibold font-header text-amber-100">Free and Open Source Software</h3>
+      <p>Made and ran by volunteers with ♥️</p>
+    </li>
+  </ul>
+</div>
+<div class="w-full justify-center flex">
+<a rel="next" href="https://bhread.com" class="animate-pulse mb-8 font-semibold font-header text-lg underline underline-offset-4 text-amber-100 p-2 rounded">Shut up and take <s>my money</s> me to Bhread 👉</a>
+</div>
 
 
 <details>
