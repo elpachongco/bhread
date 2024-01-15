@@ -1,0 +1,15 @@
+<!-- HEYY, Thanks for checking out Bhread's source. Please report bugs in the repo. Enjoy this inspectable mess :) -->
+{% extends 'feed/site-content.html' %}
+{%load static%}
+{% block content %}
+<p>Want to donate?</p>
+<progress value=".5" max="100" class="rounded-full"></progress>
+
+<p>Bhread is currently ran on a 5usd DO Droplet</p>
+{% endblock content %}
+
+{% block landing-classes %}
+  {{ block.super }}
+  before:content-['>']
+  after:content-['<']
+{% endblock %}

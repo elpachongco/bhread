@@ -32,6 +32,11 @@ urlpatterns = [
         TemplateView.as_view(template_name="feed/welcome.html"),
         name="landing",
     ),
+    path(
+        "donate/",
+        TemplateView.as_view(template_name="feed/donate.html"),
+        name="donate",
+    ),
     path("<int:pk>", feed_views.home, name="homenext"),
     path("<int:pk>", feed_views.home, name="homeprevious"),
     path("", feed_views.home, name="home"),
