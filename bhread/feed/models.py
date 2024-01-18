@@ -31,6 +31,7 @@ class Feed(models.Model):
     is_public = models.BooleanField(default=False)
     is_bozo = models.BooleanField(default=False)
     categories = models.ManyToManyField("Category")
+    language = models.CharField(max_length=50, default="", blank=True)
 
     def __str__(self):
         return f"Feed: {self.url}"
@@ -67,6 +68,8 @@ class Post(models.Model):
     categories = models.ManyToManyField("Category", blank=True)
     votes_total = models.ManyToManyField("Vote", related_name="post", blank=True)
     # Language
+    title_language = models.CharField(max_length=50, default="", blank=True)
+    content_language = models.CharField(max_length=50, default="", blank=True)
 
     def __str__(self):
         return f"Post {self.pk} - \

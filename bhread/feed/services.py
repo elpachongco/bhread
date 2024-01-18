@@ -198,14 +198,16 @@ class RegisterFeed(Service):
 
         feed, created = Feed.objects.get_or_create(url=url)
 
-        if created:
-            feed.last_scan = timezone.now()
-        # if not created and feed.last_scan -
-        # consider interval of scanning.
-
         parsed = feedparser.parse(url)
         if parsed.bozo:
             raise InvalidInputsError("url", "not a valid feed")
+
+        if created:
+            feed.last_scan = timezone.now()
+            if "language" in parsed:
+                feed.language = parsed.language
+            feed.save()
+
         return created
 
 
@@ -219,12 +221,16 @@ class CreatePost(Service):
     url = forms.URLField()
     title = forms.CharField(required=False)
     content = forms.CharField(required=False)
+    title_language = forms.CharField(required=False)
+    content_language = forms.CharField(required=False)
 
     def process(self):
         feed = self.cleaned_data["feed"]
         url = self.cleaned_data["url"]
         title = self.cleaned_data["title"]
         content = self.cleaned_data["content"]
+        title_language = self.cleaned_data["title_language"]
+        content_language = self.cleaned_data["content_language"]
 
         # If post already exists and has content, don't override it
         # in case create is called with url only
@@ -235,6 +241,10 @@ class CreatePost(Service):
             defaults["content"] = content
         if title:
             defaults["title"] = title
+        if title_language:
+            defaults["title_language"] = title_language
+        if content_language:
+            defaults["content_language"] = content_language
 
         post = None
         post, created = Post.objects.update_or_create(
@@ -289,12 +299,22 @@ class ProcessFeedEntry(Service):
                     "",
                 )
 
+        title_language = ""
+        if "title_detail" in entry and "language" in entry.title_detail:
+            title_language = entry.title_detail.language
+
+        content_language = ""
+        if len(entry.content) and "content_language" in entry.content[0]:
+            content_language = entry.content[0].content_language
+
         post = CreatePost().execute(
             {
                 "feed": feed,
                 "url": entry["link"],
                 "title": title,
                 "content": content,
+                "title_language": title_language,
+                "content_language": content_language,
             }
         )
 
@@ -379,7 +399,10 @@ class UpdateFeed(Service):
             headers["modified"] = feed.last_modified
 
         parsed = feedparser.parse(feed.url, **headers)
-        if "entries" not in parsed or parsed.status == 304:
+        if "entries" not in parsed:
+            return
+
+        if "status" in parsed and parsed.status == 304:
             return
 
         for entry in parsed.entries:
