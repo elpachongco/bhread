@@ -3,6 +3,12 @@
 {%load static%}
 {% block content %}
 
+<style>
+  html {
+    scroll-behavior: smooth;
+  }
+</style>
+
 <div class="h-screen my-auto flex flex-col justify-center my-24">
   <div class="bg-red-900 rounded-full mr-auto mb-4">
     <img class="mx-auto w-14 h-auto" src="{% static "feed/logo.svg" %}" alt="logo of bhread.com" />
@@ -11,10 +17,16 @@
     <span class="bg-amber-100 text-orange-900 px-2 rounded">Bhread</span>
     is a feed-powered social media for blogs.
   </h1>
+  <button class="absolute bottom-5 ml-auto mr-auto left-0 right-0 animate-bounce bg-slate-800 border border-slate-700 hover:bg-slate-700" onClick="document.getElementById('after-hero').scrollIntoView();">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"  class="inline text-white fill-white" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/>
+    </svg>
+  </button>
+
 </div>
 
-<div class="my-8">
-  <h3 class="sm:text-center mb-4 text-lg font-semibold font-header text-amber-100 rounded">
+<div id="after-hero" class="my-8">
+  <h3 id="rb" class="sm:text-center mb-4 text-lg font-semibold font-header text-amber-100 rounded">
   Your blog posts are now a thread 😎
   </h3>
   <!-- <img src="https://placehold.co/600x400" alt="Threaded post screenshot" class="w-full"/> -->
