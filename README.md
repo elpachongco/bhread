@@ -147,6 +147,8 @@ This will attach a tty to `bhread-web_dev-1` for pdb
 ## management commands
 
 python3 manage.py makeschedules -> adds a schedule for updating feeds every minute
+python3 manage.py makemigrations <app>
+python3 manage.py migrate <app>
 
 ## Custom filters and tags
 
