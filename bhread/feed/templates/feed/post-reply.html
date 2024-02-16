@@ -3,6 +3,7 @@
 {% var is_parent=is_parent|default:False %}
 {% var level=level|default:0 %}
 {% var show_date=show_data|default:True %}
+{% var truncate=truncate|default:False %}
 {% var voted=voted %}
 
 {% load feed_extras %}
@@ -25,7 +26,7 @@
                 <p class="text-xs text-gray-500">[ - ]</p>
             </div>
             {% if title %}<h3 class="font-medium font-header my-2">{{ post.title }}</h3>{% endif %}
-            {% post-content content=post.content truncate=True %}
+            {% post-content content=post.content truncate=truncate %}
             {% if not is_parent %}
             <!-- Buttons on the bottom -->
               <div class="m-0 flex text-sm mt-2">
