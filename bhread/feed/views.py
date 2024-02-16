@@ -1,3 +1,6 @@
+from urllib.parse import urlparse
+
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -217,3 +220,27 @@ def vote(request, id):
     # NOTE: This should redirect back to post anchor after logging in.
     # NOTE: This doesn't work.
     return response
+
+
+# @login_required(login_url="/accounts/login")
+def comment_embed(request, url: str):
+    """Allow site to embed comments of their own posts
+    - Only allow requests from site if deployed:
+    a.com cannot get comments of b.com
+    """
+    origin = request.META.get("HTTP_ORIGIN")
+    if not origin and not settings.DEBUG:
+        return HttpResponse("Only same domain can access this page", 403)
+
+    post = sel.posts(Post.objects.filter(url=url)).first()
+
+    if not settings.DEBUG and urlparse(origin).netloc != urlparse(post.url).netloc:
+        return HttpResponse("Only same domain can access this page", 403)
+
+    replies = sel.post_replies(post) if post else []
+    context = {
+        "post": post,
+        "replies": replies,
+        "base_template": "feed/base.html",
+    }
+    return render(request, "feed/comment-embed.html", context)

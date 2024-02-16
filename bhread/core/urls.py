@@ -24,6 +24,7 @@ from feed import views as feed_views
 from user import views as user_views
 
 urlpatterns = [
+    path("comment-embed/<path:url>", feed_views.comment_embed, name="comment-embed"),
     path(
         "museum/", TemplateView.as_view(template_name="feed/museum.html"), name="museum"
     ),
