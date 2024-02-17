@@ -1,5 +1,10 @@
 {% extends base_template %}
 {% load static %}
+
+{% block more_body_attributes %}
+  onload="resize()"
+{% endblock more_body_attributes %}
+
 {% block base-content %}
 {% if replies %}
 <div class="flex flex-col size-full text-white px-6 pt-6 pb-4">
@@ -22,6 +27,12 @@
 <script>
   const root = document.getElementsByTagName('html')[0];
   root.setAttribute('class','dark')
+
+  function resize() {
+    var height = document.getElementsByTagName("html")[0].scrollHeight;
+    window.parent.postMessage(["setHeight", height], "*");
+  }
+
 </script>
 {% else %}
 <style>
