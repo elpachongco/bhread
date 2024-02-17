@@ -2,11 +2,10 @@
 {% load static %}
 
 {% block more_body_attributes %}
-  onload="resize()"
+onload="resize({% if not replies %}'80px'{% endif %})"
 {% endblock more_body_attributes %}
 
 {% block base-content %}
-{% if replies %}
 <!-- Open links in a new tab (when using an iframe)-->
 <base target="_blank"></base>
 <div class="flex flex-col size-full text-white px-6 pt-6 pb-4">
@@ -25,22 +24,24 @@
     <img class="w-6 h-auto inline mx-1" src="{% static "feed/logo.svg" %}" alt="logo of bhread.com" />
     <a href="https://bhread.com">Bhread.com</a>
   </div>
+  <script>
+    const root = document.getElementsByTagName('html')[0];
+    root.setAttribute('class','dark')
+  </script>
+{% else %}
+<div class="flex flex-col h-screen">
+  <h2 class="text-xl m-auto font-header font-medium">No comments yet</h2>
+  <p class="text-sm mx-auto mb-auto">
+    <a href="https://bhread.com/welcome" class="text-center">
+      Comment with a blog post! <img class="w-5 h-auto inline mx-1" src="{% static "feed/logo.svg" %}" alt="logo of bhread.com" />
+    </a>
+  </p>
 </div>
+{% endif %}
 <script>
-  const root = document.getElementsByTagName('html')[0];
-  root.setAttribute('class','dark')
-
-  function resize() {
-    var height = document.getElementsByTagName("html")[0].scrollHeight;
+  function resize(size) {
+    var height = size || document.getElementsByTagName("html")[0].scrollHeight;
     window.parent.postMessage(["setHeight", height], "*");
   }
-
 </script>
-{% else %}
-<style>
-  html {
-    display: none;
-  }
-</style>
-{% endif %}
 {% endblock base-content %}
