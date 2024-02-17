@@ -91,3 +91,5 @@ http_cache.sqlite
 data/**
 bhread/mediafiles/profile_pics/
 *.db
+vps_ip.txt
+vps_username.txt
