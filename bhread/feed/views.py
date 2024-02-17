@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404, redirect, render, reverse
 from django.template.loader import render_to_string
 from django.views.decorators.cache import cache_page
 from django.views.decorators.clickjacking import xframe_options_exempt
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from feed import selectors as sel
 from feed import services as ser
@@ -224,6 +225,7 @@ def vote(request, id):
 
 
 # @login_required(login_url="/accounts/login")
+@csrf_exempt
 @xframe_options_exempt
 def comment_embed(request, url: str):
     """Allow site to embed comments of their own posts
