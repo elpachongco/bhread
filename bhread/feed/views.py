@@ -233,17 +233,14 @@ def comment_embed(request, url: str):
     a.com cannot get comments of b.com
     """
     origin = request.META.get("HTTP_REFERER")
-    if not origin and not settings.DEBUG:
+    if (
+        not origin
+        and not settings.DEBUG
+        and urlparse(origin).netloc != urlparse(url).netloc
+    ):
         return HttpResponse("Only same domain can access this page", 403)
 
     post = sel.posts(Post.objects.filter(url=url)).first()
-
-    if (
-        not settings.DEBUG
-        and post
-        and urlparse(origin).netloc != urlparse(post.url).netloc
-    ):
-        return HttpResponse("Only same domain can access this page", 403)
 
     replies = sel.post_replies(post) if post else []
     context = {
