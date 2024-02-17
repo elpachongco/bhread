@@ -80,7 +80,10 @@
           hx-ext="preload"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
           hx-boost="true"
-          hx-indicator="#bar">
+          hx-indicator="#bar"
+          {% block more_body_attributes %}
+          {% endblock more_body_attributes %}
+          >
         <div id="bar" class="htmx-indicator">{% loading-bar %}</div>
         <div id="no-indicator"></div>
         <script defer>hljs.highlightAll();</script>
