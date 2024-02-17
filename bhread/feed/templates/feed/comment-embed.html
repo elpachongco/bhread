@@ -1,6 +1,9 @@
 {% extends base_template %}
 {% load static %}
 
+{% block htmx_import %}
+{% endblock htmx_import %}
+
 {% block more_body_attributes %}
 onload="resize({% if not replies %}'80px'{% endif %})"
 {% endblock more_body_attributes %}
