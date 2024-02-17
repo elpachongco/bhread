@@ -29,7 +29,7 @@ onload="resize({% if not replies %}'80px'{% endif %})"
       <a href="https://bhread.com">Bhread.com</a>
     </div>
   </div>
-  <script>
+  <script type="text/javascript">
     const root = document.getElementsByTagName('html')[0];
     root.setAttribute('class','dark')
   </script>
@@ -43,7 +43,7 @@ onload="resize({% if not replies %}'80px'{% endif %})"
   </p>
 </div>
 {% endif %}
-<script>
+<script type="text/javascript">
   function resize(size) {
     var height = size || document.getElementsByTagName("html")[0].scrollHeight;
     window.parent.postMessage(["setHeight", height], "*");
