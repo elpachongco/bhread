@@ -232,13 +232,17 @@ def comment_embed(request, url: str):
     - Only allow requests from site if deployed:
     a.com cannot get comments of b.com
     """
-    origin = request.META.get("HTTP_ORIGIN")
+    origin = request.META.get("HTTP_REFERER")
     if not origin and not settings.DEBUG:
         return HttpResponse("Only same domain can access this page", 403)
 
     post = sel.posts(Post.objects.filter(url=url)).first()
 
-    if not settings.DEBUG and urlparse(origin).netloc != urlparse(post.url).netloc:
+    if (
+        not settings.DEBUG
+        and post
+        and urlparse(origin).netloc != urlparse(post.url).netloc
+    ):
         return HttpResponse("Only same domain can access this page", 403)
 
     replies = sel.post_replies(post) if post else []
