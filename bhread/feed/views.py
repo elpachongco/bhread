@@ -234,7 +234,7 @@ def comment_embed(request, url: str):
     """
     origin = request.META.get("HTTP_REFERER")
     if (
-        not origin
+        origin
         and not settings.DEBUG
         and urlparse(origin).netloc != urlparse(url).netloc
     ):
