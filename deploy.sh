@@ -11,7 +11,7 @@ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
   git checkout $DEPLOY_BRANCH
-  # rsync -avz -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --progress . $USERNAME@$TARGET_ADDRESS:~/bhread/
-  ssh -t $USERNAME@$TARGET_ADDRESS "cd ~/bhread/; sudo docker compose build web_prod djangoq_prod; sudo docker compose up --no-deps -d web_prod djangoq_prod"
+  rsync -avz -e "ssh -o StrictHostKeyChecking=no" --progress . $USERNAME@$TARGET_ADDRESS:~/bhread/
+  ssh -t $USERNAME@$TARGET_ADDRESS "cd ~/bhread/; sudo docker compose --profile prod down; sudo docker compose --profile prod up --build -d; sudo docker compose --profile prod logs -n 25 -f"
   git checkout -
 fi
