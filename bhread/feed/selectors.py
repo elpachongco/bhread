@@ -141,14 +141,16 @@ def post_replies(post: Post) -> Iterator[Dict]:
     Store tree of replies, as a single-dimension list of dictionaries.
     containining level info. Level information will be used as indentation.
     [
-        { "level": 0, "post": <Post object> },
+        { "level": 0, "post": <Main Post object> },
         { "level": 1, "post": <Post object> },
         { "level": 2, "post": <Post object> },
-        { "level": 0, "post": <Post object> },
+        { "level": 3, "post": <Post object> },
         { "level": 1, "post": <Post object> },
     ]
     This is intended to be used for displaying replies in the templates
     by doing complex logic (flattening tree) here, not in the template.
+
+    Note: level 0 is the main post i.e. the `post` param
     """
     post_stack = [post]
     head_stack = [post]  # Possible branching points
