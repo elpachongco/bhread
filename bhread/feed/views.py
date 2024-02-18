@@ -243,6 +243,7 @@ def comment_embed(request, url: str):
     post = sel.posts(Post.objects.filter(url=url)).first()
 
     replies = sel.post_replies(post) if post else []
+    replies = replies if len(list(replies)) > 1 else []
     context = {
         "post": post,
         "replies": replies,
