@@ -238,7 +238,7 @@ def comment_embed(request, url: str):
         and not settings.DEBUG
         and urlparse(origin).netloc != urlparse(url).netloc
     ):
-        return HttpResponse("Only same domain can access this page", 403)
+        return HttpResponse("Only same domain can access this page", status=403)
 
     post = sel.posts(Post.objects.filter(url=url)).first()
 
