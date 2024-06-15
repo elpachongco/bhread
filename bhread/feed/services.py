@@ -278,7 +278,8 @@ class ProcessFeedEntry(Service):
         feed = self.cleaned_data["feed"]
 
         title = entry.title
-        content = content_to_html(entry.content)
+        entry_content = entry.content if hasattr(entry, "content") else entry.summary
+        content = content_to_html(entry_content)
 
         if not feed.is_verified:
             try:
@@ -304,8 +305,8 @@ class ProcessFeedEntry(Service):
             title_language = entry.title_detail.language
 
         content_language = ""
-        if len(entry.content) and "content_language" in entry.content[0]:
-            content_language = entry.content[0].content_language
+        if len(entry_content) and "content_language" in entry_content[0]:
+            content_language = entry_content[0].content_language
 
         post = CreatePost().execute(
             {
