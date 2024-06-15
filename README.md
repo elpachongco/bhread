@@ -180,7 +180,7 @@ Add this to the part of your template where you want to show comments
     }, false);
 
   </script>
-  <iframe id="bhread-comments" src="https://bhread.com/comment-embed/{{ absURL .Page.RelPermalink }}" width="100%" height="350px"  frameBorder="0" onload="this.style.display = 'none'" loading="lazy" style="border-radius: 5px;"> </iframe>
+  <iframe id="bhread-comments" src="https://bhread.com/comment-embed/{{ absURL .Page.RelPermalink }}" width="100%" height="350"  frameBorder="0" onload="this.style.display = 'none'" loading="lazy" style="border-radius: 5px;"> </iframe>
 ```
 This will add an empty iframe with 350px height.
 

@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import TemplateView
+from django.views.generic.base import RedirectView
 from feed import views as feed_views
 from user import views as user_views
 
@@ -32,6 +33,11 @@ urlpatterns = [
         "welcome/",
         TemplateView.as_view(template_name="feed/welcome.html"),
         name="landing",
+    ),
+    path(
+        "how-to-comment/",
+        RedirectView.as_view(url="https://blog.bhread.com/posts/how-to-comment"),
+        name="how-to-comment",
     ),
     path(
         "donate/",

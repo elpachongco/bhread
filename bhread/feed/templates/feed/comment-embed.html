@@ -37,7 +37,7 @@ onload="resize({% if not replies %}'80px'{% endif %})"
 <div class="flex flex-col h-screen">
   <h2 class="text-xl m-auto font-header font-medium">No comments yet</h2>
   <p class="text-sm mx-auto mb-auto">
-    <a href="https://bhread.com/welcome" class="text-center">
+    <a href="{% url 'how-to-comment' %}" class="text-center">
       Comment with a blog post! <img class="w-5 h-auto inline mx-1" src="{% static "feed/logo.svg" %}" alt="logo of bhread.com" />
     </a>
   </p>
